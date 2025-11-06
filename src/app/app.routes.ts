@@ -12,7 +12,7 @@ export const routes: Routes = [
       import('./pages/pages.routes').then((module_) => module_.PAGES_ROUTES),
   },
   {
-    path: 'login',
+    path: 'auth/login',
     component: Login,
   },
   {

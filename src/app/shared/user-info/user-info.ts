@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, Signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../services/auth.service'; // ajustá el path según tu estructura
+import { MatMenuModule } from '@angular/material/menu';
 import { User } from '../../models/user.model';
-import { Observable } from 'rxjs';
+import { AuthService } from '../../services/auth.service'; // ajustá el path según tu estructura
 
 @Component({
   selector: 'app-user-info',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatMenuModule, MatButtonModule],
   templateUrl: './user-info.html',
   styleUrl: './user-info.scss',
 })
@@ -22,5 +23,14 @@ export class UserInfo implements OnInit {
       next: (res) => this.user.set(res),
       error: () => this.user.set(null),
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
+
+  goToProfile(): void {
+    // this.router.navigate(['/perfil']);
+    console.log('Ir al perfil');
   }
 }
