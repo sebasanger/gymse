@@ -12,13 +12,15 @@ export class TokenInterceptorService {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const jwtToken = this.authService.getJwtToken();
+    console.log('ACA');
+    console.log(jwtToken);
 
     if (jwtToken) {
       return next.handle(this.addToken(req, jwtToken)).pipe(
         catchError((error) => {
           if (error instanceof HttpErrorResponse && error.status === 401) {
             this.authService.logout();
-            this.router.navigateByUrl('auth/login');
+            this.router.navigateByUrl('login');
             return throwError(error);
           } else {
             return throwError(error);
@@ -30,7 +32,7 @@ export class TokenInterceptorService {
         catchError((error) => {
           if (error instanceof HttpErrorResponse && error.status === 401) {
             this.authService.logout();
-            this.router.navigateByUrl('auth/login');
+            this.router.navigateByUrl('login');
             return throwError(error);
           } else {
             return throwError(error);

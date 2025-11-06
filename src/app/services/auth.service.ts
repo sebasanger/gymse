@@ -20,14 +20,8 @@ const client_url = environment.client_url;
 export class AuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
-  getJwtToken(): string {
-    const token = localStorage.getItem('authenticationToken');
-
-    if (token) {
-      return token;
-    }
-
-    return '';
+  getJwtToken() {
+    return localStorage.getItem('authenticationToken');
   }
 
   login(loginRequestPayload: LoginRequestPayload): Observable<LoginResponse> {

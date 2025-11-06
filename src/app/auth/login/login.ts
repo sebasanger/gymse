@@ -6,6 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../services/auth.service';
+import { LoginRequestPayload } from '../../interfaces/auth/login-request.payload';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 export class Login {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private AuthService: AuthService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -36,7 +38,12 @@ export class Login {
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      console.log('Login con:', email, password);
+
+      const loginRequestPayload: LoginRequestPayload = {
+        email: email,
+        password: password,
+      };
+      this.AuthService.login(loginRequestPayload).subscribe();
     } else {
       this.loginForm.markAllAsTouched();
     }
