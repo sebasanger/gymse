@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { UserInfo } from '../user-info/user-info';
 
 @Component({
   selector: 'app-navigation',
@@ -21,7 +22,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
     MatListModule,
     MatIconModule,
     AsyncPipe,
-    DashboardComponent,
+    UserInfo,
   ],
 })
 export class NavigationComponent {

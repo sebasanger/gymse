@@ -15,16 +15,20 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
+    <mat-toolbar class="toolbar" color="primary">
       @if (isHandset$ | async) {
       <button type="button" aria-label="Toggle sidenav" matIconButton (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       }
       <span>gymse</span>
+
+      <app-user-info></app-user-info>
     </mat-toolbar>
 
-    <app-dashboard></app-dashboard>
+    <section id="principal">
+      <ng-content></ng-content>
+    </section>
 
     <!-- Add Content Here -->
   </mat-sidenav-content>
