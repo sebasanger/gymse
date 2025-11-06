@@ -7,10 +7,11 @@ import type {
 import type { Observable } from 'rxjs';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { LOCAL_STORAGE } from '../providers/localstorage';
+import { isPlatformBrowser } from '@angular/common';
 
 const isRefreshing = new BehaviorSubject<boolean>(false);
 
@@ -21,6 +22,11 @@ export function authenticationInterceptor(
   const authenticationService = inject(AuthService);
   const storageService = inject(LOCAL_STORAGE);
   const router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
+
+  if (!isPlatformBrowser(platformId)) {
+    return next(request);
+  }
 
   const clonedRequest = attachAccessToken(request, storageService);
   return handleRequest({
@@ -71,11 +77,12 @@ function handleErrors(parameters: {
   errorResponse: HttpErrorResponse;
 }): Observable<HttpEvent<unknown>> {
   console.log(parameters);
-  if (isAccessTokenError(parameters.errorResponse)) {
+
+  if (isAccessTokenError(parameters.errorResponse, parameters.request)) {
     return tryRefreshToken(parameters);
   }
 
-  if (isRefreshTokenError(parameters.errorResponse)) {
+  if (isRefreshTokenError(parameters.errorResponse, parameters.request)) {
     parameters.authenticationService.logout();
     void parameters.router.navigate(['auth/login']);
     return throwError(() => new Error('Session expired. Please log in again.'));
@@ -84,28 +91,20 @@ function handleErrors(parameters: {
   return throwError(() => parameters.errorResponse);
 }
 
-function isAccessTokenError(errorResponse: HttpErrorResponse): boolean {
-  console.log('ERROR AL REFRESCAR');
-
-  return false;
-  // return (
-  //   errorResponse.status === 401 &&
-  //   [AppError.ACCESS_TOKEN_NOT_FOUND, AppError.ACCESS_TOKEN_EXPIRED].includes(
-  //     errorResponse.error.internalCode
-  //   )
-  // );
+function isAccessTokenError(
+  errorResponse: HttpErrorResponse,
+  request: HttpRequest<unknown>
+): boolean {
+  // Si es 401 y no viene del endpoint de refresh, intentamos refrescar
+  return errorResponse.status === 401 && !request.url.includes('/refresh-token');
 }
 
-function isRefreshTokenError(errorResponse: HttpErrorResponse): boolean {
-  console.log('ERROR AL REFRESCAR REFRESH');
-
-  return false;
-  // return (
-  //   errorResponse.status === 401 &&
-  //   [AppError.REFRESH_TOKEN_NOT_FOUND, AppError.REFRESH_TOKEN_EXPIRED].includes(
-  //     errorResponse.error.internalCode
-  //   )
-  // );
+function isRefreshTokenError(
+  errorResponse: HttpErrorResponse,
+  request: HttpRequest<unknown>
+): boolean {
+  // Si es 401 y viene del endpoint de refresh, ya no hay nada que hacer
+  return errorResponse.status === 401 && request.url.includes('/refresh-token');
 }
 
 function tryRefreshToken(parameters: {
@@ -115,6 +114,8 @@ function tryRefreshToken(parameters: {
   storageService: Storage | null;
   router: Router;
 }): Observable<HttpEvent<unknown>> {
+  console.log('Intenta refrescar token');
+
   if (!isRefreshing.getValue()) {
     return handleTokenRefresh(parameters);
   }
@@ -161,7 +162,7 @@ function retryRequestWithRefreshedToken(parameters: {
   next: HttpHandlerFn;
   storageService: Storage | null;
 }): Observable<HttpEvent<unknown>> {
-  const refreshedToken = parameters.storageService?.getItem('authenticationToken');
+  const refreshedToken = parameters.storageService?.getItem('refreshToken');
   const clonedRequest = refreshedToken
     ? parameters.request.clone({
         setHeaders: { Authorization: `Bearer ${refreshedToken}` },

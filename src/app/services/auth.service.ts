@@ -24,10 +24,12 @@ export class AuthService {
 
   private readonly authTokens = signal<{ accessToken?: string; refreshToken?: string }>({
     accessToken: this.storageService?.getItem('authenticationToken') ?? undefined,
-    refreshToken: this.storageService?.getItem('authenticationToken') ?? undefined,
+    refreshToken: this.storageService?.getItem('refreshToken') ?? undefined,
   });
 
   refreshToken() {
+    console.log('Intenta refrescar token');
+
     return of();
   }
 
@@ -61,6 +63,7 @@ export class AuthService {
   setUserDataOnStorageAndRemoveOld(data: LoginResponse) {
     this.removeDataFromStorage();
     this.storageService?.setItem('authenticationToken', data.authenticationToken);
+    this.storageService?.setItem('refreshToken', data.refreshToken);
     this.storageService?.setItem('expiresAt', data.expiresAt.toString());
     this.authTokens.set({
       accessToken: data.authenticationToken,
@@ -70,6 +73,7 @@ export class AuthService {
 
   removeDataFromStorage() {
     this.storageService?.removeItem('authenticationToken');
+    this.storageService?.removeItem('refreshToken');
     this.storageService?.removeItem('expiresAt');
   }
 
