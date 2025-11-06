@@ -9,7 +9,7 @@ import { PreloadAllModules, provideRouter, withPreloading } from '@angular/route
 
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { routes } from './app.routes';
-import { tokenInterceptor } from './interceptors/token-interceptor';
+import { authenticationInterceptor } from './interceptors/token-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,6 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideClientHydration(withEventReplay()),
-    provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([authenticationInterceptor])),
   ],
 };

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable, linkedSignal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { UpdateAcountPayload } from '../interfaces/user/form-update-acount-paylo
 import { GetUserAuthenticated } from '../interfaces/user/get-user-authenticated';
 import { GetUser } from '../interfaces/user/get-user.interface';
 import { User } from '../models/user.model';
+import { LOCAL_STORAGE } from '../providers/localstorage';
 
 const base_url = environment.base_url;
 const client_url = environment.client_url;
@@ -19,10 +20,26 @@ const client_url = environment.client_url;
 })
 export class AuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
+  private readonly storageService = inject(LOCAL_STORAGE);
 
-  getJwtToken() {
-    return 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIxIiwiaWF0IjoxNzYyNDE3NzIzLCJleHAiOjE3NjI1MDQxMjMsImZ1bGxuYW1lIjoiU2ViYXN0aWFuIFNhbmdlcm1hbm8iLCJlbWFpbCI6InNlYmFfc2FuZ2VyQGhvdG1haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXX0.LYmXjfaciV9b0wDCw3Pg-gs184d1Pm0MlukSZJf3y5g';
+  private readonly authTokens = signal<{ accessToken?: string; refreshToken?: string }>({
+    accessToken: this.storageService?.getItem('authenticationToken') ?? undefined,
+    refreshToken: this.storageService?.getItem('authenticationToken') ?? undefined,
+  });
+
+  refreshToken() {
+    return of();
   }
+
+  readonly authState = linkedSignal({
+    source: this.authTokens,
+    computation: (tokens) => ({
+      isLoggedIn: !!tokens.accessToken,
+      hasRefreshToken: !!tokens.refreshToken,
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    }),
+  });
 
   login(loginRequestPayload: LoginRequestPayload): Observable<LoginResponse> {
     return this.httpClient.post<LoginResponse>(base_url + 'auth/login', loginRequestPayload).pipe(
@@ -43,13 +60,17 @@ export class AuthService {
 
   setUserDataOnStorageAndRemoveOld(data: LoginResponse) {
     this.removeDataFromStorage();
-    localStorage.setItem('authenticationToken', data.authenticationToken);
-    localStorage.setItem('expiresAt', data.expiresAt.toString());
+    this.storageService?.setItem('authenticationToken', data.authenticationToken);
+    this.storageService?.setItem('expiresAt', data.expiresAt.toString());
+    this.authTokens.set({
+      accessToken: data.authenticationToken,
+      refreshToken: data.refreshToken,
+    });
   }
 
   removeDataFromStorage() {
-    localStorage.removeItem('authenticationToken');
-    localStorage.removeItem('expiresAt');
+    this.storageService?.removeItem('authenticationToken');
+    this.storageService?.removeItem('expiresAt');
   }
 
   logout() {
