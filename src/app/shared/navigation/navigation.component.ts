@@ -6,10 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { UserInfo } from '../user-info/user-info';
+import { NavigationItems } from '../../interfaces/navigation/navigation-items';
 
 @Component({
   selector: 'app-navigation',
@@ -25,6 +26,7 @@ import { UserInfo } from '../user-info/user-info';
     AsyncPipe,
     UserInfo,
     RouterLink,
+    RouterModule,
   ],
 })
 export class NavigationComponent {
@@ -34,4 +36,9 @@ export class NavigationComponent {
     map((result) => result.matches),
     shareReplay()
   );
+
+  public menuItems: NavigationItems[] = [
+    { icon: 'dashboard', redirection: '/pages/dashboard', tittle: 'Inicio' },
+    { icon: 'user', redirection: '/pages/usuarios', tittle: 'Usuario' },
+  ];
 }

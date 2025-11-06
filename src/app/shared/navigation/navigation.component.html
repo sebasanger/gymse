@@ -9,14 +9,14 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/pages/dashboard" routerLinkActive="item-selected">
-        <mat-icon>dashboard</mat-icon>
-        <span>Dashboard</span>
+      @for (menuItem of menuItems; track menuItem.tittle) {
+      <a mat-list-item [routerLink]="menuItem.redirection" routerLinkActive="item-selected">
+        <div class="link-item">
+          <mat-icon>{{ menuItem.icon }}</mat-icon>
+          <span>{{ menuItem.tittle }}</span>
+        </div>
       </a>
-      <a mat-list-item routerLink="/pages/pages" routerLinkActive="item-selected">
-        <mat-icon>pages</mat-icon>
-        <span>Pages</span>
-      </a>
+      }
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -22,13 +22,21 @@
   justify-content: space-between;
 }
 
-.active {
-  background-color: rgb(153, 0, 0);
-  color: red !important;
-  font-weight: 500;
+.item-selected {
+  background: var(--mat-sys-tertiary);
 }
 
-.item-selected {
-  background: rgba(233, 30, 99, 0.15);
-  color: #f492b4;
+.item-selected span {
+  color: black;
+}
+
+.link-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.link-item span {
+  font-size: large;
 }
