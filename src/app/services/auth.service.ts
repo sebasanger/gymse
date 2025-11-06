@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoginRequestPayload } from '../interfaces/auth/login-request.payload';
 import { LoginResponse } from '../interfaces/auth/login-response.payload';
@@ -62,14 +62,12 @@ export class AuthService {
     return this.httpClient.get<User>(base_url + 'auth/me');
   }
 
-  checkUserAuthenticated() {
-    return this.httpClient.get<GetUserAuthenticated>(base_url + 'auth/me').pipe(
-      map((data: any) => {
-        if (data != null) {
-          return true;
-        } else {
-          return false;
-        }
+  checkUserAuthenticated(): Observable<boolean> {
+    return this.httpClient.get<GetUserAuthenticated>(`${base_url}auth/me`).pipe(
+      map((data) => !!data), // convierte a true/false directamente
+      catchError((error) => {
+        console.error('Error en checkUserAuthenticated:', error);
+        return of(false);
       })
     );
   }

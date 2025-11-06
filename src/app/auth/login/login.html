@@ -26,7 +26,11 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="full-width" type="submit">Ingresar</button>
+      <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
+        {{ isLoading() ? 'Cargando...' : 'Ingresar' }}
+      </button>
+
+      <p *ngIf="loginError()" class="error">{{ loginError() }}</p>
     </form>
   </mat-card>
 </div>

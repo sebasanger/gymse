@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequestPayload } from '../../interfaces/auth/login-request.payload';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -26,24 +27,35 @@ import { LoginRequestPayload } from '../../interfaces/auth/login-request.payload
 export class Login {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private AuthService: AuthService) {
+  constructor(private fb: FormBuilder, private AuthService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
-
+  isLoading = signal(false);
+  loginError = signal<string | null>(null);
   hidePassword = signal(true);
 
   onSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
+      const loginRequestPayload: LoginRequestPayload = { email, password };
 
-      const loginRequestPayload: LoginRequestPayload = {
-        email: email,
-        password: password,
-      };
-      this.AuthService.login(loginRequestPayload).subscribe();
+      this.isLoading.set(true);
+      this.loginError.set(null);
+
+      this.AuthService.login(loginRequestPayload).subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.router.navigateByUrl('/pages');
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          this.loginError.set('Credenciales inválidas.');
+          console.error('Error en login', err);
+        },
+      });
     } else {
       this.loginForm.markAllAsTouched();
     }

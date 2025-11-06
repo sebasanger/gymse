@@ -1,50 +1,26 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
+import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
-@Injectable({
-  providedIn: 'root',
-})
-export class TokenInterceptorService {
-  constructor(private authService: AuthService, private router: Router) {}
+import { catchError, throwError } from 'rxjs';
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const jwtToken = this.authService.getJwtToken();
-    console.log('ACA');
-    console.log(jwtToken);
+export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-    if (jwtToken) {
-      return next.handle(this.addToken(req, jwtToken)).pipe(
-        catchError((error) => {
-          if (error instanceof HttpErrorResponse && error.status === 401) {
-            this.authService.logout();
-            this.router.navigateByUrl('login');
-            return throwError(error);
-          } else {
-            return throwError(error);
-          }
-        })
-      );
-    } else {
-      return next.handle(req).pipe(
-        catchError((error) => {
-          if (error instanceof HttpErrorResponse && error.status === 401) {
-            this.authService.logout();
-            this.router.navigateByUrl('login');
-            return throwError(error);
-          } else {
-            return throwError(error);
-          }
-        })
-      );
-    }
-  }
+  const jwtToken = authService.getJwtToken();
 
-  addToken(req: HttpRequest<any>, jwtToken: any) {
-    return req.clone({
-      headers: req.headers.set('Authorization', 'Bearer ' + jwtToken),
-    });
-  }
-}
+  const cloned = jwtToken
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${jwtToken}` } })
+    : req;
+
+  return next(cloned).pipe(
+    catchError((error) => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        authService.logout();
+        router.navigateByUrl('/login');
+      }
+      return throwError(() => error);
+    })
+  );
+};
