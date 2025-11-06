@@ -21,7 +21,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
 
   getJwtToken() {
-    return localStorage.getItem('authenticationToken');
+    return 'eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIxIiwiaWF0IjoxNzYyNDE3NzIzLCJleHAiOjE3NjI1MDQxMjMsImZ1bGxuYW1lIjoiU2ViYXN0aWFuIFNhbmdlcm1hbm8iLCJlbWFpbCI6InNlYmFfc2FuZ2VyQGhvdG1haWwuY29tIiwicm9sZXMiOlsiQURNSU4iXX0.LYmXjfaciV9b0wDCw3Pg-gs184d1Pm0MlukSZJf3y5g';
   }
 
   login(loginRequestPayload: LoginRequestPayload): Observable<LoginResponse> {

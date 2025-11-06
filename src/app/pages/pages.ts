@@ -7,5 +7,6 @@ import { NavigationComponent } from '../shared/navigation/navigation.component';
   imports: [RouterOutlet, NavigationComponent],
   templateUrl: './pages.html',
   styleUrl: './pages.scss',
+  standalone: true,
 })
 export class Pages {}

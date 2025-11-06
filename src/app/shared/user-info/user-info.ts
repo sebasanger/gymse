@@ -30,6 +30,7 @@ export class UserInfo implements OnInit {
   }
 
   goToProfile(): void {
+    // según tu routing, por ejemplo:
     // this.router.navigate(['/perfil']);
     console.log('Ir al perfil');
   }
