@@ -5,7 +5,7 @@ import type {
   HttpRequest,
 } from '@angular/common/http';
 import type { Observable } from 'rxjs';
-import { BehaviorSubject, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
@@ -25,7 +25,7 @@ export function authenticationInterceptor(
   const platformId = inject(PLATFORM_ID);
 
   if (!isPlatformBrowser(platformId)) {
-    return next(request);
+    return of();
   }
 
   const clonedRequest = attachAccessToken(request, storageService);
@@ -95,7 +95,6 @@ function isAccessTokenError(
   errorResponse: HttpErrorResponse,
   request: HttpRequest<unknown>
 ): boolean {
-  // Si es 401 y no viene del endpoint de refresh, intentamos refrescar
   return errorResponse.status === 401 && !request.url.includes('/refresh-token');
 }
 
@@ -103,7 +102,6 @@ function isRefreshTokenError(
   errorResponse: HttpErrorResponse,
   request: HttpRequest<unknown>
 ): boolean {
-  // Si es 401 y viene del endpoint de refresh, ya no hay nada que hacer
   return errorResponse.status === 401 && request.url.includes('/refresh-token');
 }
 

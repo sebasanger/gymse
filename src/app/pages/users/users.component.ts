@@ -1,10 +1,18 @@
-import { AfterViewInit, ChangeDetectorRef, Component, inject, ViewChild } from '@angular/core';
-import { MatTableModule, MatTable } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { MatSortModule, MatSort } from '@angular/material/sort';
-import { UsersDataSource } from './users-datasource';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { Subject, takeUntil } from 'rxjs';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { UsersDataSource } from './users-datasource';
 
 @Component({
   selector: 'app-users',
@@ -18,19 +26,27 @@ export class UsersComponent implements AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<User>;
   dataSource = new UsersDataSource();
   private readonly userService = inject(UserService);
-
+  private readonly destroy$ = new Subject<void>();
   private readonly cdr = inject(ChangeDetectorRef);
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'fullName'];
 
   ngAfterViewInit(): void {
-    this.userService.getUsers().subscribe((res) => {
-      this.dataSource.data = res;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.table.dataSource = this.dataSource;
-      this.cdr.detectChanges();
-    });
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+    this.userService
+      .getUsers()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((users) => {
+        this.dataSource.data = users ?? [];
+        this.table.dataSource = this.dataSource;
+        this.cdr.detectChanges();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
