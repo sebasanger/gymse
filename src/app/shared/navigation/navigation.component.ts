@@ -39,6 +39,6 @@ export class NavigationComponent {
 
   public menuItems: NavigationItems[] = [
     { icon: 'dashboard', redirection: '/pages/dashboard', tittle: 'Inicio' },
-    { icon: 'user', redirection: '/pages/usuarios', tittle: 'Usuario' },
+    { icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' },
   ];
 }

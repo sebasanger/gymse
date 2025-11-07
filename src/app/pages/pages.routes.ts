@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from '../shared/dashboard/dashboard.component';
 import { Pages } from './pages';
+import { UsersComponent } from './users/users.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -9,7 +10,7 @@ export const PAGES_ROUTES: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
 
-      { path: 'pages', component: DashboardComponent },
+      { path: 'users', component: UsersComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

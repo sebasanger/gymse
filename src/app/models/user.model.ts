@@ -3,7 +3,7 @@ export class User {
     public email: string,
     public fullName: string,
     public roles: string[],
-    public id?: number,
+    public id: number,
     public avatar?: string,
     public createdAt?: Date,
     public lastPasswordChangeAt?: Date,

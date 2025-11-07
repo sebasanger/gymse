@@ -30,6 +30,10 @@ export class UserService {
     });
   }
 
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${base_url}user`);
+  }
+
   getUserById(userId: number) {
     return this.http.get<GetUser>(`${base_url}user/${userId}`);
   }
