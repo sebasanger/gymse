@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { User } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service'; // ajustá el path según tu estructura
 
 @Component({
@@ -12,18 +11,9 @@ import { AuthService } from '../../services/auth.service'; // ajustá el path se
   templateUrl: './user-info.html',
   styleUrl: './user-info.scss',
 })
-export class UserInfo implements OnInit {
-  user = signal<User | null>(null);
-
-  constructor(private authService: AuthService) {}
-
-  ngOnInit(): void {
-    // si los datos del usuario están en el token o guardados en localStorage
-    this.authService.getAuthenticatedUser().subscribe({
-      next: (res) => this.user.set(res),
-      error: () => this.user.set(null),
-    });
-  }
+export class UserInfo {
+  public readonly authService = inject(AuthService);
+  user = this.authService.getUser();
 
   logout(): void {
     this.authService.logout();

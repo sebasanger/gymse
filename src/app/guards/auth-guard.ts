@@ -15,9 +15,12 @@ export const authGuard: CanActivateFn = (route, state) => {
     return of(true);
   }
 
-  if (authService.authState().isLoggedIn) {
-    console.log(authService.authState());
+  if (!authService.getCurrentUser().value) {
+    authService.getAuthenticatedUser().subscribe();
+    return true;
+  }
 
+  if (authService.authState().isLoggedIn) {
     return true;
   }
 

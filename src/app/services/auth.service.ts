@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, linkedSignal, signal } from '@angular/core';
+import { inject, Injectable, linkedSignal, signal, WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { LoginRequestPayload } from '../interfaces/auth/login-request.payload';
 import { LoginResponse } from '../interfaces/auth/login-response.payload';
@@ -21,11 +21,23 @@ const client_url = environment.client_url;
 export class AuthService {
   constructor(private httpClient: HttpClient, private router: Router) {}
   private readonly storageService = inject(LOCAL_STORAGE);
+  private readonly userSignal = signal<User | null>(null);
+  private readonly $currentUser: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
+    null
+  );
 
   private readonly authTokens = signal<{ accessToken?: string; refreshToken?: string }>({
     accessToken: this.storageService?.getItem('authenticationToken') ?? undefined,
     refreshToken: this.storageService?.getItem('refreshToken') ?? undefined,
   });
+
+  getUser(): WritableSignal<User | null> {
+    return this.userSignal;
+  }
+
+  getCurrentUser(): BehaviorSubject<User | null> {
+    return this.$currentUser;
+  }
 
   refreshToken() {
     console.log('Intenta refrescar token');
@@ -84,7 +96,16 @@ export class AuthService {
   }
 
   getAuthenticatedUser() {
-    return this.httpClient.get<User>(base_url + 'auth/me');
+    return this.httpClient.get<User>(base_url + 'auth/me').pipe(
+      tap((user) => {
+        this.userSignal.set(user);
+        this.$currentUser.next(user);
+      }),
+      catchError(() => {
+        this.userSignal.set(null);
+        return of(null);
+      })
+    );
   }
 
   checkUserAuthenticated(): Observable<boolean> {

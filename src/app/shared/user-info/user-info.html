@@ -1,6 +1,6 @@
-<div class="user-info" *ngIf="user() as u">
+<div class="user-info">
   <button mat-button [matMenuTriggerFor]="menu">
-    <span>{{ u.fullName }}</span>
+    <span>{{ user()?.fullName }}</span>
     <mat-icon>account_circle</mat-icon>
   </button>
 
