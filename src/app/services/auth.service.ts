@@ -1,5 +1,13 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, linkedSignal, signal, WritableSignal } from '@angular/core';
+import {
+  inject,
+  Injectable,
+  linkedSignal,
+  PLATFORM_ID,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -7,8 +15,8 @@ import { environment } from '../../environments/environment';
 import { LoginRequestPayload } from '../interfaces/auth/login-request.payload';
 import { LoginResponse } from '../interfaces/auth/login-response.payload';
 import { ResendEmailVerification } from '../interfaces/auth/resend-email-verification.payload';
+import { Role } from '../interfaces/roles/roles.enum';
 import { UpdateAcountPayload } from '../interfaces/user/form-update-acount-payload';
-import { GetUserAuthenticated } from '../interfaces/user/get-user-authenticated';
 import { GetUser } from '../interfaces/user/get-user.interface';
 import { User } from '../models/user.model';
 import { LOCAL_STORAGE } from '../providers/localstorage';
@@ -19,17 +27,23 @@ const client_url = environment.client_url;
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private httpClient: HttpClient, private router: Router) {}
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly storageService = inject(LOCAL_STORAGE);
   private readonly userSignal = signal<User | null>(null);
   private readonly $currentUser: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(
     null
   );
-
   private readonly authTokens = signal<{ accessToken?: string; refreshToken?: string }>({
     accessToken: this.storageService?.getItem('authenticationToken') ?? undefined,
     refreshToken: this.storageService?.getItem('refreshToken') ?? undefined,
   });
+
+  constructor(private httpClient: HttpClient, private router: Router) {
+    const isBrowser = isPlatformBrowser(this.platformId);
+    if (isBrowser) {
+      this.getAuthenticatedUser().subscribe();
+    }
+  }
 
   getUser(): WritableSignal<User | null> {
     return this.userSignal;
@@ -40,8 +54,6 @@ export class AuthService {
   }
 
   refreshToken() {
-    console.log('Intenta refrescar token');
-
     return of();
   }
 
@@ -108,29 +120,11 @@ export class AuthService {
     );
   }
 
-  checkUserAuthenticated(): Observable<boolean> {
-    return this.httpClient.get<GetUserAuthenticated>(`${base_url}auth/me`).pipe(
-      map((data) => !!data), // convierte a true/false directamente
-      catchError((error) => {
-        console.error('Error en checkUserAuthenticated:', error);
-        return of(false);
-      })
-    );
-  }
-
   updateAcount(acountPayload: UpdateAcountPayload) {
     return this.httpClient.put<GetUser>(`${base_url}user/update-acount`, acountPayload);
   }
 
-  checkUserIsAdmin() {
-    return this.httpClient.get<GetUserAuthenticated>(base_url + 'auth/me').pipe(
-      map((data: any) => {
-        if (data != null && data.roles.includes('ADMIN')) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-    );
+  checkUserHasRole(rol: Role): boolean {
+    return this.$currentUser.value?.roles?.includes(rol) ?? false;
   }
 }

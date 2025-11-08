@@ -21,7 +21,7 @@ export class UserService {
     pageIndex: number,
     pageSize: number
   ) {
-    return this.http.get<GetPaginatedUsers>(`${base_url}user/pageable`, {
+    return this.http.get<GetPaginatedUsers>(`${base_url}/user/pageable`, {
       params: new HttpParams()
         .set('page', pageIndex.toString())
         .set('filter', filter)
@@ -31,22 +31,22 @@ export class UserService {
   }
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${base_url}user`);
+    return this.http.get<User[]>(`${base_url}/user`);
   }
 
   getUserById(userId: number) {
-    return this.http.get<GetUser>(`${base_url}user/${userId}`);
+    return this.http.get<GetUser>(`${base_url}/user/${userId}`);
   }
 
   createNewUser(userPayload: UserCreateUpdatePayload): Observable<User> {
-    return this.http.post<GetUser>(`${base_url}user`, userPayload);
+    return this.http.post<GetUser>(`${base_url}/user`, userPayload);
   }
 
   updateUser(userPayload: UserCreateUpdatePayload) {
-    return this.http.put<GetUser>(`${base_url}user`, userPayload);
+    return this.http.put<GetUser>(`${base_url}/user`, userPayload);
   }
 
   deleteUser(id: number) {
-    return this.http.delete(`${base_url}user/${id}`);
+    return this.http.delete(`${base_url}/user/${id}`);
   }
 }

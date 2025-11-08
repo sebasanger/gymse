@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { UserInfo } from '../user-info/user-info';
 import { NavigationItems } from '../../interfaces/navigation/navigation-items';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -31,14 +32,34 @@ import { NavigationItems } from '../../interfaces/navigation/navigation-items';
 })
 export class NavigationComponent {
   private breakpointObserver = inject(BreakpointObserver);
+  private authService = inject(AuthService);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
     shareReplay()
   );
 
-  public menuItems: NavigationItems[] = [
-    { icon: 'dashboard', redirection: '/pages/dashboard', tittle: 'Inicio' },
-    { icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' },
-  ];
+  public menuItems: Set<NavigationItems> = new Set();
+
+  constructor() {
+    //BASIC ROLE
+    this.menuItems = new Set([
+      { icon: 'dashboard', redirection: '/pages/dashboard', tittle: 'Inicio' },
+      { icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' },
+      {
+        icon: 'exercise',
+        redirection: '/pages/ejercicios',
+        tittle: 'Ejercicios',
+      },
+    ]);
+
+    if (this.authService.checkUserHasRole('ADMIN')) {
+      this.menuItems.add({ icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' });
+      this.menuItems.add({
+        icon: 'exercise',
+        redirection: '/pages/ejercicios',
+        tittle: 'Ejercicios',
+      });
+    }
+  }
 }

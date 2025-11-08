@@ -112,8 +112,6 @@ function tryRefreshToken(parameters: {
   storageService: Storage | null;
   router: Router;
 }): Observable<HttpEvent<unknown>> {
-  console.log('Intenta refrescar token');
-
   if (!isRefreshing.getValue()) {
     return handleTokenRefresh(parameters);
   }
