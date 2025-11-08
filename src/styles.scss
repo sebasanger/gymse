@@ -44,3 +44,13 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+.delete-button {
+  cursor: pointer;
+  background-color: red;
+}
+
+.edit-button {
+  cursor: pointer;
+  background-color: cyan;
+}
