@@ -16,6 +16,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   if (!authService.getCurrentUser().value) {
+    console.log('ACA');
+
     authService.getAuthenticatedUser().subscribe();
   }
 

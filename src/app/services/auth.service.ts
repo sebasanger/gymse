@@ -68,7 +68,7 @@ export class AuthService {
   });
 
   login(loginRequestPayload: LoginRequestPayload): Observable<LoginResponse> {
-    return this.httpClient.post<LoginResponse>(base_url + 'auth/login', loginRequestPayload).pipe(
+    return this.httpClient.post<LoginResponse>(base_url + '/auth/login', loginRequestPayload).pipe(
       map((data: any) => {
         this.setUserDataOnStorageAndRemoveOld(data);
         return data;
@@ -77,9 +77,9 @@ export class AuthService {
   }
 
   resendEmailVerification(resendEmailVerification: ResendEmailVerification) {
-    resendEmailVerification.urlRedirect = client_url + 'auth/activate-acount?tokenuid=';
+    resendEmailVerification.urlRedirect = client_url + '/auth/activate-acount?tokenuid=';
     return this.httpClient.put<LoginResponse>(
-      base_url + 'auth/resend-email',
+      base_url + '/auth/resend-email',
       resendEmailVerification
     );
   }
@@ -102,13 +102,13 @@ export class AuthService {
   }
 
   logout() {
-    this.router.navigateByUrl('auth/login');
+    this.router.navigateByUrl('/auth/login');
     this.removeDataFromStorage();
     return of(true);
   }
 
   getAuthenticatedUser() {
-    return this.httpClient.get<User>(base_url + 'auth/me').pipe(
+    return this.httpClient.get<User>(base_url + '/auth/me').pipe(
       tap((user) => {
         this.userSignal.set(user);
         this.$currentUser.next(user);
@@ -121,7 +121,7 @@ export class AuthService {
   }
 
   updateAcount(acountPayload: UpdateAcountPayload) {
-    return this.httpClient.put<GetUser>(`${base_url}user/update-acount`, acountPayload);
+    return this.httpClient.put<GetUser>(`${base_url}/user/update-acount`, acountPayload);
   }
 
   checkUserHasRole(rol: Role): boolean {
