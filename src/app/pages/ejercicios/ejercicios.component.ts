@@ -30,7 +30,7 @@ export class EjerciciosComponent implements AfterViewInit, OnDestroy {
   private readonly ejercicioService = inject(EjercicioService);
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'nombre'];
+  displayedColumns = ['id', 'nombre', 'categoria'];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

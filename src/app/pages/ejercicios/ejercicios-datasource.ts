@@ -73,6 +73,8 @@ export class EjerciciosDataSource extends DataSource<Ejercicio> {
           return compare(a.nombre, b.nombre, isAsc);
         case 'id':
           return compare(+a.id, +b.id, isAsc);
+        case 'categoria':
+          return compare(+a.categoria.categoria, +b.categoria.categoria, isAsc);
         default:
           return 0;
       }
