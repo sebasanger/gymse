@@ -124,7 +124,11 @@ export class AuthService {
     return this.httpClient.put<GetUser>(`${base_url}/user/update-acount`, acountPayload);
   }
 
-  checkUserHasRole(rol: Role): boolean {
-    return this.$currentUser.value?.roles?.includes(rol) ?? false;
+  checkUserHasRole(rol: Role): Observable<boolean> {
+    return this.$currentUser.asObservable().pipe(
+      map((user) => {
+        return (user?.roles.includes(rol) || user?.roles.includes('ROLE_' + rol)) ?? false;
+      })
+    );
   }
 }

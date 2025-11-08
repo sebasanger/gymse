@@ -1,6 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AsyncPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -30,7 +30,7 @@ import { AuthService } from '../../services/auth.service';
     RouterModule,
   ],
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
   private authService = inject(AuthService);
 
@@ -41,25 +41,23 @@ export class NavigationComponent {
 
   public menuItems: Set<NavigationItems> = new Set();
 
-  constructor() {
+  constructor() {}
+  ngOnInit(): void {
     //BASIC ROLE
     this.menuItems = new Set([
       { icon: 'dashboard', redirection: '/pages/dashboard', tittle: 'Inicio' },
-      { icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' },
-      {
-        icon: 'exercise',
-        redirection: '/pages/ejercicios',
-        tittle: 'Ejercicios',
-      },
     ]);
 
-    if (this.authService.checkUserHasRole('ADMIN')) {
-      this.menuItems.add({ icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' });
-      this.menuItems.add({
-        icon: 'exercise',
-        redirection: '/pages/ejercicios',
-        tittle: 'Ejercicios',
-      });
-    }
+    //ADMIN ROLES
+    this.authService.checkUserHasRole('ADMIN').subscribe((result) => {
+      if (result) {
+        this.menuItems.add({ icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' });
+        this.menuItems.add({
+          icon: 'fitness_center',
+          redirection: '/pages/ejercicios',
+          tittle: 'Ejercicios',
+        });
+      }
+    });
   }
 }
