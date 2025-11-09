@@ -16,7 +16,7 @@
 
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Email" formControlName="email" />
+            <input matInput placeholder="Email" type="email" formControlName="email" />
             @if (ejercicioForm.controls['email'].hasError('required')) {
             <mat-error>Email es <strong>requerido</strong></mat-error>
             }

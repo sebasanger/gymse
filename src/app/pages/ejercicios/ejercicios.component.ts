@@ -142,7 +142,7 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
           },
           error: (err) => {
             console.error(err);
-            this.alert.error('Error', 'No se pudo deshabilitar el ejercicio.');
+            this.alert.errorResponse('Error', 'No se pudo deshabilitar el ejercicio.');
           },
         });
       } else {
@@ -164,7 +164,7 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
           },
           error: (err) => {
             console.error(err);
-            this.alert.error('Error', 'No se pudo habilitar el ejercicio.');
+            this.alert.errorResponse('Error', 'No se pudo habilitar el ejercicio.');
           },
         });
       } else {

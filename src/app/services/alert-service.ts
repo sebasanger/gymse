@@ -27,6 +27,13 @@ export class AlertService {
     });
   }
 
+  errorResponse(err: any, fallbackTitle = 'Error') {
+    const message =
+      err?.error?.message || err?.message || 'Ocurrió un error inesperado. Intenta nuevamente.';
+
+    return this.error(fallbackTitle, message);
+  }
+
   warning(title: string, text?: string) {
     return Swal.fire({
       title,

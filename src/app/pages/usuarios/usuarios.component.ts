@@ -85,12 +85,8 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
 
       const nombre = data.fullName?.toLowerCase() ?? '';
       const id = String(data.id ?? '').toLowerCase();
-      //const categoria = data.categoria?.categoria?.toLowerCase() ?? '';
 
-      return (
-        nombre.includes(normalizedFilter) || id.includes(normalizedFilter)
-        // categoria.includes(normalizedFilter)
-      );
+      return nombre.includes(normalizedFilter) || id.includes(normalizedFilter);
     };
   }
 
@@ -143,7 +139,7 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
           },
           error: (err) => {
             console.error(err);
-            this.alert.error('Error', 'No se pudo deshabilitar el usuario.');
+            this.alert.errorResponse(err, 'No se pudo deshabilitar el usuario');
           },
         });
       } else {
@@ -162,7 +158,7 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
           },
           error: (err) => {
             console.error(err);
-            this.alert.error('Error', 'No se pudo habilitar el usuario.');
+            this.alert.errorResponse(err, 'No se pudo habilitar el usuario');
           },
         });
       } else {

@@ -7,13 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Subject, takeUntil } from 'rxjs';
-import { Categoria } from '../../../interfaces/categoria/categoria.interface';
+import { Subject, takeUntil } from 'rxjs';
+import { Role, ROLES } from '../../../interfaces/roles/roles.enum';
+import { Usuario } from '../../../interfaces/user/usuario.interface';
 import { AlertService } from '../../../services/alert-service';
 import { CategoriaService } from '../../../services/categoria-service';
 import { UserService } from '../../../services/user.service';
-import { Usuario } from '../../../interfaces/user/usuario.interface';
-import { Role, ROLES } from '../../../interfaces/roles/roles.enum';
 @Component({
   selector: 'app-create-update-usuarios',
   templateUrl: './create-update-usuarios.component.html',
@@ -42,7 +41,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
 
   ejercicioForm = this.fb.group({
     fullName: ['', Validators.required],
-    email: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
     documento: ['', Validators.required],
     roles: [[], Validators.required],
   });
@@ -89,7 +88,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
         this.router.navigateByUrl('pages/ejercicios');
       },
       error: (err) => {
-        this.alert.error(this.usuarioId ? 'Error al actualizar' : 'Error al guardar');
+        this.alert.errorResponse(err, this.usuarioId ? 'Error al actualizar' : 'Error al guardar');
         console.error(err);
       },
     });

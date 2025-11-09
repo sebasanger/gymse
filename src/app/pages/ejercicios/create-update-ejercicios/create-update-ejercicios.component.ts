@@ -89,7 +89,10 @@ export class CreateUpdateEjerciciosComponent implements OnInit {
         this.router.navigateByUrl('pages/ejercicios');
       },
       error: (err) => {
-        this.alert.error(this.ejercicioId ? 'Error al actualizar' : 'Error al guardar');
+        this.alert.errorResponse(
+          err,
+          this.ejercicioId ? 'Error al actualizar' : 'Error al guardar'
+        );
         console.error(err);
       },
     });
