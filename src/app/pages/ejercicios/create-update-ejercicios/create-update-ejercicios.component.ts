@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { map, Subject, takeUntil } from 'rxjs';
 import { Categoria } from '../../../interfaces/categoria/categoria.interface';
 import {
   CreateEjercicio,
@@ -55,14 +55,16 @@ export class CreateUpdateEjerciciosComponent implements OnInit {
   states = [];
 
   ngOnInit(): void {
-    this.categoriaService.findAll().subscribe((res) => {
-      this.categorias = res;
-    });
+    this.categoriaService
+      .findAll()
+      .pipe(map((categorias) => categorias.filter((e) => e.tipo == 'EJERCICIO')))
+      .subscribe((res) => {
+        this.categorias = res;
+      });
+
     this.route.params.subscribe((params) => {
       this.ejercicioId = params['id'];
       takeUntil(this.ngUnsubscribe);
-
-      this.categoriaService.findAll();
 
       if (this.ejercicioId && this.ejercicioId > 0) {
         this.ejercicioService.findById(this.ejercicioId).subscribe((res) => {
