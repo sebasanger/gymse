@@ -47,7 +47,7 @@
     </ng-container>
 
     <ng-container matColumnDef="delete">
-      <th mat-header-cell *matHeaderCellDef>Eliminar/Recuperar</th>
+      <th mat-header-cell *matHeaderCellDef>Deshabilitar/Habilitar</th>
       <td mat-cell *matCellDef="let row">
         @if (row.deleted) {
         <button mat-icon-button class="recover-button" (click)="recover(row.id)">

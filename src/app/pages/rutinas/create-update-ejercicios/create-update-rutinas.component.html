@@ -1,28 +1,28 @@
-<form [formGroup]="ejercicioForm" novalidate (ngSubmit)="onSubmit()">
+<form [formGroup]="rutinaForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="base-form-card">
     <mat-card-header>
-      <mat-card-title>Ejercicio</mat-card-title>
+      <mat-card-title>Rutina</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Nombre del ejercicio" formControlName="nombre" />
-            @if (ejercicioForm.controls['nombre'].hasError('required')) {
-            <mat-error>Nombre del ejercicio es <strong>requerido</strong></mat-error>
+            <input matInput placeholder="Nombre de la rutina" formControlName="nombre" />
+            @if (rutinaForm.controls['nombre'].hasError('required')) {
+            <mat-error>Nombre de la rutina es <strong>requerida</strong></mat-error>
             }
           </mat-form-field>
         </div>
 
         <div class="col">
           <mat-form-field class="full-width">
-            <mat-select placeholder="Categoria" formControlName="categoria">
-              @for (categoria of categorias; track categoria) {
-              <mat-option [value]="categoria.categoria">{{ categoria.categoria }}</mat-option>
+            <mat-select placeholder="Ejercicio" formControlName="ejercicios" multiple>
+              @for (ejercicio of ejercicios; track ejercicio) {
+              <mat-option [value]="ejercicio.nombre">{{ ejercicio.nombre }}</mat-option>
               }
             </mat-select>
-            @if (ejercicioForm.controls['categoria'].hasError('required')) {
-            <mat-error>Categoria es <strong>requireda</strong></mat-error>
+            @if (rutinaForm.controls['ejercicios'].hasError('required')) {
+            <mat-error>Ejercicios es <strong>requiredo</strong></mat-error>
             }
           </mat-form-field>
         </div>
@@ -32,7 +32,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <textarea matInput placeholder="Descripcion" formControlName="descripcion"></textarea>
-            @if (ejercicioForm.controls['descripcion'].hasError('required')) {
+            @if (rutinaForm.controls['descripcion'].hasError('required')) {
             <mat-error>Descripcion del ejercicio es <strong>requerida</strong></mat-error>
             }
           </mat-form-field>

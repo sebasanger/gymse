@@ -57,6 +57,11 @@ export class NavigationComponent implements OnInit {
           redirection: '/pages/ejercicios',
           tittle: 'Ejercicios',
         });
+        this.menuItems.add({
+          icon: 'run_circle',
+          redirection: '/pages/rutinas',
+          tittle: 'Rutinas',
+        });
       }
     });
   }

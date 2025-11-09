@@ -5,6 +5,8 @@ import { EjerciciosComponent } from './ejercicios/ejercicios.component';
 import { CreateUpdateEjerciciosComponent } from './ejercicios/create-update-ejercicios/create-update-ejercicios.component';
 import { CreateUpdateUsuariosComponent } from './usuarios/create-update-usuarios/create-update-usuarios.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { RutinasComponent } from './rutinas/rutinas.component';
+import { CreateUpdateRutinasComponent } from './rutinas/create-update-ejercicios/create-update-rutinas.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -30,6 +32,16 @@ export const PAGES_ROUTES: Routes = [
       {
         path: 'ejercicios/update/:id',
         component: CreateUpdateEjerciciosComponent,
+      },
+
+      { path: 'rutinas', component: RutinasComponent },
+      {
+        path: 'rutinas/create',
+        component: CreateUpdateRutinasComponent,
+      },
+      {
+        path: 'rutinas/update/:id',
+        component: CreateUpdateRutinasComponent,
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
