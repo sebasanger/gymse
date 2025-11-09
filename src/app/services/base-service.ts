@@ -18,7 +18,7 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
   }
 
   findById(id: number): Observable<T> {
-    return this.http.get<T>(`${base_url}/${id}`);
+    return this.http.get<T>(`${base_url}/${this.endpoint}/${id}`);
   }
 
   save(entity: T): Observable<T> {

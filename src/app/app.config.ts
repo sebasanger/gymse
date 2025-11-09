@@ -10,6 +10,7 @@ import { PreloadAllModules, provideRouter, withPreloading } from '@angular/route
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { routes } from './app.routes';
 import { authenticationInterceptor } from './interceptors/token-interceptor';
+import { provideSweetAlert2 } from '@sweetalert2/ngx-sweetalert2';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +19,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch(), withInterceptors([authenticationInterceptor])),
+    provideSweetAlert2({
+      fireOnInit: false,
+      dismissOnDestroy: true,
+    }),
   ],
 };
