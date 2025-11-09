@@ -4,7 +4,7 @@ import { Pages } from './pages';
 import { EjerciciosComponent } from './ejercicios/ejercicios.component';
 import { CreateUpdateEjerciciosComponent } from './ejercicios/create-update-ejercicios/create-update-ejercicios.component';
 import { CreateUpdateUsuariosComponent } from './usuarios/create-update-usuarios/create-update-usuarios.component';
-import { UsuariosComponent } from './usuarios/ejercicios.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
 
 export const PAGES_ROUTES: Routes = [
   {

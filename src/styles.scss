@@ -45,12 +45,83 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
+.full-width-table {
+  width: 100%;
+}
+
+.table-top {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
 .delete-button {
-  cursor: pointer;
-  background-color: red;
+  cursor: pointer !important;
+  background-color: red !important;
+  color: black !important;
 }
 
 .edit-button {
-  cursor: pointer;
-  background-color: cyan;
+  cursor: pointer !important;
+  background-color: cyan !important;
+  color: black !important;
+}
+
+.recover-button {
+  cursor: pointer !important;
+  background-color: greenyellow !important;
+  color: black !important;
+}
+
+.agregar-button {
+  width: 100px !important;
+  background: green !important;
+  padding: 5px !important;
+  height: 50px !important;
+  font-size: 18px !important;
+}
+
+.deleted-row {
+  background-color: rgba(244, 67, 54, 0.1) !important;
+  color: #b71c1c !important;
+  text-decoration: line-through !important;
+  font-style: italic !important;
+
+  &:hover {
+    cursor: not-allowed !important;
+    background-color: rgba(244, 67, 54, 0.2) !important;
+  }
+}
+
+tr:not(.deleted-row) {
+  transition: background-color 0.2s ease-in-out !important;
+
+  &:hover {
+    background-color: rgba(33, 150, 243, 0.08) !important;
+    cursor: pointer !important;
+  }
+
+  &:active {
+    background-color: rgba(33, 150, 243, 0.15) !important;
+  }
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.col {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.col:last-child {
+  margin-right: 0;
 }
