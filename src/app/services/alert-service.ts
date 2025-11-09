@@ -58,15 +58,27 @@ export class AlertService {
     });
   }
 
-  confirmDelete(title = '¿Estás seguro?', text = 'Esta acción no se puede deshacer') {
+  confirmDelete(title = '¿Estás seguro?') {
     return Swal.fire({
       title,
-      text,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Sí, deshabilitar',
+      cancelButtonText: 'Cancelar',
+      theme: 'dark',
+    });
+  }
+
+  confirmRecover(title = '¿Estás seguro?') {
+    return Swal.fire({
+      title,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, habilitar',
       cancelButtonText: 'Cancelar',
       theme: 'dark',
     });

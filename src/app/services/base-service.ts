@@ -47,4 +47,8 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
   deleteById(id: number): Observable<void> {
     return this.http.delete<void>(`${base_url}/${this.endpoint}/${id}`);
   }
+
+  recoverById(id: number): Observable<void> {
+    return this.http.put<void>(`${base_url}/${this.endpoint}/recover/${id}`, null);
+  }
 }

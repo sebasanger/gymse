@@ -130,7 +130,7 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
   }
 
   delete(id: number) {
-    this.alert.confirmDelete('Deshabilitar ejercicio?', 'Podras revertir esto.').then((result) => {
+    this.alert.confirmDelete('Deshabilitar ejercicio?').then((result) => {
       if (result.isConfirmed) {
         this.ejercicioService.deleteById(id).subscribe({
           next: () => {
@@ -138,7 +138,7 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
               'Ejercicio deshabilitado',
               'El ejercicio fue deshabilitado correctamente.'
             );
-            this.dataSource.data = this.dataSource.data.filter((c) => c.id !== id);
+            this.load();
           },
           error: (err) => {
             console.error(err);
@@ -152,23 +152,23 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
   }
 
   recover(id: number) {
-    this.alert.confirmDelete('Deshabilitar ejercicio?', 'Podras revertir esto.').then((result) => {
+    this.alert.confirmRecover('Habilitar ejercicio?').then((result) => {
       if (result.isConfirmed) {
-        this.ejercicioService.deleteById(id).subscribe({
+        this.ejercicioService.recoverById(id).subscribe({
           next: () => {
             this.alert.success(
-              'Ejercicio deshabilitado',
-              'El ejercicio fue deshabilitado correctamente.'
+              'Ejercicio habilitado',
+              'El ejercicio fue habilitado correctamente.'
             );
-            this.dataSource.data = this.dataSource.data.filter((c) => c.id !== id);
+            this.load();
           },
           error: (err) => {
             console.error(err);
-            this.alert.error('Error', 'No se pudo deshabilitar el ejercicio.');
+            this.alert.error('Error', 'No se pudo habilitar el ejercicio.');
           },
         });
       } else {
-        this.alert.warning('Cancelado', 'No se deshabilito.');
+        this.alert.warning('Cancelado', 'No se habilito.');
       }
     });
   }
