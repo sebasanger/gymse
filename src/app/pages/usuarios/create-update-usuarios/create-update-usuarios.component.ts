@@ -66,13 +66,14 @@ export class CreateUpdateUsuariosComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const formValue = this.ejercicioForm.value;
+    if (this.ejercicioForm.invalid) return;
 
+    const formValue = this.ejercicioForm.value;
     const dto = {
       fullName: formValue.fullName ?? '',
       email: formValue.email ?? '',
       documento: formValue.documento ?? '',
-      roles: [],
+      roles: formValue.roles ?? [],
     };
 
     const action = this.usuarioId

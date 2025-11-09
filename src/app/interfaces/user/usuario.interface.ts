@@ -19,7 +19,6 @@ export interface CreateUsuarioDto {
   documento: string;
   fullName: string;
   roles: Role[];
-  username?: string;
 }
 
 export interface UpdateUsuarioDto {
@@ -28,5 +27,4 @@ export interface UpdateUsuarioDto {
   documento: string;
   fullName: string;
   roles: Role[];
-  username?: string;
 }
