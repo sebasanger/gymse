@@ -14,7 +14,7 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
   }
 
   findAllIncludingDeleted(): Observable<T[]> {
-    return this.http.get<T[]>(`${base_url}/${this.endpoint}/includeDeleted`);
+    return this.http.get<T[]>(`${base_url}/${this.endpoint}/includedDeleted`);
   }
 
   findById(id: number): Observable<T> {
