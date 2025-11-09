@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from '../shared/dashboard/dashboard.component';
 import { Pages } from './pages';
-import { UsersComponent } from './users/users.component';
 import { EjerciciosComponent } from './ejercicios/ejercicios.component';
 import { CreateUpdateEjerciciosComponent } from './ejercicios/create-update-ejercicios/create-update-ejercicios.component';
+import { CreateUpdateUsuariosComponent } from './usuarios/create-update-usuarios/create-update-usuarios.component';
+import { UsuariosComponent } from './usuarios/ejercicios.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -11,7 +12,16 @@ export const PAGES_ROUTES: Routes = [
     component: Pages,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'users', component: UsersComponent },
+      { path: 'usuarios', component: UsuariosComponent },
+      {
+        path: 'usuarios/create',
+        component: CreateUpdateUsuariosComponent,
+      },
+      {
+        path: 'usuarios/update/:id',
+        component: CreateUpdateUsuariosComponent,
+      },
+
       { path: 'ejercicios', component: EjerciciosComponent },
       {
         path: 'ejercicios/create',

@@ -51,7 +51,7 @@ export class NavigationComponent implements OnInit {
     //ADMIN ROLES
     this.authService.checkUserHasRole('ADMIN').subscribe((result) => {
       if (result) {
-        this.menuItems.add({ icon: 'person', redirection: '/pages/users', tittle: 'Usuarios' });
+        this.menuItems.add({ icon: 'person', redirection: '/pages/usuarios', tittle: 'Usuarios' });
         this.menuItems.add({
           icon: 'fitness_center',
           redirection: '/pages/ejercicios',

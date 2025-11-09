@@ -1,0 +1,55 @@
+<form [formGroup]="ejercicioForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="shipping-card">
+    <mat-card-header>
+      <mat-card-title>Usuario</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre completo" formControlName="fullName" />
+            @if (ejercicioForm.controls['fullName'].hasError('required')) {
+            <mat-error>Nombre es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Email" formControlName="email" />
+            @if (ejercicioForm.controls['email'].hasError('required')) {
+            <mat-error>Email es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Roles" formControlName="roles" multiple>
+              @for (rol of roles; track rol) {
+              <mat-option [value]="rol">{{ rol }}</mat-option>
+              }
+            </mat-select>
+            @if (ejercicioForm.controls['roles'].hasError('required')) {
+            <mat-error>Rol es <strong>requiredo</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="documento" formControlName="documento" />
+            @if (ejercicioForm.controls['documento'].hasError('required')) {
+            <mat-error>Documento es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button matButton="elevated" color="primary" type="submit">Guardar</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

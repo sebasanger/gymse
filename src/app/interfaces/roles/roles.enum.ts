@@ -1,1 +1,3 @@
 export type Role = 'ADMIN' | 'GIMNASIO' | 'ENTRENADOR' | 'INSTRUCTOR' | 'RECEPCIONSITA';
+
+export const ROLES: Role[] = ['ADMIN', 'GIMNASIO', 'ENTRENADOR', 'INSTRUCTOR', 'RECEPCIONSITA'];

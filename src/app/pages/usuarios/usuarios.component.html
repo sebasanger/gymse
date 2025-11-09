@@ -1,0 +1,81 @@
+<div class="table-top">
+  <mat-slide-toggle [(ngModel)]="includedDeleted" (click)="toggleIncludeDeleted()">
+    Mostrar desahilitados
+  </mat-slide-toggle>
+
+  <mat-form-field>
+    <mat-label>Filtro por nombre completo o id</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ejemplo: press banca" #input />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por rol</mat-label>
+    <mat-select (selectionChange)="applyFilterByRol($event.value)">
+      <mat-option value="">Todas</mat-option>
+      <mat-option *ngFor="let entry of roles | keyvalue" [value]="entry.value">
+        {{ entry.value }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button (click)="create()" class="agregar-button" mat-icon-button>Agregar</button>
+</div>
+<div class="mat-elevation-z2">
+  <table mat-table class="full-width-table" matSort aria-label="Elements">
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre completo</th>
+      <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Editar</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="edit-button" (click)="edit(row.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef>Eliminar/Recuperar</th>
+      <td mat-cell *matCellDef="let row">
+        @if (row.deleted) {
+        <button mat-icon-button class="recover-button" (click)="recover(row.id)">
+          <mat-icon>history</mat-icon>
+        </button>
+        }@else {
+        <button mat-icon-button class="delete-button" (click)="delete(row.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      [class.deleted-row]="row.deleted"
+    ></tr>
+  </table>
+
+  <mat-paginator
+    #paginator
+    [length]="dataSource.data.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>
