@@ -1,12 +1,17 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSelectModule } from '@angular/material/select';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { Categoria } from '../../../interfaces/categoria/categoria.interface';
+import { CreateEjercicio, Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
+import { CategoriaService } from '../../../services/categoria-service';
+import { EjercicioService } from '../../../services/ejercicio-service';
 
 @Component({
   selector: 'app-create-update-ejercicios',
@@ -21,88 +26,67 @@ import { MatIconModule } from '@angular/material/icon';
     ReactiveFormsModule,
   ],
 })
-export class CreateUpdateEjerciciosComponent {
+export class CreateUpdateEjerciciosComponent implements OnInit {
   private fb = inject(FormBuilder);
-  addressForm = this.fb.group({
-    company: null,
-    firstName: [null, Validators.required],
-    lastName: [null, Validators.required],
-    address: [null, Validators.required],
-    address2: null,
-    city: [null, Validators.required],
-    state: [null, Validators.required],
-    postalCode: [
-      null,
-      Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(5)]),
-    ],
-    shipping: ['free', Validators.required],
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly ejercicioService = inject(EjercicioService);
+  private readonly categoriaService = inject(CategoriaService);
+  private ngUnsubscribe: Subject<boolean> = new Subject();
+
+  public ejercicioId: number | undefined;
+  public ejercicio: Ejercicio | undefined;
+  public categorias: Categoria[] = [];
+
+  ejercicioForm = this.fb.group({
+    nombre: ['', Validators.required],
+    descripcion: ['', Validators.required],
+    categoria: ['', Validators.required],
   });
 
   hasUnitNumber = false;
 
-  states = [
-    { name: 'Alabama', abbreviation: 'AL' },
-    { name: 'Alaska', abbreviation: 'AK' },
-    { name: 'American Samoa', abbreviation: 'AS' },
-    { name: 'Arizona', abbreviation: 'AZ' },
-    { name: 'Arkansas', abbreviation: 'AR' },
-    { name: 'California', abbreviation: 'CA' },
-    { name: 'Colorado', abbreviation: 'CO' },
-    { name: 'Connecticut', abbreviation: 'CT' },
-    { name: 'Delaware', abbreviation: 'DE' },
-    { name: 'District Of Columbia', abbreviation: 'DC' },
-    { name: 'Federated States Of Micronesia', abbreviation: 'FM' },
-    { name: 'Florida', abbreviation: 'FL' },
-    { name: 'Georgia', abbreviation: 'GA' },
-    { name: 'Guam', abbreviation: 'GU' },
-    { name: 'Hawaii', abbreviation: 'HI' },
-    { name: 'Idaho', abbreviation: 'ID' },
-    { name: 'Illinois', abbreviation: 'IL' },
-    { name: 'Indiana', abbreviation: 'IN' },
-    { name: 'Iowa', abbreviation: 'IA' },
-    { name: 'Kansas', abbreviation: 'KS' },
-    { name: 'Kentucky', abbreviation: 'KY' },
-    { name: 'Louisiana', abbreviation: 'LA' },
-    { name: 'Maine', abbreviation: 'ME' },
-    { name: 'Marshall Islands', abbreviation: 'MH' },
-    { name: 'Maryland', abbreviation: 'MD' },
-    { name: 'Massachusetts', abbreviation: 'MA' },
-    { name: 'Michigan', abbreviation: 'MI' },
-    { name: 'Minnesota', abbreviation: 'MN' },
-    { name: 'Mississippi', abbreviation: 'MS' },
-    { name: 'Missouri', abbreviation: 'MO' },
-    { name: 'Montana', abbreviation: 'MT' },
-    { name: 'Nebraska', abbreviation: 'NE' },
-    { name: 'Nevada', abbreviation: 'NV' },
-    { name: 'New Hampshire', abbreviation: 'NH' },
-    { name: 'New Jersey', abbreviation: 'NJ' },
-    { name: 'New Mexico', abbreviation: 'NM' },
-    { name: 'New York', abbreviation: 'NY' },
-    { name: 'North Carolina', abbreviation: 'NC' },
-    { name: 'North Dakota', abbreviation: 'ND' },
-    { name: 'Northern Mariana Islands', abbreviation: 'MP' },
-    { name: 'Ohio', abbreviation: 'OH' },
-    { name: 'Oklahoma', abbreviation: 'OK' },
-    { name: 'Oregon', abbreviation: 'OR' },
-    { name: 'Palau', abbreviation: 'PW' },
-    { name: 'Pennsylvania', abbreviation: 'PA' },
-    { name: 'Puerto Rico', abbreviation: 'PR' },
-    { name: 'Rhode Island', abbreviation: 'RI' },
-    { name: 'South Carolina', abbreviation: 'SC' },
-    { name: 'South Dakota', abbreviation: 'SD' },
-    { name: 'Tennessee', abbreviation: 'TN' },
-    { name: 'Texas', abbreviation: 'TX' },
-    { name: 'Utah', abbreviation: 'UT' },
-    { name: 'Vermont', abbreviation: 'VT' },
-    { name: 'Virgin Islands', abbreviation: 'VI' },
-    { name: 'Virginia', abbreviation: 'VA' },
-    { name: 'Washington', abbreviation: 'WA' },
-    { name: 'West Virginia', abbreviation: 'WV' },
-    { name: 'Wisconsin', abbreviation: 'WI' },
-    { name: 'Wyoming', abbreviation: 'WY' },
-  ];
+  states = [];
+
+  ngOnInit(): void {
+    this.categoriaService.findAll().subscribe((res) => {
+      this.categorias = res;
+    });
+    this.route.params.subscribe((params) => {
+      this.ejercicioId = params['id'];
+      takeUntil(this.ngUnsubscribe);
+
+      this.categoriaService.findAll();
+
+      if (this.ejercicioId && this.ejercicioId > 0) {
+        this.ejercicioService.findById(this.ejercicioId).subscribe((res) => {
+          this.ejercicio = res;
+          this.ejercicioForm.patchValue({
+            nombre: res.nombre,
+            descripcion: res.descripcion,
+            categoria: res.categoria?.categoria ?? null,
+          });
+        });
+      }
+    });
+  }
 
   onSubmit(): void {
-    alert('Thanks!');
+    const formValue = this.ejercicioForm.value;
+    const ejer: CreateEjercicio = {
+      nombre: formValue.nombre ?? '',
+      descripcion: formValue.descripcion ?? '',
+      categoria: formValue.categoria ?? '',
+    };
+
+    this.ejercicioService.saveSpecific(ejer).subscribe({
+      next: (res) => {
+        console.log('Ejercicio creado:', res);
+        this.router.navigateByUrl('pages/ejercicios');
+      },
+      error: (err) => {
+        console.error('Error al crear el ejercicio', err);
+      },
+    });
   }
 }

@@ -11,3 +11,20 @@ export interface Ejercicio {
   fotos?: Foto[];
   videos?: Video[];
 }
+
+export interface CreateEjercicio {
+  nombre: string;
+  descripcion: string;
+  categoria: string;
+  fotos?: Foto[];
+  videos?: Video[];
+}
+
+export interface UpdateEjercicio {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  categoria: string;
+  fotos?: Foto[];
+  videos?: Video[];
+}
