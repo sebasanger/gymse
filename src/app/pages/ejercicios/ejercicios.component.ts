@@ -21,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Categoria } from '../../interfaces/categoria/categoria.interface';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { AlertService } from '../../services/alert-service';
 
 @Component({
   selector: 'app-ejercicios',
@@ -43,6 +44,7 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Ejercicio>;
   dataSource = new MatTableDataSource<Ejercicio>();
+  private readonly alert = inject(AlertService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
@@ -114,24 +116,24 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
   }
 
   deleteCustomer(id: number) {
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "You won't be able to revert this!",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText: 'Yes, delete it!',
-    // }).then((result: any) => {
-    //   if (result.isConfirmed) {
-    //     this.customerService.delete(id);
-    //     setTimeout(() => {
-    //       this.loadCustomerPage();
-    //     }, 500);
-    //   } else {
-    //     Swal.fire('Cancelled', 'the customer is safe', 'warning');
-    //   }
-    // });
+    this.alert
+      .confirmDelete('¿Eliminar ejercicio?', 'No podrás revertir esta acción.')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.ejercicioService.deleteById(id).subscribe({
+            next: () => {
+              this.alert.success('ejercicio eliminado', 'El ejercicio fue borrado correctamente.');
+              this.dataSource.data = this.dataSource.data.filter((c) => c.id !== id);
+            },
+            error: (err) => {
+              console.error(err);
+              this.alert.error('Error', 'No se pudo eliminar el ejercicio.');
+            },
+          });
+        } else {
+          this.alert.warning('Cancelado', 'No se elimino.');
+        }
+      });
   }
 
   ngOnDestroy(): void {

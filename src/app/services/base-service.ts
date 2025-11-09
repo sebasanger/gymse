@@ -14,7 +14,7 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
   }
 
   findAllIncludingDeleted(): Observable<T[]> {
-    return this.http.get<T[]>(`${base_url}/includeDeleted`);
+    return this.http.get<T[]>(`${base_url}/${this.endpoint}/includeDeleted`);
   }
 
   findById(id: number): Observable<T> {
@@ -22,7 +22,7 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
   }
 
   save(entity: T): Observable<T> {
-    return this.http.post<T>(base_url, entity);
+    return this.http.post<T>(`${base_url}/${this.endpoint}`, entity);
   }
 
   saveSpecific(entity: S): Observable<T> {
@@ -31,7 +31,7 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
 
   update(entity: T): Observable<T> {
     if (!entity.id) throw new Error('El id es requerido para actualizar');
-    return this.http.put<T>(`${base_url}`, entity);
+    return this.http.put<T>(`${base_url}/${this.endpoint}`, entity);
   }
 
   updateSpecific(entity: U): Observable<T> {
@@ -41,10 +41,10 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
 
   delete(entity: T): Observable<void> {
     if (!entity.id) throw new Error('El id es requerido para eliminar');
-    return this.http.delete<void>(`${base_url}/${entity.id}`);
+    return this.http.delete<void>(`${base_url}/${this.endpoint}/${entity.id}`);
   }
 
   deleteById(id: number): Observable<void> {
-    return this.http.delete<void>(`${base_url}/${id}`);
+    return this.http.delete<void>(`${base_url}/${this.endpoint}/${id}`);
   }
 }

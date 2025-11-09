@@ -57,4 +57,18 @@ export class AlertService {
       theme: this.theme,
     });
   }
+
+  confirmDelete(title = '¿Estás seguro?', text = 'Esta acción no se puede deshacer') {
+    return Swal.fire({
+      title,
+      text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      theme: 'dark',
+    });
+  }
 }
