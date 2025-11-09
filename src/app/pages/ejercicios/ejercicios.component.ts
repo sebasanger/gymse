@@ -55,7 +55,7 @@ export class EjerciciosComponent implements OnDestroy, AfterViewInit {
   public includedDeleted: boolean = true;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'nombre', 'categoria', 'edit', 'delete'];
+  displayedColumns = ['id', 'nombre', 'descripcion', 'categoria', 'edit', 'delete'];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
