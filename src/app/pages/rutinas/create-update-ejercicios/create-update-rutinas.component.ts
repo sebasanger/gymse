@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -102,11 +102,9 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
       if (this.rutinaId && this.rutinaId > 0) {
         this.rutinaService.findById(this.rutinaId).subscribe((res) => {
-          this.rutina = res;
-          this.rutinaForm.patchValue({
-            nombre: res.nombre,
-            descripcion: res.descripcion,
-          });
+          if (res) {
+            this.loadRutina(res);
+          }
         });
       }
     });
@@ -188,5 +186,38 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
   deleteEjercicio(entrenamientoIndex: number, ejercicioIndex: number): void {
     this.getEjerciciosFormArray(entrenamientoIndex).removeAt(ejercicioIndex);
+  }
+
+  loadRutina(rutina: any): void {
+    this.entrenamientosForm.clear();
+
+    this.rutinaForm.patchValue({
+      nombre: rutina.nombre,
+      descripcion: rutina.descripcion,
+    });
+
+    rutina.entrenamientos.forEach((entrenamiento: any) => {
+      const ejerciciosArray = this.fb.array<FormGroup>([]);
+
+      entrenamiento.ejerciciosEntrenamientos.forEach((ej: any) => {
+        const ejercicioGroup = this.fb.group({
+          ejercicioId: [ej.ejercicio.id, Validators.required],
+          series: [ej.series, Validators.required],
+          repeticiones: [ej.repeticiones, Validators.required],
+          peso: [ej.peso, Validators.required],
+        });
+
+        ejerciciosArray.push(ejercicioGroup);
+      });
+
+      const entrenamientoGroup = this.fb.group({
+        nombre: [entrenamiento.nombre, Validators.required],
+        descripcion: [entrenamiento.descripcion, Validators.required],
+        categoria: [entrenamiento.categoria?.id, Validators.required],
+        ejercicioEntrenamiento: ejerciciosArray,
+      });
+
+      this.entrenamientosForm.push(entrenamientoGroup);
+    });
   }
 }
