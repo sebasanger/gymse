@@ -46,8 +46,23 @@
         <h2>Entrenamientos</h2>
 
         <div formArrayName="entrenamientos">
-          @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let i = $index) {
-          <div class="lesson-form-row mt-3 p-3 border rounded bg-surface" [formGroupName]="i">
+          @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let
+          indiceEntrenamiento = $index) {
+          <h3>Entrenamiento: #{{ indiceEntrenamiento + 1 }}</h3>
+          <div
+            class="lesson-form-row mt-3 p-3 border rounded bg-surface"
+            [formGroupName]="indiceEntrenamiento"
+          >
+            <button
+              mat-raised-button
+              color="warn"
+              type="button"
+              (click)="deleteEntrenamiento(indiceEntrenamiento)"
+            >
+              Eliminar entrenamiento
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+
             <mat-form-field class="full-width">
               <mat-label>Nombre del entrenamiento</mat-label>
               <input matInput formControlName="nombre" required />
@@ -63,17 +78,17 @@
               <input matInput formControlName="categoria" required />
             </mat-form-field>
 
-            <button mat-mini-fab color="warn" type="button" (click)="deleteEntrenamiento(i)">
-              <mat-icon>delete_forever</mat-icon>
-            </button>
-
             <!-- EJERCICIOS DENTRO DEL ENTRENAMIENTO -->
             <div formArrayName="ejercicioEntrenamiento">
-              <h3 class="mt-3">Ejercicios</h3>
+              <h4 class="mt-3">Ejercicios</h4>
 
-              @for (ejercicio of getEjerciciosFormArray(i).controls; track ejercicio; let j =
-              $index) {
-              <div class="lesson-form-row mt-2 p-2 border rounded-sm" [formGroupName]="j">
+              @for (ejercicio of getEjerciciosFormArray(indiceEntrenamiento).controls; track
+              ejercicio; let indiceEjercicio = $index) {
+              <h5 class="mt-3">Ejercicio: #{{ indiceEjercicio + 1 }}</h5>
+              <div
+                class="lesson-form-row mt-2 p-2 border rounded-sm"
+                [formGroupName]="indiceEjercicio"
+              >
                 <mat-form-field class="full-width">
                   <mat-label>Ejercicio</mat-label>
                   <mat-select formControlName="ejercicioId" required>
@@ -98,13 +113,24 @@
                   <input matInput type="number" formControlName="peso" />
                 </mat-form-field>
 
-                <button mat-icon-button color="warn" type="button" (click)="deleteEjercicio(i, j)">
-                  <mat-icon>delete</mat-icon>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  type="button"
+                  (click)="deleteEjercicio(indiceEntrenamiento, indiceEjercicio)"
+                >
+                  Eliminar ejercicio <mat-icon>delete</mat-icon>
                 </button>
               </div>
               }
 
-              <button mat-mini-fab color="primary" type="button" (click)="addEjercicio(i)">
+              <button
+                mat-raised-button
+                color="primary"
+                type="button"
+                (click)="addEjercicio(indiceEntrenamiento)"
+              >
+                Agregar ejercicio
                 <mat-icon>add</mat-icon>
               </button>
             </div>
@@ -113,8 +139,8 @@
           }
         </div>
 
-        <button mat-mini-fab color="accent" type="button" (click)="addEntrenamiento()">
-          <mat-icon>add</mat-icon>
+        <button mat-raised-button color="accent" type="button" (click)="addEntrenamiento()">
+          Agregar entrenamiento<mat-icon>add</mat-icon>
         </button>
       </div>
     </mat-card-content>
