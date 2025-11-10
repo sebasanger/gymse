@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,18 +10,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { Categoria } from '../../../interfaces/categoria/categoria.interface';
 import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
 import { CreateRutinaDto, Rutina } from '../../../interfaces/rutina/rutina.interface';
+import { Usuario } from '../../../interfaces/user/usuario.interface';
 import { AlertService } from '../../../services/alert-service';
+import { CategoriaService } from '../../../services/categoria-service';
 import { EjercicioService } from '../../../services/ejercicio-service';
 import { RutinaService } from '../../../services/rutina-service';
-import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user.service';
-import { User } from '../../../models/user.model';
-import { GetUser } from '../../../interfaces/user/get-user.interface';
-import { Usuario } from '../../../interfaces/user/usuario.interface';
-import { Categoria } from '../../../interfaces/categoria/categoria.interface';
-import { CategoriaService } from '../../../services/categoria-service';
+import { minLengthArray } from '../../../utils/validators';
 @Component({
   selector: 'app-create-update-rutinas',
   templateUrl: './create-update-rutinas.component.html',
@@ -57,25 +56,29 @@ export class CreateUpdateRutinasComponent implements OnInit {
   rutinaForm = this.fb.group({
     nombre: ['', Validators.required],
     descripcion: ['', Validators.required],
-    categoria: ['', Validators.required],
     usuarios: [[]],
 
-    entrenamientos: this.fb.array([
-      this.fb.group({
-        nombre: ['', Validators.required],
-        descripcion: ['', Validators.required],
-        categoria: ['', Validators.required],
-
-        ejercicioEntrenamiento: this.fb.array([
-          this.fb.group({
-            ejercicioId: [0, Validators.required],
-            series: [4, Validators.required],
-            repeticiones: [10, Validators.required],
-            peso: [0, Validators.required],
-          }),
-        ]),
-      }),
-    ]),
+    entrenamientos: this.fb.array(
+      [
+        this.fb.group({
+          nombre: ['', Validators.required],
+          descripcion: ['', Validators.required],
+          categoria: [null, Validators.required],
+          ejercicioEntrenamiento: this.fb.array(
+            [
+              this.fb.group({
+                ejercicioId: [null, Validators.required],
+                series: [4, Validators.required],
+                repeticiones: [10, Validators.required],
+                peso: [0, Validators.required],
+              }),
+            ],
+            [minLengthArray(1)]
+          ),
+        }),
+      ],
+      [minLengthArray(1)]
+    ),
   });
 
   get entrenamientosForm() {
@@ -122,10 +125,10 @@ export class CreateUpdateRutinasComponent implements OnInit {
     });
 
     const entrenamientoForm = this.fb.group({
-      nombre: [''],
-      descripcion: [''],
-      categoria: [''],
-      ejercicioEntrenamiento: this.fb.array([ejercicioForm]),
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      categoria: ['', Validators.required],
+      ejercicioEntrenamiento: this.fb.array([ejercicioForm], Validators.required),
     });
 
     this.entrenamientosForm.push(entrenamientoForm);
@@ -141,7 +144,6 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
   onSubmit(): void {
     const formValue = this.rutinaForm.value;
-    console.log(formValue);
 
     const dto: CreateRutinaDto = {
       nombre: formValue.nombre ?? '',

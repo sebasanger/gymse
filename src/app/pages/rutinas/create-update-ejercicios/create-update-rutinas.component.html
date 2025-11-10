@@ -40,13 +40,6 @@
 
       <!-- ENTRENAMIENTOS -->
       <section class="section-container">
-        <div class="section-header">
-          <h2>Entrenamientos</h2>
-          <button mat-stroked-button color="accent" type="button" (click)="addEntrenamiento()">
-            <mat-icon>add</mat-icon> Agregar entrenamiento
-          </button>
-        </div>
-
         <div formArrayName="entrenamientos">
           @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let
           indiceEntrenamiento = $index) {
@@ -191,7 +184,9 @@
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button mat-raised-button color="primary" type="submit">Guardar rutina</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="rutinaForm.invalid">
+        Guardar rutina
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>
