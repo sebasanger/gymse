@@ -1,0 +1,24 @@
+.base-form-card {
+  padding: 1rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.small-field {
+  width: 120px;
+  margin-right: 8px;
+}
+
+.lesson-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.border {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
