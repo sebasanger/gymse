@@ -11,9 +11,9 @@
           <mat-form-field class="full-width">
             <mat-label>Nombre de la rutina</mat-label>
             <input matInput formControlName="nombre" />
-            @if (rutinaForm.controls['nombre'].hasError('required')) {
-            <mat-error>El nombre de la rutina es <strong>requerido</strong></mat-error>
-            }
+            <mat-error *ngIf="rutinaForm.get('nombre')?.hasError('required')">
+              El nombre de la rutina es <strong>requerido</strong>
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field class="full-width">
@@ -23,24 +23,29 @@
               <mat-option [value]="usuario.id">{{ usuario.fullName }}</mat-option>
               }
             </mat-select>
-            @if (rutinaForm.controls['usuarios'].hasError('required')) {
-            <mat-error>Debe seleccionar al menos un usuario</mat-error>
-            }
+            <mat-error *ngIf="rutinaForm.get('usuarios')?.hasError('required')">
+              Debe seleccionar al menos un usuario
+            </mat-error>
           </mat-form-field>
         </div>
 
         <mat-form-field class="full-width">
           <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="descripcion"></textarea>
-          @if (rutinaForm.controls['descripcion'].hasError('required')) {
-          <mat-error>Descripción es <strong>requerida</strong></mat-error>
-          }
+          <mat-error *ngIf="rutinaForm.get('descripcion')?.hasError('required')">
+            La descripción es <strong>requerida</strong>
+          </mat-error>
         </mat-form-field>
       </section>
 
       <!-- ENTRENAMIENTOS -->
       <section class="section-container">
-        <h2>Entrenamientos</h2>
+        <div class="section-header">
+          <h2>Entrenamientos</h2>
+          <button mat-stroked-button color="accent" type="button" (click)="addEntrenamiento()">
+            <mat-icon>add</mat-icon> Agregar entrenamiento
+          </button>
+        </div>
 
         <div formArrayName="entrenamientos">
           @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let
@@ -64,11 +69,17 @@
                 <mat-form-field class="full-width">
                   <mat-label>Nombre</mat-label>
                   <input matInput formControlName="nombre" />
+                  <mat-error *ngIf="entrenamiento.get('nombre')?.hasError('required')">
+                    El nombre del entrenamiento es requerido
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="full-width">
                   <mat-label>Descripción</mat-label>
                   <input matInput formControlName="descripcion" />
+                  <mat-error *ngIf="entrenamiento.get('descripcion')?.hasError('required')">
+                    La descripción es requerida
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="full-width">
@@ -78,6 +89,9 @@
                     <mat-option [value]="categoria.categoria">{{ categoria.categoria }}</mat-option>
                     }
                   </mat-select>
+                  <mat-error *ngIf="entrenamiento.get('categoria')?.hasError('required')">
+                    La categoría es requerida
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -109,28 +123,48 @@
                         <mat-option [value]="ej.id">{{ ej.nombre }}</mat-option>
                         }
                       </mat-select>
+                      <mat-error *ngIf="ejercicio.get('ejercicioId')?.hasError('required')">
+                        Debe seleccionar un ejercicio
+                      </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="small-field">
                       <mat-label>Series</mat-label>
                       <input matInput type="number" formControlName="series" />
+                      <mat-error *ngIf="ejercicio.get('series')?.hasError('required')">
+                        Campo requerido
+                      </mat-error>
+                      <mat-error *ngIf="ejercicio.get('series')?.hasError('min')">
+                        Mínimo 1 serie
+                      </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="small-field">
                       <mat-label>Repeticiones</mat-label>
                       <input matInput type="number" formControlName="repeticiones" />
+                      <mat-error *ngIf="ejercicio.get('repeticiones')?.hasError('required')">
+                        Campo requerido
+                      </mat-error>
+                      <mat-error *ngIf="ejercicio.get('repeticiones')?.hasError('min')">
+                        Mínimo 1 repetición
+                      </mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="small-field">
                       <mat-label>Peso (kg)</mat-label>
                       <input matInput type="number" formControlName="peso" />
+                      <mat-error *ngIf="ejercicio.get('peso')?.hasError('required')">
+                        Campo requerido
+                      </mat-error>
+                      <mat-error *ngIf="ejercicio.get('peso')?.hasError('min')">
+                        El peso no puede ser negativo
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
                 }
 
-                <!-- botón debajo del último ejercicio -->
-                <div class="add-button-row">
+                <div class="add-btn-container">
                   <button
                     mat-stroked-button
                     color="primary"
@@ -143,22 +177,21 @@
               </div>
             </mat-card-content>
           </mat-card>
-          }
 
-          <!-- botón debajo del último entrenamiento -->
-          <div class="add-button-row">
+          <!-- Botón debajo del último entrenamiento -->
+          @if (indiceEntrenamiento === entrenamientosForm.length - 1) {
+          <div class="add-btn-container">
             <button mat-stroked-button color="accent" type="button" (click)="addEntrenamiento()">
               <mat-icon>add</mat-icon> Agregar entrenamiento
             </button>
           </div>
+          } }
         </div>
       </section>
     </mat-card-content>
 
     <mat-card-actions align="end">
-      <button mat-raised-button color="primary" type="submit" [disabled]="rutinaForm.invalid">
-        Guardar rutina
-      </button>
+      <button mat-raised-button color="primary" type="submit">Guardar rutina</button>
     </mat-card-actions>
   </mat-card>
 </form>

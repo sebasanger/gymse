@@ -58,7 +58,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
     nombre: ['', Validators.required],
     descripcion: ['', Validators.required],
     categoria: ['', Validators.required],
-    usuarios: [[], Validators.required],
+    usuarios: [[]],
 
     entrenamientos: this.fb.array([
       this.fb.group({
@@ -146,9 +146,18 @@ export class CreateUpdateRutinasComponent implements OnInit {
     const dto: CreateRutinaDto = {
       nombre: formValue.nombre ?? '',
       descripcion: formValue.descripcion ?? '',
-      //TODO: setear user
-      userId: 1,
-      entrenamientos: [],
+      usuariosId: formValue.usuarios ?? [],
+      entrenamientos: (formValue.entrenamientos ?? []).map((entrenamiento: any) => ({
+        nombre: entrenamiento.nombre ?? '',
+        descripcion: entrenamiento.descripcion ?? '',
+        categoria: entrenamiento.categoria ?? '',
+        ejercicioEntrenamiento: (entrenamiento.ejercicioEntrenamiento ?? []).map((ej: any) => ({
+          ejercicioId: ej.ejercicioId,
+          series: ej.series,
+          repeticiones: ej.repeticiones,
+          peso: ej.peso,
+        })),
+      })),
     };
 
     const action = this.rutinaId

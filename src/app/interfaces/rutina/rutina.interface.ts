@@ -12,7 +12,7 @@ export interface Rutina {
 export interface CreateRutinaDto {
   nombre: string;
   descripcion: string;
-  userId?: number;
+  usuariosId?: number[];
   entrenamientos: CreateEntrenamientoDto[];
 }
 
