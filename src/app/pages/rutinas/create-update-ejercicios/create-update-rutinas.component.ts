@@ -56,7 +56,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
   rutinaForm = this.fb.group({
     nombre: ['', Validators.required],
     descripcion: ['', Validators.required],
-    usuarios: [[]],
+    usuarios: this.fb.control<number[]>([], Validators.required),
 
     entrenamientos: this.fb.array(
       [
@@ -188,12 +188,13 @@ export class CreateUpdateRutinasComponent implements OnInit {
     this.getEjerciciosFormArray(entrenamientoIndex).removeAt(ejercicioIndex);
   }
 
-  loadRutina(rutina: any): void {
+  loadRutina(rutina: Rutina): void {
     this.entrenamientosForm.clear();
 
     this.rutinaForm.patchValue({
       nombre: rutina.nombre,
       descripcion: rutina.descripcion,
+      usuarios: rutina.usuarios.map((u) => u.id),
     });
 
     rutina.entrenamientos.forEach((entrenamiento: any) => {
@@ -210,10 +211,12 @@ export class CreateUpdateRutinasComponent implements OnInit {
         ejerciciosArray.push(ejercicioGroup);
       });
 
+      console.log(entrenamiento.categoria?.id);
+
       const entrenamientoGroup = this.fb.group({
         nombre: [entrenamiento.nombre, Validators.required],
         descripcion: [entrenamiento.descripcion, Validators.required],
-        categoria: [entrenamiento.categoria?.id, Validators.required],
+        categoria: [entrenamiento.categoria.categoria, Validators.required],
         ejercicioEntrenamiento: ejerciciosArray,
       });
 

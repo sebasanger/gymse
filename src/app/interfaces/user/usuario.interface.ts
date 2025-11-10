@@ -28,3 +28,9 @@ export interface UpdateUsuarioDto {
   fullName: string;
   roles: Role[];
 }
+
+export interface UsuarioMinDto {
+  id: number;
+  documento: string;
+  fullName: string;
+}

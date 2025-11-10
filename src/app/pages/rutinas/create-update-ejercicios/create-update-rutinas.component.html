@@ -20,7 +20,9 @@
             <mat-label>Usuarios asignados</mat-label>
             <mat-select formControlName="usuarios" multiple>
               @for (usuario of usuarios; track usuario) {
-              <mat-option [value]="usuario.id">{{ usuario.fullName }}</mat-option>
+              <mat-option [value]="usuario.id"
+                >{{ usuario.fullName }}-{{ usuario.documento }}</mat-option
+              >
               }
             </mat-select>
             <mat-error *ngIf="rutinaForm.get('usuarios')?.hasError('required')">
