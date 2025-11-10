@@ -85,10 +85,6 @@ export class CreateUpdateRutinasComponent implements OnInit {
     return this.rutinaForm.controls['entrenamientos'] as FormArray;
   }
 
-  get ejercicioEntrenamientoForm() {
-    return this.rutinaForm.controls['entrenamientos'] as FormArray;
-  }
-
   ngOnInit(): void {
     this.ejercicioService.findAll().subscribe((res) => {
       this.ejercicios = res;
@@ -114,32 +110,6 @@ export class CreateUpdateRutinasComponent implements OnInit {
         });
       }
     });
-  }
-
-  addEntrenamiento(): void {
-    const ejercicioForm = this.fb.group({
-      ejercicioId: [0, Validators.required],
-      series: [4, Validators.required],
-      repeticiones: [10, Validators.required],
-      peso: [0, Validators.required],
-    });
-
-    const entrenamientoForm = this.fb.group({
-      nombre: ['', Validators.required],
-      descripcion: ['', Validators.required],
-      categoria: ['', Validators.required],
-      ejercicioEntrenamiento: this.fb.array([ejercicioForm], Validators.required),
-    });
-
-    this.entrenamientosForm.push(entrenamientoForm);
-  }
-
-  get entrenamientosForms(): FormArray {
-    return this.rutinaForm.get('entrenamientos') as FormArray;
-  }
-
-  deleteEntrenamiento(entrenamientoIndex: any) {
-    this.entrenamientosForm.removeAt(entrenamientoIndex);
   }
 
   onSubmit(): void {
@@ -182,6 +152,28 @@ export class CreateUpdateRutinasComponent implements OnInit {
     return this.entrenamientosForm
       .at(entrenamientoIndex)
       .get('ejercicioEntrenamiento') as FormArray;
+  }
+
+  addEntrenamiento(): void {
+    const ejercicioForm = this.fb.group({
+      ejercicioId: [0, Validators.required],
+      series: [4, Validators.required],
+      repeticiones: [10, Validators.required],
+      peso: [0, Validators.required],
+    });
+
+    const entrenamientoForm = this.fb.group({
+      nombre: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      categoria: ['', Validators.required],
+      ejercicioEntrenamiento: this.fb.array([ejercicioForm], Validators.required),
+    });
+
+    this.entrenamientosForm.push(entrenamientoForm);
+  }
+
+  deleteEntrenamiento(entrenamientoIndex: any) {
+    this.entrenamientosForm.removeAt(entrenamientoIndex);
   }
 
   addEjercicio(entrenamientoIndex: number): void {
