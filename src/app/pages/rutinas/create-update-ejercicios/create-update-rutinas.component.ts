@@ -1,7 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { Categoria } from '../../../interfaces/categoria/categoria.interface';
 import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
 import { CreateRutinaDto, Rutina } from '../../../interfaces/rutina/rutina.interface';
@@ -20,6 +27,7 @@ import { EjercicioService } from '../../../services/ejercicio-service';
 import { RutinaService } from '../../../services/rutina-service';
 import { UserService } from '../../../services/user.service';
 import { minLengthArray } from '../../../utils/validators';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 @Component({
   selector: 'app-create-update-rutinas',
   templateUrl: './create-update-rutinas.component.html',
@@ -33,6 +41,7 @@ import { minLengthArray } from '../../../utils/validators';
     MatCardModule,
     ReactiveFormsModule,
     MatIconModule,
+    NgxMatSelectSearchModule,
   ],
 })
 export class CreateUpdateRutinasComponent implements OnInit {
@@ -45,7 +54,8 @@ export class CreateUpdateRutinasComponent implements OnInit {
   private readonly ejercicioService = inject(EjercicioService);
   private readonly categoriaService = inject(CategoriaService);
   private ngUnsubscribe: Subject<boolean> = new Subject();
-
+  filteredUsuarios: ReplaySubject<Usuario[]> = new ReplaySubject<Usuario[]>(1);
+  usuarioFilterCtrl: FormControl = new FormControl('');
   public rutinaId: number | undefined;
   public rutina: Rutina | undefined;
 
@@ -91,9 +101,14 @@ export class CreateUpdateRutinasComponent implements OnInit {
     });
     this.usuarioService.findAll().subscribe((res) => {
       this.usuarios = res;
+      this.filteredUsuarios.next(this.usuarios.slice());
     });
     this.categoriaService.findAll().subscribe((res) => {
       this.categorias = res;
+    });
+
+    this.usuarioFilterCtrl.valueChanges.subscribe(() => {
+      this.filterUsuarios();
     });
 
     this.route.params.subscribe((params) => {
@@ -141,7 +156,6 @@ export class CreateUpdateRutinasComponent implements OnInit {
       },
       error: (err) => {
         this.alert.errorResponse(err, this.rutinaId ? 'Error al actualizar' : 'Error al guardar');
-        console.error(err);
       },
     });
   }
@@ -211,8 +225,6 @@ export class CreateUpdateRutinasComponent implements OnInit {
         ejerciciosArray.push(ejercicioGroup);
       });
 
-      console.log(entrenamiento.categoria?.id);
-
       const entrenamientoGroup = this.fb.group({
         nombre: [entrenamiento.nombre, Validators.required],
         descripcion: [entrenamiento.descripcion, Validators.required],
@@ -222,5 +234,20 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
       this.entrenamientosForm.push(entrenamientoGroup);
     });
+  }
+
+  private filterUsuarios(): void {
+    const search = this.usuarioFilterCtrl.value?.toLowerCase() || '';
+    if (!search) {
+      this.filteredUsuarios.next(this.usuarios);
+      return;
+    }
+    this.filteredUsuarios.next(
+      this.usuarios.filter(
+        (u) =>
+          u.fullName.toLowerCase().includes(search) ||
+          (u.documento && u.documento.toLowerCase().includes(search))
+      )
+    );
   }
 }

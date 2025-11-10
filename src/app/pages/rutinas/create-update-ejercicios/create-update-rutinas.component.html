@@ -15,16 +15,26 @@
               El nombre de la rutina es <strong>requerido</strong>
             </mat-error>
           </mat-form-field>
-
           <mat-form-field class="full-width">
             <mat-label>Usuarios asignados</mat-label>
-            <mat-select formControlName="usuarios" multiple>
-              @for (usuario of usuarios; track usuario) {
-              <mat-option [value]="usuario.id"
-                >{{ usuario.fullName }}-{{ usuario.documento }}</mat-option
-              >
-              }
+
+            <mat-select
+              formControlName="usuarios"
+              multiple
+              (openedChange)="usuarioFilterCtrl.setValue('')"
+            >
+              <mat-option>
+                <ngx-mat-select-search
+                  [formControl]="usuarioFilterCtrl"
+                  placeholderLabel="Buscar usuario..."
+                  noEntriesFoundLabel="Sin resultados"
+                ></ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let usuario of filteredUsuarios | async" [value]="usuario.id">
+                {{ usuario.fullName }} - {{ usuario.documento }}
+              </mat-option>
             </mat-select>
+
             <mat-error *ngIf="rutinaForm.get('usuarios')?.hasError('required')">
               Debe seleccionar al menos un usuario
             </mat-error>
