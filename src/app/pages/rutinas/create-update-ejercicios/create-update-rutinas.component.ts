@@ -58,11 +58,31 @@ export class CreateUpdateRutinasComponent implements OnInit {
     nombre: ['', Validators.required],
     descripcion: ['', Validators.required],
     categoria: ['', Validators.required],
-    usuarios: ['', Validators.required],
-    entrenamientos: this.fb.array([]),
+    usuarios: [[], Validators.required],
+
+    entrenamientos: this.fb.array([
+      this.fb.group({
+        nombre: ['', Validators.required],
+        descripcion: ['', Validators.required],
+        categoria: ['', Validators.required],
+
+        ejercicioEntrenamiento: this.fb.array([
+          this.fb.group({
+            ejercicioId: [0, Validators.required],
+            series: [4, Validators.required],
+            repeticiones: [10, Validators.required],
+            peso: [0, Validators.required],
+          }),
+        ]),
+      }),
+    ]),
   });
 
   get entrenamientosForm() {
+    return this.rutinaForm.controls['entrenamientos'] as FormArray;
+  }
+
+  get ejercicioEntrenamientoForm() {
     return this.rutinaForm.controls['entrenamientos'] as FormArray;
   }
 
@@ -109,7 +129,6 @@ export class CreateUpdateRutinasComponent implements OnInit {
     });
 
     this.entrenamientosForm.push(entrenamientoForm);
-    console.log(this.entrenamientosForms.value);
   }
 
   get entrenamientosForms(): FormArray {
@@ -122,6 +141,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
   onSubmit(): void {
     const formValue = this.rutinaForm.value;
+    console.log(formValue);
 
     const dto: CreateRutinaDto = {
       nombre: formValue.nombre ?? '',
@@ -145,5 +165,25 @@ export class CreateUpdateRutinasComponent implements OnInit {
         console.error(err);
       },
     });
+  }
+
+  getEjerciciosFormArray(entrenamientoIndex: number): FormArray {
+    return this.entrenamientosForm
+      .at(entrenamientoIndex)
+      .get('ejercicioEntrenamiento') as FormArray;
+  }
+
+  addEjercicio(entrenamientoIndex: number): void {
+    const ejercicioForm = this.fb.group({
+      ejercicioId: [0, Validators.required],
+      series: [4, Validators.required],
+      repeticiones: [10, Validators.required],
+      peso: [0, Validators.required],
+    });
+    this.getEjerciciosFormArray(entrenamientoIndex).push(ejercicioForm);
+  }
+
+  deleteEjercicio(entrenamientoIndex: number, ejercicioIndex: number): void {
+    this.getEjerciciosFormArray(entrenamientoIndex).removeAt(ejercicioIndex);
   }
 }

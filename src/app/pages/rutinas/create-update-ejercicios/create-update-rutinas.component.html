@@ -3,13 +3,15 @@
     <mat-card-header>
       <mat-card-title>Rutina</mat-card-title>
     </mat-card-header>
+
     <mat-card-content>
+      <!-- DATOS PRINCIPALES -->
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
             <input matInput placeholder="Nombre de la rutina" formControlName="nombre" />
             @if (rutinaForm.controls['nombre'].hasError('required')) {
-            <mat-error>Nombre de la rutina es <strong>requerida</strong></mat-error>
+            <mat-error>Nombre de la rutina es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
         </div>
@@ -21,6 +23,9 @@
               <mat-option [value]="usuario.id">{{ usuario.fullName }}</mat-option>
               }
             </mat-select>
+            @if (rutinaForm.controls['usuarios'].hasError('required')) {
+            <mat-error>Debe seleccionar al menos un usuario</mat-error>
+            }
           </mat-form-field>
         </div>
       </div>
@@ -28,52 +33,89 @@
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
-            <textarea matInput placeholder="Descripcion" formControlName="descripcion"></textarea>
+            <textarea matInput placeholder="Descripción" formControlName="descripcion"></textarea>
             @if (rutinaForm.controls['descripcion'].hasError('required')) {
-            <mat-error>Descripcion del ejercicio es <strong>requerida</strong></mat-error>
+            <mat-error>Descripción es <strong>requerida</strong></mat-error>
             }
           </mat-form-field>
         </div>
       </div>
 
-      <!-- Entrenamientos -->
-      <div class="row">
-        <div class="col">
-          <h2>Entrenamientos</h2>
+      <!-- ENTRENAMIENTOS -->
+      <div class="entrenamientos-container">
+        <h2>Entrenamientos</h2>
 
-          <div formArrayName="entrenamientos">
-            @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let i = $index)
-            {
-            <div class="lesson-form-row mt-3 p-3 border rounded" [formGroup]="$any(entrenamiento)">
-              <mat-form-field class="full-width">
-                <mat-label>Nombre del entrenamiento</mat-label>
-                <input matInput formControlName="nombre" required />
-              </mat-form-field>
+        <div formArrayName="entrenamientos">
+          @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let i = $index) {
+          <div class="lesson-form-row mt-3 p-3 border rounded bg-surface" [formGroupName]="i">
+            <mat-form-field class="full-width">
+              <mat-label>Nombre del entrenamiento</mat-label>
+              <input matInput formControlName="nombre" required />
+            </mat-form-field>
 
-              <mat-form-field class="full-width">
-                <mat-label>Descripción</mat-label>
-                <input matInput formControlName="descripcion" required />
-              </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Descripción</mat-label>
+              <input matInput formControlName="descripcion" required />
+            </mat-form-field>
 
-              <mat-form-field class="full-width">
-                <mat-select placeholder="Categoria" formControlName="categoria">
-                  @for (categoria of categorias; track categoria) {
-                  <mat-option [value]="categoria.categoria">{{ categoria.categoria }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
+            <mat-form-field class="full-width">
+              <mat-label>Categoría</mat-label>
+              <input matInput formControlName="categoria" required />
+            </mat-form-field>
 
-              <button mat-mini-fab color="warn" type="button" (click)="deleteEntrenamiento(i)">
-                <mat-icon>delete_forever</mat-icon>
+            <button mat-mini-fab color="warn" type="button" (click)="deleteEntrenamiento(i)">
+              <mat-icon>delete_forever</mat-icon>
+            </button>
+
+            <!-- EJERCICIOS DENTRO DEL ENTRENAMIENTO -->
+            <div formArrayName="ejercicioEntrenamiento">
+              <h3 class="mt-3">Ejercicios</h3>
+
+              @for (ejercicio of getEjerciciosFormArray(i).controls; track ejercicio; let j =
+              $index) {
+              <div class="lesson-form-row mt-2 p-2 border rounded-sm" [formGroupName]="j">
+                <mat-form-field class="full-width">
+                  <mat-label>Ejercicio</mat-label>
+                  <mat-select formControlName="ejercicioId" required>
+                    @for (ej of ejercicios; track ej) {
+                    <mat-option [value]="ej.id">{{ ej.nombre }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="small-field">
+                  <mat-label>Series</mat-label>
+                  <input matInput type="number" formControlName="series" />
+                </mat-form-field>
+
+                <mat-form-field class="small-field">
+                  <mat-label>Repeticiones</mat-label>
+                  <input matInput type="number" formControlName="repeticiones" />
+                </mat-form-field>
+
+                <mat-form-field class="small-field">
+                  <mat-label>Peso (kg)</mat-label>
+                  <input matInput type="number" formControlName="peso" />
+                </mat-form-field>
+
+                <button mat-icon-button color="warn" type="button" (click)="deleteEjercicio(i, j)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              }
+
+              <button mat-mini-fab color="primary" type="button" (click)="addEjercicio(i)">
+                <mat-icon>add</mat-icon>
               </button>
             </div>
-            }
+            <!-- FIN EJERCICIOS -->
           </div>
-
-          <button mat-mini-fab color="primary" type="button" (click)="addEntrenamiento()">
-            <mat-icon>add</mat-icon>
-          </button>
+          }
         </div>
+
+        <button mat-mini-fab color="accent" type="button" (click)="addEntrenamiento()">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
     </mat-card-content>
 
