@@ -1,5 +1,6 @@
 import { Categoria } from '../categoria/categoria.interface';
 import { Ejercicio } from '../ejercicio/ejercicio.interface';
+import { EjercicioEntrenamientoDto } from '../ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 
 export interface Entrenamiento {
   id: number;
@@ -14,7 +15,7 @@ export interface CreateEntrenamientoDto {
   nombre: string;
   descripcion: string;
   categoria: string;
-  ejercicios: number[];
+  ejercicioEntrenamiento: EjercicioEntrenamientoDto[];
 }
 
 export interface UpdateEntrenamientoDto {
@@ -22,5 +23,5 @@ export interface UpdateEntrenamientoDto {
   nombre: string;
   descripcion: string;
   categoria: string;
-  ejercicios: number[];
+  ejercicioEntrenamiento: EjercicioEntrenamientoDto[];
 }

@@ -8,3 +8,10 @@ export interface EjercicioEntrenamiento {
   ejerciciosAlternativos: Ejercicio[];
   ejercicio: Ejercicio;
 }
+
+export interface EjercicioEntrenamientoDto {
+  ejercicioId: number;
+  series: number;
+  repeticiones: number;
+  peso: number;
+}

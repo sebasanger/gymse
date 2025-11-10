@@ -65,8 +65,6 @@ export class RutinasComponent implements OnDestroy, AfterViewInit {
 
   /** Toggles the expanded state of an element. */
   toggle(element: Rutina) {
-    console.log(element);
-
     this.expandedRutina = this.isExpanded(element) ? null : element;
   }
 

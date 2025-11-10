@@ -16,14 +16,11 @@
 
         <div class="col">
           <mat-form-field class="full-width">
-            <mat-select placeholder="Ejercicio" formControlName="ejercicios" multiple>
-              @for (ejercicio of ejercicios; track ejercicio) {
-              <mat-option [value]="ejercicio.nombre">{{ ejercicio.nombre }}</mat-option>
+            <mat-select placeholder="Usuarios asignados" formControlName="usuarios" multiple>
+              @for (usuario of usuarios; track usuario) {
+              <mat-option [value]="usuario.id">{{ usuario.fullName }}</mat-option>
               }
             </mat-select>
-            @if (rutinaForm.controls['ejercicios'].hasError('required')) {
-            <mat-error>Ejercicios es <strong>requiredo</strong></mat-error>
-            }
           </mat-form-field>
         </div>
       </div>
@@ -36,6 +33,41 @@
             <mat-error>Descripcion del ejercicio es <strong>requerida</strong></mat-error>
             }
           </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h2>Entrenamientos:</h2>
+
+          <div formArrayName="entrenamientos">
+            @for (ef of entrenamientosForm.controls; track ef; let i = $index) {
+            <div class="lesson-form-row" [formGroup]="$any(ef)">
+              <mat-form-field>
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" />
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Categoria</mat-label>
+                <input matInput formControlName="categoria" />
+              </mat-form-field>
+            </div>
+
+            <mat-icon
+              class="delete-btn"
+              (click)="$event.preventDefault(); $event.stopPropagation(); deleteEntrenamiento(i)"
+            >
+              delete_forever</mat-icon
+            >
+            }
+          </div>
+          <button
+            mat-mini-fab
+            (click)="$event.preventDefault(); $event.stopPropagation(); addEntrenamiento()"
+          >
+            <mat-icon class="add-course-btn">add</mat-icon>
+          </button>
         </div>
       </div>
     </mat-card-content>

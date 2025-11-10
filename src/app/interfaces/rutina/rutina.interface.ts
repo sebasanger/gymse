@@ -6,20 +6,22 @@ export interface Rutina {
   nombre: string;
   descripcion: string;
   deleted: boolean;
-  ejerciciosEntrenamientos: EjercicioEntrenamiento[];
+  entrenamientos: EjercicioEntrenamiento[];
 }
 
 export interface CreateRutinaDto {
   nombre: string;
   descripcion: string;
-  entrenamientos: CreateEntrenamientoDto[];
   userId?: number;
+  entrenamientos: CreateEntrenamientoDto[];
 }
 
 export interface UpdateRutinaDto {
   id: number;
   nombre: string;
   descripcion: string;
+  userId?: number;
+  entrenamientos: CreateEntrenamientoDto[];
 }
 
 export interface AddRemoveUserRutine {
