@@ -1,24 +1,24 @@
 <form [formGroup]="rutinaForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="base-form-card">
     <mat-card-header>
-      <mat-card-title>Rutina</mat-card-title>
+      <mat-card-title class="title">Rutina</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       <!-- DATOS PRINCIPALES -->
-      <div class="row">
-        <div class="col">
+      <section class="section-container">
+        <div class="row">
           <mat-form-field class="full-width">
-            <input matInput placeholder="Nombre de la rutina" formControlName="nombre" />
+            <mat-label>Nombre de la rutina</mat-label>
+            <input matInput formControlName="nombre" />
             @if (rutinaForm.controls['nombre'].hasError('required')) {
-            <mat-error>Nombre de la rutina es <strong>requerido</strong></mat-error>
+            <mat-error>El nombre de la rutina es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
-        </div>
 
-        <div class="col">
           <mat-form-field class="full-width">
-            <mat-select placeholder="Usuarios asignados" formControlName="usuarios" multiple>
+            <mat-label>Usuarios asignados</mat-label>
+            <mat-select formControlName="usuarios" multiple>
               @for (usuario of usuarios; track usuario) {
               <mat-option [value]="usuario.id">{{ usuario.fullName }}</mat-option>
               }
@@ -28,125 +28,137 @@
             }
           </mat-form-field>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <textarea matInput placeholder="Descripción" formControlName="descripcion"></textarea>
-            @if (rutinaForm.controls['descripcion'].hasError('required')) {
-            <mat-error>Descripción es <strong>requerida</strong></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
+        <mat-form-field class="full-width">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="descripcion"></textarea>
+          @if (rutinaForm.controls['descripcion'].hasError('required')) {
+          <mat-error>Descripción es <strong>requerida</strong></mat-error>
+          }
+        </mat-form-field>
+      </section>
 
       <!-- ENTRENAMIENTOS -->
-      <div class="entrenamientos-container">
+      <section class="section-container">
         <h2>Entrenamientos</h2>
 
         <div formArrayName="entrenamientos">
           @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let
           indiceEntrenamiento = $index) {
-          <h3>Entrenamiento: #{{ indiceEntrenamiento + 1 }}</h3>
-          <div
-            class="lesson-form-row mt-3 p-3 border rounded bg-surface"
-            [formGroupName]="indiceEntrenamiento"
-          >
-            <button
-              mat-raised-button
-              color="warn"
-              type="button"
-              (click)="deleteEntrenamiento(indiceEntrenamiento)"
-            >
-              Eliminar entrenamiento
-              <mat-icon>delete_forever</mat-icon>
-            </button>
-
-            <mat-form-field class="full-width">
-              <mat-label>Nombre del entrenamiento</mat-label>
-              <input matInput formControlName="nombre" required />
-            </mat-form-field>
-
-            <mat-form-field class="full-width">
-              <mat-label>Descripción</mat-label>
-              <input matInput formControlName="descripcion" required />
-            </mat-form-field>
-
-            <mat-form-field class="full-width">
-              <mat-label>Categoría</mat-label>
-              <input matInput formControlName="categoria" required />
-            </mat-form-field>
-
-            <!-- EJERCICIOS DENTRO DEL ENTRENAMIENTO -->
-            <div formArrayName="ejercicioEntrenamiento">
-              <h4 class="mt-3">Ejercicios</h4>
-
-              @for (ejercicio of getEjerciciosFormArray(indiceEntrenamiento).controls; track
-              ejercicio; let indiceEjercicio = $index) {
-              <h5 class="mt-3">Ejercicio: #{{ indiceEjercicio + 1 }}</h5>
-              <div
-                class="lesson-form-row mt-2 p-2 border rounded-sm"
-                [formGroupName]="indiceEjercicio"
+          <mat-card class="entrenamiento-card" [formGroupName]="indiceEntrenamiento">
+            <mat-card-header>
+              <mat-card-title>Entrenamiento #{{ indiceEntrenamiento + 1 }}</mat-card-title>
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                (click)="deleteEntrenamiento(indiceEntrenamiento)"
+                matTooltip="Eliminar entrenamiento"
               >
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="row">
                 <mat-form-field class="full-width">
-                  <mat-label>Ejercicio</mat-label>
-                  <mat-select formControlName="ejercicioId" required>
-                    @for (ej of ejercicios; track ej) {
-                    <mat-option [value]="ej.id">{{ ej.nombre }}</mat-option>
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="nombre" />
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                  <mat-label>Descripción</mat-label>
+                  <input matInput formControlName="descripcion" />
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                  <mat-label>Categoría</mat-label>
+                  <mat-select formControlName="categoria">
+                    @for (categoria of categorias; track categoria) {
+                    <mat-option [value]="categoria.categoria">{{ categoria.categoria }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
-
-                <mat-form-field class="small-field">
-                  <mat-label>Series</mat-label>
-                  <input matInput type="number" formControlName="series" />
-                </mat-form-field>
-
-                <mat-form-field class="small-field">
-                  <mat-label>Repeticiones</mat-label>
-                  <input matInput type="number" formControlName="repeticiones" />
-                </mat-form-field>
-
-                <mat-form-field class="small-field">
-                  <mat-label>Peso (kg)</mat-label>
-                  <input matInput type="number" formControlName="peso" />
-                </mat-form-field>
-
-                <button
-                  mat-raised-button
-                  color="warn"
-                  type="button"
-                  (click)="deleteEjercicio(indiceEntrenamiento, indiceEjercicio)"
-                >
-                  Eliminar ejercicio <mat-icon>delete</mat-icon>
-                </button>
               </div>
-              }
 
-              <button
-                mat-raised-button
-                color="primary"
-                type="button"
-                (click)="addEjercicio(indiceEntrenamiento)"
-              >
-                Agregar ejercicio
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
-            <!-- FIN EJERCICIOS -->
-          </div>
+              <!-- EJERCICIOS -->
+              <div formArrayName="ejercicioEntrenamiento" class="ejercicios-container">
+                <h3>Ejercicios</h3>
+
+                @for (ejercicio of getEjerciciosFormArray(indiceEntrenamiento).controls; track
+                ejercicio; let indiceEjercicio = $index) {
+                <div class="ejercicio-card" [formGroupName]="indiceEjercicio">
+                  <div class="ejercicio-header">
+                    <span>Ejercicio #{{ indiceEjercicio + 1 }}</span>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      (click)="deleteEjercicio(indiceEntrenamiento, indiceEjercicio)"
+                      matTooltip="Eliminar ejercicio"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+
+                  <div class="row">
+                    <mat-form-field class="full-width">
+                      <mat-label>Ejercicio</mat-label>
+                      <mat-select formControlName="ejercicioId" required>
+                        @for (ej of ejercicios; track ej) {
+                        <mat-option [value]="ej.id">{{ ej.nombre }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="small-field">
+                      <mat-label>Series</mat-label>
+                      <input matInput type="number" formControlName="series" />
+                    </mat-form-field>
+
+                    <mat-form-field class="small-field">
+                      <mat-label>Repeticiones</mat-label>
+                      <input matInput type="number" formControlName="repeticiones" />
+                    </mat-form-field>
+
+                    <mat-form-field class="small-field">
+                      <mat-label>Peso (kg)</mat-label>
+                      <input matInput type="number" formControlName="peso" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                }
+
+                <!-- botón debajo del último ejercicio -->
+                <div class="add-button-row">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="addEjercicio(indiceEntrenamiento)"
+                  >
+                    <mat-icon>add</mat-icon> Agregar ejercicio
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
           }
-        </div>
 
-        <button mat-raised-button color="accent" type="button" (click)="addEntrenamiento()">
-          Agregar entrenamiento<mat-icon>add</mat-icon>
-        </button>
-      </div>
+          <!-- botón debajo del último entrenamiento -->
+          <div class="add-button-row">
+            <button mat-stroked-button color="accent" type="button" (click)="addEntrenamiento()">
+              <mat-icon>add</mat-icon> Agregar entrenamiento
+            </button>
+          </div>
+        </div>
+      </section>
     </mat-card-content>
 
-    <mat-card-actions>
-      <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="rutinaForm.invalid">
+        Guardar rutina
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>

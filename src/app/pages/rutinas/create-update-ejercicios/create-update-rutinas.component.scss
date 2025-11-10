@@ -1,24 +1,79 @@
 .base-form-card {
+  background-color: var(--mat-sys-surface-container-low);
   padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--mat-sys-on-surface);
+}
+
+.section-container {
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.entrenamiento-card {
+  background-color: var(--mat-sys-surface-container-high);
+  margin-bottom: 1rem;
+  border-radius: 10px;
+}
+
+.ejercicio-card {
+  background-color: var(--mat-sys-surface-container);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.ejercicio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 0.5rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .full-width {
-  width: 100%;
+  flex: 1 1 100%;
 }
 
 .small-field {
   width: 120px;
-  margin-right: 8px;
 }
 
-.lesson-form-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
+mat-card-title,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--mat-sys-on-surface);
+  margin: 0.25rem 0;
 }
 
-.border {
-  border: 1px solid #ccc;
+button[mat-raised-button],
+button[mat-stroked-button] {
   border-radius: 8px;
+  font-weight: 500;
+}
+
+mat-form-field {
+  color: var(--mat-sys-on-surface);
 }
