@@ -52,9 +52,23 @@ export class RutinasComponent implements OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
   private readonly rutinaService = inject(RutinaService);
   public includedDeleted: boolean = true;
+  expandedRutina: Rutina | null | undefined;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'nombre', 'descripcion', 'edit', 'delete'];
+  columnsToDisplay = ['id', 'nombre', 'descripcion', 'edit', 'delete'];
+  columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
+
+  /** Checks whether an element is expanded. */
+  isExpanded(element: Rutina) {
+    return this.expandedRutina === element;
+  }
+
+  /** Toggles the expanded state of an element. */
+  toggle(element: Rutina) {
+    console.log(element);
+
+    this.expandedRutina = this.isExpanded(element) ? null : element;
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

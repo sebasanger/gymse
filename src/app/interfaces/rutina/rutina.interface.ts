@@ -1,3 +1,4 @@
+import { EjercicioEntrenamiento } from '../ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 import { CreateEntrenamientoDto, Entrenamiento } from '../entrenamieto/entrenamiento.interface';
 
 export interface Rutina {
@@ -5,7 +6,7 @@ export interface Rutina {
   nombre: string;
   descripcion: string;
   deleted: boolean;
-  entrenamientos: Entrenamiento[];
+  ejerciciosEntrenamientos: EjercicioEntrenamiento[];
 }
 
 export interface CreateRutinaDto {
