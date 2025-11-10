@@ -3,6 +3,8 @@
   padding: 1rem;
   border-radius: 12px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .title {
@@ -15,6 +17,9 @@
   margin-top: 1.5rem;
   padding: 1rem 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .section-header {
@@ -45,18 +50,42 @@
   margin-bottom: 0.5rem;
 }
 
+/* === FLEXBOX RESPONSIVE === */
 .row {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
+/* Por defecto, cada campo ocupa todo el ancho */
 .full-width {
   flex: 1 1 100%;
 }
 
+/* Campos pequeños, como series/peso/reps */
 .small-field {
-  width: 120px;
+  flex: 1 1 120px;
+  min-width: 100px;
+}
+
+/* --- Breakpoint para tablets --- */
+@media (min-width: 768px) {
+  .full-width {
+    flex: 1 1 calc(50% - 1rem);
+  }
+}
+
+/* --- Breakpoint para pantallas grandes --- */
+@media (min-width: 1200px) {
+  .full-width {
+    flex: 1 1 calc(33.33% - 1rem);
+  }
+}
+
+.add-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
 mat-card-title,
@@ -76,4 +105,17 @@ button[mat-stroked-button] {
 
 mat-form-field {
   color: var(--mat-sys-on-surface);
+}
+
+/* --- Pequeño ajuste para móviles --- */
+@media (max-width: 480px) {
+  .add-btn-container {
+    justify-content: center;
+  }
+
+  .ejercicio-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
