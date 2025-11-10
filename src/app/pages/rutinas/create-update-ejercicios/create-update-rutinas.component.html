@@ -41,6 +41,27 @@
           </mat-form-field>
         </div>
 
+        <!-- USUARIOS SELECCIONADOS-->
+        <div class="row selected-users">
+          <h4>Usuarios seleccionados</h4>
+          <div class="selected-users-items" *ngIf="selectedUsuarios?.length">
+            <mat-chip-listbox aria-label="Usuarios seleccionados">
+              <mat-chip
+                *ngFor="let user of selectedUsuarios"
+                [removable]="true"
+                (removed)="removeUsuario(user.id)"
+              >
+                {{ user.fullName }} - {{ user.documento }}
+                <button matChipRemove>
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip>
+            </mat-chip-listbox>
+          </div>
+        </div>
+
+        <!-- USUARIOS SELECCIONADOS-->
+
         <mat-form-field class="full-width">
           <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="descripcion"></textarea>

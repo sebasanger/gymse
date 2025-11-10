@@ -28,6 +28,7 @@ import { RutinaService } from '../../../services/rutina-service';
 import { UserService } from '../../../services/user.service';
 import { minLengthArray } from '../../../utils/validators';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatChipsModule } from '@angular/material/chips';
 @Component({
   selector: 'app-create-update-rutinas',
   templateUrl: './create-update-rutinas.component.html',
@@ -42,6 +43,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     ReactiveFormsModule,
     MatIconModule,
     NgxMatSelectSearchModule,
+    MatChipsModule,
   ],
 })
 export class CreateUpdateRutinasComponent implements OnInit {
@@ -58,7 +60,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
   usuarioFilterCtrl: FormControl = new FormControl('');
   public rutinaId: number | undefined;
   public rutina: Rutina | undefined;
-
+  selectedUsuarios: Usuario[] = [];
   public ejercicios: Ejercicio[] = [];
   public usuarios: Usuario[] = [];
   public categorias: Categoria[] = [];
@@ -99,10 +101,22 @@ export class CreateUpdateRutinasComponent implements OnInit {
     this.ejercicioService.findAll().subscribe((res) => {
       this.ejercicios = res;
     });
+
     this.usuarioService.findAll().subscribe((res) => {
       this.usuarios = res;
-      this.filteredUsuarios.next(this.usuarios.slice());
+      this.filteredUsuarios.next(this.usuarios);
+
+      // si hay usuarios seleccionados inicialmente
+      const selectedIds: number[] = this.rutinaForm.get('usuarios')?.value ?? [];
+      this.selectedUsuarios = this.usuarios.filter((u) => selectedIds.includes(u.id));
+
+      // suscripción para actualizar chips cuando cambien
+      this.rutinaForm.get('usuarios')!.valueChanges.subscribe((ids: number[] | null) => {
+        const safeIds = ids ?? [];
+        this.selectedUsuarios = this.usuarios.filter((u) => safeIds.includes(u.id));
+      });
     });
+
     this.categoriaService.findAll().subscribe((res) => {
       this.categorias = res;
     });
@@ -123,6 +137,12 @@ export class CreateUpdateRutinasComponent implements OnInit {
         });
       }
     });
+  }
+
+  removeUsuario(id: number): void {
+    const current = this.rutinaForm.get('usuarios')!.value as number[];
+    const updated = current.filter((uid) => uid !== id);
+    this.rutinaForm.get('usuarios')!.setValue(updated);
   }
 
   onSubmit(): void {
