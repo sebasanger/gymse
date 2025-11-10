@@ -19,6 +19,8 @@ import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.model';
 import { GetUser } from '../../../interfaces/user/get-user.interface';
 import { Usuario } from '../../../interfaces/user/usuario.interface';
+import { Categoria } from '../../../interfaces/categoria/categoria.interface';
+import { CategoriaService } from '../../../services/categoria-service';
 @Component({
   selector: 'app-create-update-rutinas',
   templateUrl: './create-update-rutinas.component.html',
@@ -42,6 +44,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
   private readonly rutinaService = inject(RutinaService);
   private readonly usuarioService = inject(UserService);
   private readonly ejercicioService = inject(EjercicioService);
+  private readonly categoriaService = inject(CategoriaService);
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   public rutinaId: number | undefined;
@@ -49,6 +52,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
   public ejercicios: Ejercicio[] = [];
   public usuarios: Usuario[] = [];
+  public categorias: Categoria[] = [];
 
   rutinaForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -68,6 +72,9 @@ export class CreateUpdateRutinasComponent implements OnInit {
     });
     this.usuarioService.findAll().subscribe((res) => {
       this.usuarios = res;
+    });
+    this.categoriaService.findAll().subscribe((res) => {
+      this.categorias = res;
     });
 
     this.route.params.subscribe((params) => {

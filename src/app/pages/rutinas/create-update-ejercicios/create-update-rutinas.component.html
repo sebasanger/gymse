@@ -36,43 +36,49 @@
         </div>
       </div>
 
+      <!-- Entrenamientos -->
       <div class="row">
         <div class="col">
-          <h2>Entrenamientos:</h2>
+          <h2>Entrenamientos</h2>
 
           <div formArrayName="entrenamientos">
-            @for (ef of entrenamientosForm.controls; track ef; let i = $index) {
-            <div class="lesson-form-row" [formGroup]="$any(ef)">
-              <mat-form-field>
-                <mat-label>Nombre</mat-label>
-                <input matInput formControlName="nombre" />
+            @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let i = $index)
+            {
+            <div class="lesson-form-row mt-3 p-3 border rounded" [formGroup]="$any(entrenamiento)">
+              <mat-form-field class="full-width">
+                <mat-label>Nombre del entrenamiento</mat-label>
+                <input matInput formControlName="nombre" required />
               </mat-form-field>
 
-              <mat-form-field>
-                <mat-label>Categoria</mat-label>
-                <input matInput formControlName="categoria" />
+              <mat-form-field class="full-width">
+                <mat-label>Descripción</mat-label>
+                <input matInput formControlName="descripcion" required />
               </mat-form-field>
+
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Categoria" formControlName="categoria">
+                  @for (categoria of categorias; track categoria) {
+                  <mat-option [value]="categoria.categoria">{{ categoria.categoria }}</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-mini-fab color="warn" type="button" (click)="deleteEntrenamiento(i)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
             </div>
-
-            <mat-icon
-              class="delete-btn"
-              (click)="$event.preventDefault(); $event.stopPropagation(); deleteEntrenamiento(i)"
-            >
-              delete_forever</mat-icon
-            >
             }
           </div>
-          <button
-            mat-mini-fab
-            (click)="$event.preventDefault(); $event.stopPropagation(); addEntrenamiento()"
-          >
-            <mat-icon class="add-course-btn">add</mat-icon>
+
+          <button mat-mini-fab color="primary" type="button" (click)="addEntrenamiento()">
+            <mat-icon>add</mat-icon>
           </button>
         </div>
       </div>
     </mat-card-content>
+
     <mat-card-actions>
-      <button matButton="elevated" color="primary" type="submit">Guardar</button>
+      <button mat-raised-button color="primary" type="submit">Guardar</button>
     </mat-card-actions>
   </mat-card>
 </form>
