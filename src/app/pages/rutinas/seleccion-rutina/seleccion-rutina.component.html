@@ -32,26 +32,16 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>Seleccionar rutina</th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-icon-button class="select-button" (click)="select(row.id)">
-          <mat-icon>check</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
     <ng-container matColumnDef="expand">
-      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Detalles</th>
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Seleccion de rutina</th>
       <td mat-cell *matCellDef="let element">
         <button
-          matIconButton
-          aria-label="expand row"
+          mat-raised-button
+          color="{{ isExpanded(element) ? 'warn' : 'primary' }}"
           (click)="toggle(element); $event.stopPropagation()"
-          class="example-toggle-button"
-          [class.example-toggle-button-expanded]="isExpanded(element)"
         >
-          <mat-icon>keyboard_arrow_down</mat-icon>
+          <mat-icon>{{ isExpanded(element) ? 'cancel' : 'check_circle_outline' }}</mat-icon>
+          {{ isExpanded(element) ? 'Cancelar selección' : 'Seleccionar rutina' }}
         </button>
       </td>
     </ng-container>

@@ -55,7 +55,7 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   selectedEntrenamiento: any | null = null;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'edit', 'select'];
+  columnsToDisplay = ['id', 'nombre', 'descripcion', 'edit'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
   /** Checks whether an element is expanded. */
@@ -122,23 +122,6 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
 
   edit(userid: number) {
     this.router.navigateByUrl('pages/rutinas/update/' + userid);
-  }
-
-  select(id: number) {
-    const rutina = this.rutinas.find((r) => r.id === id);
-    if (!rutina) return;
-
-    this.alert
-      .confirm('Seleccionar rutina?', '¿Está seguro de que quiere seguir esta rutina hoy?')
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.expandedRutina = rutina;
-          this.selectedEntrenamiento = null;
-          this.cdr.detectChanges();
-        } else {
-          this.alert.warning('Cancelado', 'Seleccione alguna rutina a seguir.');
-        }
-      });
   }
 
   ngOnDestroy(): void {
