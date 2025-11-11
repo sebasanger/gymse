@@ -7,6 +7,7 @@ import { CreateUpdateUsuariosComponent } from './usuarios/create-update-usuarios
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RutinasComponent } from './rutinas/rutinas.component';
 import { CreateUpdateRutinasComponent } from './rutinas/create-update-ejercicios/create-update-rutinas.component';
+import { CheckInOutComponent } from './check-in-out/check-in-out.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -43,6 +44,7 @@ export const PAGES_ROUTES: Routes = [
         path: 'rutinas/update/:id',
         component: CreateUpdateRutinasComponent,
       },
+      { path: 'checkInOut', component: CheckInOutComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

@@ -62,6 +62,12 @@ export class NavigationComponent implements OnInit {
           redirection: '/pages/rutinas',
           tittle: 'Rutinas',
         });
+
+        this.menuItems.add({
+          icon: 'check_in_out',
+          redirection: '/pages/checkInOut',
+          tittle: 'Check in/Out',
+        });
       }
     });
   }
