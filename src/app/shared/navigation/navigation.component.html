@@ -10,7 +10,12 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       @for (menuItem of menuItems; track menuItem.tittle) {
-      <a mat-list-item [routerLink]="menuItem.redirection" routerLinkActive="item-selected">
+      <a
+        mat-list-item
+        [routerLink]="menuItem.redirection"
+        routerLinkActive="item-selected"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
         <div class="link-item">
           <mat-icon>{{ menuItem.icon }}</mat-icon>
           <span>{{ menuItem.tittle }}</span>

@@ -1,5 +1,5 @@
 import { EjercicioEntrenamiento } from '../ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
-import { CreateEntrenamientoDto, Entrenamiento } from '../entrenamieto/entrenamiento.interface';
+import { CreateEntrenamientoDto } from '../entrenamieto/entrenamiento.interface';
 import { UsuarioMinDto } from '../user/usuario.interface';
 
 export interface Rutina {

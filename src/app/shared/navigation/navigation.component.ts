@@ -52,11 +52,13 @@ export class NavigationComponent implements OnInit {
     this.authService.checkUserHasRole('ADMIN').subscribe((result) => {
       if (result) {
         this.menuItems.add({ icon: 'person', redirection: '/pages/usuarios', tittle: 'Usuarios' });
+
         this.menuItems.add({
           icon: 'fitness_center',
           redirection: '/pages/ejercicios',
           tittle: 'Ejercicios',
         });
+
         this.menuItems.add({
           icon: 'run_circle',
           redirection: '/pages/rutinas',
@@ -67,6 +69,12 @@ export class NavigationComponent implements OnInit {
           icon: 'check_in_out',
           redirection: '/pages/checkInOut',
           tittle: 'Check in/Out',
+        });
+
+        this.menuItems.add({
+          icon: 'data_check',
+          redirection: '/pages/rutinas/seleccionar',
+          tittle: 'Seleccionar rutina',
         });
       }
     });
