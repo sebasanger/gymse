@@ -22,6 +22,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { Rutina } from '../../../interfaces/rutina/rutina.interface';
 import { AlertService } from '../../../services/alert-service';
 import { RutinaService } from '../../../services/rutina-service';
+import { Entrenamiento } from '../../../interfaces/entrenamieto/entrenamiento.interface';
 @Component({
   selector: 'app-seleccion-rutina',
   templateUrl: './seleccion-rutina.component.html',
@@ -129,9 +130,10 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
     this.destroy$.complete();
   }
 
-  onEntrenamientoSelect(entrenamiento: any) {
+  onEntrenamientoSelect(entrenamiento: Entrenamiento) {
     this.selectedEntrenamiento = entrenamiento;
     this.alert.success(`Entrenamiento "${entrenamiento.nombre}" seleccionado.`);
+    console.log(entrenamiento);
 
     // Si queres actualizar el progreso en el backend:
     // this.progresoRutinaService.actualizar(this.expandedRutina!.id, entrenamiento.id).subscribe()
