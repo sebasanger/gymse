@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ProgresoRutina } from '../interfaces/progresoRutina/progreso-rutina..interface';
+import {
+  GuardarRutinaEntrenamiento,
+  ProgresoRutina,
+} from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -17,5 +20,14 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
 
   checkOut(documento: string): Observable<ProgresoRutina> {
     return this.http.put<ProgresoRutina>(`${base_url}/${this.endpoint}/checkOut`, documento);
+  }
+
+  guardarRutinaEntrenamiento(
+    guardarRutinaEntrenamiento: GuardarRutinaEntrenamiento
+  ): Observable<ProgresoRutina> {
+    return this.http.put<ProgresoRutina>(
+      `${base_url}/${this.endpoint}/guardarRutinaEntrenamiento`,
+      guardarRutinaEntrenamiento
+    );
   }
 }

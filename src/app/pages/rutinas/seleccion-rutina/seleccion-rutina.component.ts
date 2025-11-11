@@ -23,6 +23,9 @@ import { Rutina } from '../../../interfaces/rutina/rutina.interface';
 import { AlertService } from '../../../services/alert-service';
 import { RutinaService } from '../../../services/rutina-service';
 import { Entrenamiento } from '../../../interfaces/entrenamieto/entrenamiento.interface';
+import { GuardarRutinaEntrenamiento } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-seleccion-rutina',
   templateUrl: './seleccion-rutina.component.html',
@@ -52,6 +55,7 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
   private readonly rutinaService = inject(RutinaService);
+  private readonly progresoRutinaService = inject(ProgresoRutinaService);
   expandedRutina: Rutina | null | undefined;
   selectedEntrenamiento: any | null = null;
 
@@ -130,12 +134,41 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
     this.destroy$.complete();
   }
 
-  onEntrenamientoSelect(entrenamiento: Entrenamiento) {
-    this.selectedEntrenamiento = entrenamiento;
-    this.alert.success(`Entrenamiento "${entrenamiento.nombre}" seleccionado.`);
-    console.log(entrenamiento);
+  onEntrenamientoSelect(rutina: Rutina, entrenamiento: Entrenamiento) {
+    this.alert
+      .confirm(
+        '¿Confirmar selección?',
+        `¿Deseas seleccionar el entrenamiento "${entrenamiento.nombre}" de la rutina "${rutina.nombre}"?`,
+        'Sí, seleccionar',
+        'Cancelar'
+      )
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.selectedEntrenamiento = entrenamiento;
 
-    // Si queres actualizar el progreso en el backend:
-    // this.progresoRutinaService.actualizar(this.expandedRutina!.id, entrenamiento.id).subscribe()
+          const guardarRutinaEntrenamiento: GuardarRutinaEntrenamiento = {
+            entrenamientoId: entrenamiento.id,
+            rutinaId: rutina.id,
+          };
+
+          this.progresoRutinaService
+            .guardarRutinaEntrenamiento(guardarRutinaEntrenamiento)
+            .subscribe({
+              next: () => {
+                this.alert.success(
+                  'Entrenamiento seleccionado',
+                  `El entrenamiento "${entrenamiento.nombre}" fue asignado correctamente.`
+                );
+              },
+              error: (err) => {
+                console.error(err);
+                this.alert.error(
+                  'Error al seleccionar entrenamiento',
+                  `No se pudo seleccionar el entrenamiento "${entrenamiento.nombre}".`
+                );
+              },
+            });
+        }
+      });
   }
 }

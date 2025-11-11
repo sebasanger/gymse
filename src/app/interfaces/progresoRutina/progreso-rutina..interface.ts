@@ -10,3 +10,8 @@ export interface ProgresoRutina {
   checkIn: Date;
   checkOut: Date;
 }
+
+export interface GuardarRutinaEntrenamiento {
+  rutinaId: number;
+  entrenamientoId: number;
+}

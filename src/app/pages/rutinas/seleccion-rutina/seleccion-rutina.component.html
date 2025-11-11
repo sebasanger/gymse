@@ -57,7 +57,7 @@
             @for (entrenamiento of element.entrenamientos; track entrenamiento; let i = $index) {
             <div class="entrenamiento-element">
               <div class="select-ejercicio-container">
-                <button (click)="onEntrenamientoSelect(entrenamiento)" matButton="filled">
+                <button (click)="onEntrenamientoSelect(element, entrenamiento)" matButton="filled">
                   Seleccionar entrenamiento
                 </button>
               </div>
