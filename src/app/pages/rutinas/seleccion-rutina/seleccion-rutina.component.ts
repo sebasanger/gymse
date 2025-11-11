@@ -52,6 +52,7 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   private readonly destroy$ = new Subject<void>();
   private readonly rutinaService = inject(RutinaService);
   expandedRutina: Rutina | null | undefined;
+  selectedEntrenamiento: any | null = null;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   columnsToDisplay = ['id', 'nombre', 'descripcion', 'edit', 'select'];
@@ -124,25 +125,18 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   }
 
   select(id: number) {
+    const rutina = this.rutinas.find((r) => r.id === id);
+    if (!rutina) return;
+
     this.alert
-      .confirm('Seleccionar rutina?', 'Esta seguro de que quiere seguir esta rutina hoy?')
+      .confirm('Seleccionar rutina?', '¿Está seguro de que quiere seguir esta rutina hoy?')
       .then((result) => {
         if (result.isConfirmed) {
-          this.rutinaService.recoverById(id).subscribe({
-            next: () => {
-              this.alert.success(
-                'Rutina Seleccionada',
-                'La rutina fue seleccionada correctamente.'
-              );
-              this.load();
-            },
-            error: (err) => {
-              console.error(err);
-              this.alert.errorResponse('Error', 'No se pudo seleccionar la rutina.');
-            },
-          });
+          this.expandedRutina = rutina;
+          this.selectedEntrenamiento = null;
+          this.cdr.detectChanges();
         } else {
-          this.alert.warning('Cancelado', 'seleccione alguna rutina a seguir.');
+          this.alert.warning('Cancelado', 'Seleccione alguna rutina a seguir.');
         }
       });
   }
@@ -150,5 +144,13 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  onEntrenamientoSelect(entrenamiento: any) {
+    this.selectedEntrenamiento = entrenamiento;
+    this.alert.success(`Entrenamiento "${entrenamiento.nombre}" seleccionado.`);
+
+    // Si queres actualizar el progreso en el backend:
+    // this.progresoRutinaService.actualizar(this.expandedRutina!.id, entrenamiento.id).subscribe()
   }
 }

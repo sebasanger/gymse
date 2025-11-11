@@ -2,6 +2,7 @@ import { Ejercicio } from '../ejercicio/ejercicio.interface';
 
 export interface EjercicioEntrenamiento {
   id: number;
+  nombre: string;
   series: number;
   repeticiones: number;
   peso: number;

@@ -7,7 +7,7 @@ tr.example-detail-row {
 }
 
 tr.example-element-row {
-  cursor: pointer;
+  cursor: default !important;
 }
 
 tr.example-element-row:not(.example-expanded-row):hover {
@@ -78,4 +78,20 @@ tr.example-element-row:not(.example-expanded-row):active {
 .select-button {
   color: black;
   background-color: greenyellow;
+}
+
+tr:not(.deleted-row) {
+  transition: background-color 0.2s ease-in-out !important;
+
+  &:hover {
+    background-color: var(--app-background) !important;
+  }
+}
+
+.select-ejercicio-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

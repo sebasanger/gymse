@@ -66,6 +66,10 @@
           <div class="example-element-detail">
             @for (entrenamiento of element.entrenamientos; track entrenamiento; let i = $index) {
             <div class="entrenamiento-element">
+              <div class="select-ejercicio-container">
+                <button matButton="filled">Seleccionar entrenamiento</button>
+              </div>
+
               <div class="center">Entrenamiento: #{{ i + 1 }}</div>
               <div>Nombre: {{ entrenamiento.nombre }}</div>
               <div>Descripcion: {{ entrenamiento.descripcion }}</div>
@@ -96,7 +100,6 @@
       *matRowDef="let element; columns: columnsToDisplayWithExpand"
       class="example-element-row"
       [class.example-expanded-row]="isExpanded(element)"
-      (click)="toggle(element)"
     ></tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
   </table>
