@@ -40,3 +40,10 @@
 .link-item span {
   font-size: large;
 }
+
+.tittle-page {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}

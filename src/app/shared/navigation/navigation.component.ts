@@ -72,9 +72,9 @@ export class NavigationComponent implements OnInit {
         });
 
         this.menuItems.add({
-          icon: 'data_check',
+          icon: '',
           redirection: '/pages/rutinas/seleccionar',
-          tittle: 'Seleccionar rutina',
+          tittle: 'Seleccionar Rutina',
         });
       }
     });

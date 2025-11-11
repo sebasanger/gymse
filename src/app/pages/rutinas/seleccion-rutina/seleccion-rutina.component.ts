@@ -51,7 +51,6 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
   private readonly rutinaService = inject(RutinaService);
-  public includedDeleted: boolean = true;
   expandedRutina: Rutina | null | undefined;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -108,15 +107,6 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  toggleIncludeDeleted(): void {
-    if (this.includedDeleted) {
-      this.dataSource.data = this.rutinas;
-    } else {
-      this.dataSource.data = this.rutinas.filter((e) => !e.deleted);
-    }
-    this.cdr.detectChanges();
-  }
-
   applyFilterByCategory(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
 
@@ -131,6 +121,30 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
 
   edit(userid: number) {
     this.router.navigateByUrl('pages/rutinas/update/' + userid);
+  }
+
+  select(id: number) {
+    this.alert
+      .confirm('Seleccionar rutina?', 'Esta seguro de que quiere seguir esta rutina hoy?')
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.rutinaService.recoverById(id).subscribe({
+            next: () => {
+              this.alert.success(
+                'Rutina Seleccionada',
+                'La rutina fue seleccionada correctamente.'
+              );
+              this.load();
+            },
+            error: (err) => {
+              console.error(err);
+              this.alert.errorResponse('Error', 'No se pudo seleccionar la rutina.');
+            },
+          });
+        } else {
+          this.alert.warning('Cancelado', 'seleccione alguna rutina a seguir.');
+        }
+      });
   }
 
   ngOnDestroy(): void {
