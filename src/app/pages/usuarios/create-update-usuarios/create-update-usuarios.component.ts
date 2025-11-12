@@ -43,7 +43,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
     fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     documento: ['', Validators.required],
-    roles: [[], Validators.required],
+    roles: this.fb.control<Role[]>([], Validators.required),
   });
 
   ngOnInit(): void {
@@ -58,6 +58,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
             fullName: res.fullName,
             email: res.email,
             documento: res.documento,
+            roles: res.roles ?? [],
           });
         });
       }

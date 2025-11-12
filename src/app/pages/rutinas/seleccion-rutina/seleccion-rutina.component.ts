@@ -19,13 +19,12 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Rutina } from '../../../interfaces/rutina/rutina.interface';
-import { AlertService } from '../../../services/alert-service';
-import { RutinaService } from '../../../services/rutina-service';
 import { Entrenamiento } from '../../../interfaces/entrenamieto/entrenamiento.interface';
 import { GuardarRutinaEntrenamiento } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import { Rutina } from '../../../interfaces/rutina/rutina.interface';
+import { AlertService } from '../../../services/alert-service';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
-import Swal from 'sweetalert2';
+import { RutinaService } from '../../../services/rutina-service';
 @Component({
   selector: 'app-seleccion-rutina',
   templateUrl: './seleccion-rutina.component.html',
