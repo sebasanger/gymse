@@ -106,6 +106,7 @@
       *matRowDef="let element; columns: columnsToDisplayWithExpand"
       class="example-element-row"
       [class.example-expanded-row]="isExpanded(element)"
+      [class.deleted-row]="element.deleted"
       (click)="toggle(element)"
     ></tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
