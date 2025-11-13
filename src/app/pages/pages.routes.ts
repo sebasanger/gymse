@@ -9,6 +9,7 @@ import { RutinasComponent } from './rutinas/rutinas.component';
 import { CreateUpdateRutinasComponent } from './rutinas/create-update-ejercicios/create-update-rutinas.component';
 import { CheckInOutComponent } from './check-in-out/check-in-out.component';
 import { SeleccionRutinasComponent } from './rutinas/seleccion-rutina/seleccion-rutina.component';
+import { SeguimientoRutina } from './rutinas/seguimiento-rutina/seguimiento-rutina';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -38,6 +39,7 @@ export const PAGES_ROUTES: Routes = [
 
       { path: 'rutinas', component: RutinasComponent },
       { path: 'rutinas/seleccionar', component: SeleccionRutinasComponent },
+      { path: 'rutinas/seguimiento', component: SeguimientoRutina },
       {
         path: 'rutinas/create',
         component: CreateUpdateRutinasComponent,

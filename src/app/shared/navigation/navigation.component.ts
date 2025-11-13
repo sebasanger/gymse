@@ -76,6 +76,12 @@ export class NavigationComponent implements OnInit {
           redirection: '/pages/rutinas/seleccionar',
           tittle: 'Seleccionar Rutina',
         });
+
+        this.menuItems.add({
+          icon: 'track_changes',
+          redirection: '/pages/rutinas/seguimiento',
+          tittle: 'Seguir Rutina',
+        });
       }
     });
   }
