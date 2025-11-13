@@ -66,13 +66,13 @@ export class NavigationComponent implements OnInit {
         });
 
         this.menuItems.add({
-          icon: 'check_in_out',
+          icon: 'how_to_reg',
           redirection: '/pages/checkInOut',
           tittle: 'Check in/Out',
         });
 
         this.menuItems.add({
-          icon: '',
+          icon: 'check',
           redirection: '/pages/rutinas/seleccionar',
           tittle: 'Seleccionar Rutina',
         });

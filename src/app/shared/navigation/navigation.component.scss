@@ -3,7 +3,7 @@
 }
 
 .sidenav {
-  width: 200px;
+  width: 250px;
 }
 
 .sidenav .mat-toolbar {
@@ -28,6 +28,10 @@
 
 .item-selected span {
   color: black;
+}
+
+.item-selected mat-icon {
+  color: var(--mat-sys-primary);
 }
 
 .link-item {
