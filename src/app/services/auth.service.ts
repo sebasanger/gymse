@@ -20,6 +20,7 @@ import { UpdateAcountPayload } from '../interfaces/user/form-update-acount-paylo
 import { GetUser } from '../interfaces/user/get-user.interface';
 import { User } from '../models/user.model';
 import { LOCAL_STORAGE } from '../providers/localstorage';
+import { RefreshTokenPayload } from '../interfaces/auth/refresh-token.payload';
 
 const base_url = environment.base_url;
 const client_url = environment.client_url;
@@ -53,8 +54,15 @@ export class AuthService {
     return this.$currentUser;
   }
 
-  refreshToken() {
-    return of();
+  refreshToken(refreshTokenPayload: RefreshTokenPayload) {
+    return this.httpClient
+      .post<LoginResponse>(base_url + '/auth/refresh/token', refreshTokenPayload)
+      .pipe(
+        map((data: any) => {
+          this.setUserDataOnStorageAndRemoveOld(data);
+          return data;
+        })
+      );
   }
 
   readonly authState = linkedSignal({
@@ -88,6 +96,7 @@ export class AuthService {
     this.removeDataFromStorage();
     this.storageService?.setItem('authenticationToken', data.authenticationToken);
     this.storageService?.setItem('refreshToken', data.refreshToken);
+    this.storageService?.setItem('email', data.user.email);
     this.storageService?.setItem('expiresAt', data.expiresAt.toString());
     this.authTokens.set({
       accessToken: data.authenticationToken,
@@ -99,6 +108,7 @@ export class AuthService {
     this.storageService?.removeItem('authenticationToken');
     this.storageService?.removeItem('refreshToken');
     this.storageService?.removeItem('expiresAt');
+    this.storageService?.removeItem('email');
   }
 
   logout() {

@@ -1,8 +1,8 @@
+import { isPlatformBrowser } from '@angular/common';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { catchError, of, switchMap } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { isPlatformBrowser } from '@angular/common';
-import { catchError, map, of, switchMap } from 'rxjs';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);

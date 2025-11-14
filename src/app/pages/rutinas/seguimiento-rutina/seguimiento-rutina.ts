@@ -18,7 +18,6 @@ import { AsyncPipe } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    AsyncPipe,
   ],
   templateUrl: './seguimiento-rutina.html',
   styleUrl: './seguimiento-rutina.scss',

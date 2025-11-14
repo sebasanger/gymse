@@ -1,4 +1,4 @@
-<mat-stepper class="example-stepper" [orientation]="(stepperOrientation | async)!">
+<mat-stepper class="example-stepper" orientation="vertical">
   <mat-step [stepControl]="firstFormGroup" label="Fill out your name">
     <form [formGroup]="firstFormGroup">
       <mat-form-field>
@@ -20,6 +20,90 @@
           placeholder="Ex. 1 Main St, New York, NY"
           required
         />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
+      </mat-form-field>
+      <div>
+        <button matButton matStepperPrevious>Back</button>
+        <button matButton matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup" label="Fill out your phone number">
+    <form [formGroup]="thirdFormGroup">
+      <mat-form-field>
+        <mat-label>Phone number</mat-label>
+        <input matInput formControlName="thirdCtrl" placeholder="Ex. 12345678" required />
       </mat-form-field>
       <div>
         <button matButton matStepperPrevious>Back</button>

@@ -25,17 +25,23 @@ export function authenticationInterceptor(
   const platformId = inject(PLATFORM_ID);
 
   if (!isPlatformBrowser(platformId)) {
-    return of();
+    return next(request);
   }
 
   const clonedRequest = attachAccessToken(request, storageService);
-  return handleRequest({
-    request: clonedRequest,
-    next,
-    authenticationService,
-    storageService,
-    router,
-  });
+
+  return next(clonedRequest).pipe(
+    catchError((errorResponse: HttpErrorResponse) =>
+      handleErrors({
+        request: clonedRequest,
+        next,
+        authenticationService,
+        storageService,
+        router,
+        errorResponse,
+      })
+    )
+  );
 }
 
 function attachAccessToken(
@@ -51,23 +57,6 @@ function attachAccessToken(
   return request;
 }
 
-function handleRequest(parameters: {
-  request: HttpRequest<unknown>;
-  next: HttpHandlerFn;
-  authenticationService: AuthService;
-  storageService: Storage | null;
-  router: Router;
-}): Observable<HttpEvent<unknown>> {
-  return parameters.next(parameters.request).pipe(
-    catchError((errorResponse: HttpErrorResponse) =>
-      handleErrors({
-        errorResponse,
-        ...parameters,
-      })
-    )
-  );
-}
-
 function handleErrors(parameters: {
   request: HttpRequest<unknown>;
   next: HttpHandlerFn;
@@ -76,33 +65,32 @@ function handleErrors(parameters: {
   router: Router;
   errorResponse: HttpErrorResponse;
 }): Observable<HttpEvent<unknown>> {
-  console.log(parameters);
+  const { errorResponse } = parameters;
 
-  if (isAccessTokenError(parameters.errorResponse, parameters.request)) {
+  // 401 de access token → intentamos refrescar
+  if (isAccessTokenError(errorResponse)) {
     return tryRefreshToken(parameters);
   }
 
-  if (isRefreshTokenError(parameters.errorResponse, parameters.request)) {
+  // 401 en endpoint de refresh → sesión expirada
+  if (isRefreshTokenError(errorResponse)) {
     parameters.authenticationService.logout();
-    void parameters.router.navigate(['auth/login']);
-    return throwError(() => new Error('Session expired. Please log in again.'));
+    void parameters.router.navigate(['/auth/login']);
+    return throwError(() => new Error('Session expired'));
   }
 
-  return throwError(() => parameters.errorResponse);
+  // cualquier otro error → lo lanzamos
+  return throwError(() => errorResponse);
 }
 
-function isAccessTokenError(
-  errorResponse: HttpErrorResponse,
-  request: HttpRequest<unknown>
-): boolean {
-  return errorResponse.status === 401 && !request.url.includes('/refresh-token');
+// Access token inválido o expirado
+function isAccessTokenError(errorResponse: HttpErrorResponse): boolean {
+  return errorResponse.status === 401 && !errorResponse.url?.includes('/refresh/token');
 }
 
-function isRefreshTokenError(
-  errorResponse: HttpErrorResponse,
-  request: HttpRequest<unknown>
-): boolean {
-  return errorResponse.status === 401 && request.url.includes('/refresh-token');
+// Refresh token inválido/expirado
+function isRefreshTokenError(errorResponse: HttpErrorResponse): boolean {
+  return errorResponse.status === 401 && !!errorResponse.url?.includes('/refresh/token');
 }
 
 function tryRefreshToken(parameters: {
@@ -126,9 +114,14 @@ function handleTokenRefresh(parameters: {
   storageService: Storage | null;
   router: Router;
 }): Observable<HttpEvent<unknown>> {
+  const { authenticationService, storageService } = parameters;
+
   isRefreshing.next(true);
 
-  return parameters.authenticationService.refreshToken().pipe(
+  const refreshToken = storageService?.getItem('refreshToken') ?? '';
+  const email = storageService?.getItem('email') ?? '';
+
+  return authenticationService.refreshToken({ email, refreshToken }).pipe(
     switchMap(() => {
       isRefreshing.next(false);
       return retryRequestWithRefreshedToken(parameters);
@@ -147,7 +140,7 @@ function waitForTokenRefresh(parameters: {
   storageService: Storage | null;
 }): Observable<HttpEvent<unknown>> {
   return isRefreshing.pipe(
-    filter((refreshing) => !refreshing),
+    filter((value) => !value),
     take(1),
     switchMap(() => retryRequestWithRefreshedToken(parameters))
   );
@@ -158,13 +151,17 @@ function retryRequestWithRefreshedToken(parameters: {
   next: HttpHandlerFn;
   storageService: Storage | null;
 }): Observable<HttpEvent<unknown>> {
-  const refreshedToken = parameters.storageService?.getItem('refreshToken');
-  const clonedRequest = refreshedToken
+  const refreshedToken = parameters.storageService?.getItem('authenticationToken');
+
+  const cloned = refreshedToken
     ? parameters.request.clone({
-        setHeaders: { Authorization: `Bearer ${refreshedToken}` },
+        setHeaders: {
+          Authorization: `Bearer ${refreshedToken}`,
+        },
       })
     : parameters.request;
-  return parameters.next(clonedRequest);
+
+  return parameters.next(cloned);
 }
 
 function handleRefreshError(parameters: {
@@ -172,5 +169,5 @@ function handleRefreshError(parameters: {
   router: Router;
 }): void {
   parameters.authenticationService.logout();
-  void parameters.router.navigate(['auth/login']);
+  void parameters.router.navigate(['/auth/login']);
 }
