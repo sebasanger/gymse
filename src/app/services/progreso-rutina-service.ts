@@ -30,4 +30,8 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
       guardarRutinaEntrenamiento
     );
   }
+
+  getLastActiveRoutine(): Observable<ProgresoRutina> {
+    return this.http.get<ProgresoRutina>(`${base_url}/${this.endpoint}/last/active`);
+  }
 }

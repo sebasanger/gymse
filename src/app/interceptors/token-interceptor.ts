@@ -25,7 +25,8 @@ export function authenticationInterceptor(
   const platformId = inject(PLATFORM_ID);
 
   if (!isPlatformBrowser(platformId)) {
-    return next(request);
+    //no muestra el error con el SSR
+    return next(request).pipe(catchError(() => of()));
   }
 
   const clonedRequest = attachAccessToken(request, storageService);

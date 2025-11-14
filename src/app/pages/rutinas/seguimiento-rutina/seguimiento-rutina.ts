@@ -1,13 +1,11 @@
-import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { StepperOrientation, MatStepperModule } from '@angular/material/stepper';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { AsyncPipe } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatStepperModule } from '@angular/material/stepper';
+import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
+import { ProgresoRutina } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -22,8 +20,12 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './seguimiento-rutina.html',
   styleUrl: './seguimiento-rutina.scss',
 })
-export class SeguimientoRutina {
+export class SeguimientoRutina implements OnInit {
+  constructor() {}
+
+  private progresoRutinaService = inject(ProgresoRutinaService);
   private _formBuilder = inject(FormBuilder);
+  progresoRutina!: ProgresoRutina;
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],
@@ -34,13 +36,11 @@ export class SeguimientoRutina {
   thirdFormGroup = this._formBuilder.group({
     thirdCtrl: ['', Validators.required],
   });
-  stepperOrientation: Observable<StepperOrientation>;
 
-  constructor() {
-    const breakpointObserver = inject(BreakpointObserver);
-
-    this.stepperOrientation = breakpointObserver
-      .observe('(min-width: 800px)')
-      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  ngOnInit(): void {
+    this.progresoRutinaService.getLastActiveRoutine().subscribe((res) => {
+      this.progresoRutina = res;
+      console.log(res);
+    });
   }
 }
