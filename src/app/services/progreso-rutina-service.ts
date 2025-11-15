@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   GuardarRutinaEntrenamiento,
   ProgresoRutina,
+  ProgresoRutinaActiva,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
 import { Observable } from 'rxjs';
@@ -31,7 +32,7 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
     );
   }
 
-  getLastActiveRoutine(): Observable<ProgresoRutina> {
-    return this.http.get<ProgresoRutina>(`${base_url}/${this.endpoint}/last/active`);
+  getLastActiveRoutine(): Observable<ProgresoRutinaActiva> {
+    return this.http.get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`);
   }
 }

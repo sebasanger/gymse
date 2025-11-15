@@ -12,7 +12,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
-import { ProgresoRutina } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import {
+  ProgresoRutina,
+  ProgresoRutinaActiva,
+} from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { CommonModule } from '@angular/common';
 import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
 import { EjercicioEntrenamiento } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
@@ -46,7 +49,7 @@ export class SeguimientoRutina implements OnInit {
   private progresoEjercicioService = inject(ProgresoEjercicioService);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
-  progresoRutina!: ProgresoRutina;
+  progresoRutina!: ProgresoRutinaActiva;
   ejerciciosEntrenamientos: EjercicioEntrenamiento[] = [];
 
   forms: { [ejercicioId: number]: FormGroup } = {};
@@ -56,7 +59,7 @@ export class SeguimientoRutina implements OnInit {
       this.progresoRutina = res;
 
       this.ejerciciosEntrenamientos =
-        this.progresoRutina?.entrenamiento?.ejerciciosEntrenamientos || [];
+        this.progresoRutina?.entrenamientoSeleccionado.ejercicios || [];
 
       this.ejerciciosEntrenamientos.forEach((ejercicioEntrenamiento: EjercicioEntrenamiento) => {
         const seriesArray = this.fb.array<FormGroup>([]);

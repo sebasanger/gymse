@@ -1,8 +1,10 @@
 import { Categoria } from '../categoria/categoria.interface';
 import {
   EjercicioEntrenamiento,
+  EjercicioEntrenamientoConProgreso,
   EjercicioEntrenamientoDto,
 } from '../ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
+import { ProgresoEjercicio } from '../progresoEjercicio/progreso-ejercicio..interface';
 
 export interface Entrenamiento {
   id: number;
@@ -26,4 +28,13 @@ export interface UpdateEntrenamientoDto {
   descripcion: string;
   categoria: string;
   ejercicioEntrenamiento: EjercicioEntrenamientoDto[];
+}
+
+export interface EntrenamientoConProgreso {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  deleted: boolean;
+  categoria: Categoria;
+  ejercicios: EjercicioEntrenamientoConProgreso[];
 }
