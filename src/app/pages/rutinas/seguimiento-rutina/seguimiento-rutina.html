@@ -8,17 +8,29 @@
     </ng-template>
 
     <form [formGroup]="getForm(ejercicioEntrenamiento.id)">
-      <p><strong>Ejercicio:</strong> {{ ejercicioEntrenamiento.nombre }}</p>
+      <div formArrayName="ejercicioEntrenamiento">
+        <div
+          *ngFor="
+            let serie of getSeriesFormArray(ejercicioEntrenamiento.id).controls;
+            let i = index
+          "
+          [formGroupName]="i"
+        >
+          <p>
+            <strong>Serie {{ i + 1 }}</strong>
+          </p>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Peso</mat-label>
-        <input matInput type="number" formControlName="peso" />
-      </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Peso</mat-label>
+            <input matInput type="number" formControlName="peso" />
+          </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Repeticiones</mat-label>
-        <input matInput type="number" formControlName="repeticiones" />
-      </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Repeticiones</mat-label>
+            <input matInput type="number" formControlName="repeticiones" />
+          </mat-form-field>
+        </div>
+      </div>
 
       <button mat-button matStepperNext>Siguiente</button>
     </form>

@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -46,15 +47,23 @@ export class SeguimientoRutina implements OnInit {
       this.ejerciciosEntrenamientos =
         this.progresoRutina?.entrenamiento?.ejerciciosEntrenamientos || [];
 
-      console.log(this.ejerciciosEntrenamientos);
-
       this.ejerciciosEntrenamientos.forEach((ejercicioEntrenamiento: EjercicioEntrenamiento) => {
-        console.log('ESTE');
+        const seriesArray = this.fb.array<FormGroup>([]);
 
-        this.forms[ejercicioEntrenamiento.id] = this.fb.group({
-          peso: [0, Validators.required],
-          repeticiones: [10, Validators.required],
+        for (let index = 0; index < ejercicioEntrenamiento.series; index++) {
+          const serieForm = this.fb.group({
+            repeticiones: [10, Validators.required],
+            peso: [0, Validators.required],
+          });
+
+          seriesArray.push(serieForm);
+        }
+
+        const ejercicioForm = this.fb.group({
+          ejercicioEntrenamiento: seriesArray,
         });
+
+        this.forms[ejercicioEntrenamiento.id] = ejercicioForm;
       });
       this.cdr.detectChanges();
     });
@@ -62,5 +71,9 @@ export class SeguimientoRutina implements OnInit {
 
   getForm(id: number) {
     return this.forms[id];
+  }
+
+  getSeriesFormArray(ejercicioId: number): FormArray {
+    return this.forms[ejercicioId]?.get('ejercicioEntrenamiento') as FormArray;
   }
 }
