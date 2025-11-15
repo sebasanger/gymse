@@ -14,6 +14,7 @@ import { ProgresoRutinaService } from '../../../services/progreso-rutina-service
 import { ProgresoRutina } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { CommonModule } from '@angular/common';
 import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
+import { EjercicioEntrenamiento } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -34,7 +35,7 @@ export class SeguimientoRutina implements OnInit {
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   progresoRutina!: ProgresoRutina;
-  ejercicios: Ejercicio[] = [];
+  ejerciciosEntrenamientos: EjercicioEntrenamiento[] = [];
 
   forms: { [ejercicioId: number]: FormGroup } = {};
 
@@ -42,10 +43,15 @@ export class SeguimientoRutina implements OnInit {
     this.progresoRutinaService.getLastActiveRoutine().subscribe((res) => {
       this.progresoRutina = res;
 
-      this.ejercicios = this.progresoRutina?.entrenamiento?.ejerciciosEntrenamientos || [];
+      this.ejerciciosEntrenamientos =
+        this.progresoRutina?.entrenamiento?.ejerciciosEntrenamientos || [];
 
-      this.ejercicios.forEach((ej: Ejercicio) => {
-        this.forms[ej.id] = this.fb.group({
+      console.log(this.ejerciciosEntrenamientos);
+
+      this.ejerciciosEntrenamientos.forEach((ejercicioEntrenamiento: EjercicioEntrenamiento) => {
+        console.log('ESTE');
+
+        this.forms[ejercicioEntrenamiento.id] = this.fb.group({
           peso: [0, Validators.required],
           repeticiones: [10, Validators.required],
         });

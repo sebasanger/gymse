@@ -1,6 +1,8 @@
 import { Categoria } from '../categoria/categoria.interface';
-import { Ejercicio } from '../ejercicio/ejercicio.interface';
-import { EjercicioEntrenamientoDto } from '../ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
+import {
+  EjercicioEntrenamiento,
+  EjercicioEntrenamientoDto,
+} from '../ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 
 export interface Entrenamiento {
   id: number;
@@ -8,7 +10,7 @@ export interface Entrenamiento {
   descripcion: string;
   deleted: boolean;
   categoria: Categoria;
-  ejerciciosEntrenamientos: Ejercicio[];
+  ejerciciosEntrenamientos: EjercicioEntrenamiento[];
 }
 
 export interface CreateEntrenamientoDto {

@@ -1,11 +1,14 @@
 <mat-stepper linear orientation="vertical">
-  <mat-step *ngFor="let ej of ejercicios" [stepControl]="getForm(ej.id)">
+  <mat-step
+    *ngFor="let ejercicioEntrenamiento of ejerciciosEntrenamientos"
+    [stepControl]="getForm(ejercicioEntrenamiento.id)"
+  >
     <ng-template matStepLabel>
-      {{ ej.nombre }}
+      {{ ejercicioEntrenamiento.ejercicio.nombre }}
     </ng-template>
 
-    <form [formGroup]="getForm(ej.id)">
-      <p><strong>Ejercicio:</strong> {{ ej.nombre }}</p>
+    <form [formGroup]="getForm(ejercicioEntrenamiento.id)">
+      <p><strong>Ejercicio:</strong> {{ ejercicioEntrenamiento.nombre }}</p>
 
       <mat-form-field appearance="outline">
         <mat-label>Peso</mat-label>
