@@ -59,10 +59,18 @@
             <mat-label>Repeticiones</mat-label>
             <input matInput type="number" formControlName="repeticiones" />
           </mat-form-field>
+
+          <button mat-button (click)="eliminarSerie(ejercicioEntrenamiento.id, i)">
+            Eliminar serie
+          </button>
         </div>
+        <button mat-button (click)="agregarSerie(ejercicioEntrenamiento.id)">Agregar serie</button>
       </div>
 
       <button mat-button matStepperNext>Siguiente</button>
+      <button mat-button (click)="guardarProgresoEjercicio(ejercicioEntrenamiento.id)">
+        Guardar
+      </button>
     </form>
   </mat-step>
 

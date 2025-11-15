@@ -82,4 +82,29 @@ export class SeguimientoRutina implements OnInit {
   getSeriesFormArray(ejercicioId: number): FormArray {
     return this.forms[ejercicioId]?.get('ejercicioEntrenamiento') as FormArray;
   }
+
+  eliminarSerie(ejercicioId: number, serieId: number) {
+    this.getSeriesFormArray(ejercicioId).removeAt(serieId);
+  }
+
+  agregarSerie(ejercicioId: number) {
+    const form = this.getSeriesFormArray(ejercicioId);
+    const serieForm = this.fb.group({
+      repeticiones: [10, Validators.required],
+      peso: [0, Validators.required],
+    });
+
+    form.push(serieForm);
+  }
+
+  guardarProgresoEjercicio(id: number) {
+    const form = this.getForm(id);
+
+    if (form.invalid) {
+      form.markAllAsTouched();
+      return;
+    }
+
+    console.log('✔ Form válido:', form.value);
+  }
 }
