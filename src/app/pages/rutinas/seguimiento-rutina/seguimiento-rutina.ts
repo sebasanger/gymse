@@ -16,6 +16,8 @@ import { ProgresoRutina } from '../../../interfaces/progresoRutina/progreso-ruti
 import { CommonModule } from '@angular/common';
 import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
 import { EjercicioEntrenamiento } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -27,6 +29,8 @@ import { EjercicioEntrenamiento } from '../../../interfaces/ejercicioEntrenamien
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatTabsModule,
+    MatCardModule,
   ],
   templateUrl: './seguimiento-rutina.html',
   styleUrl: './seguimiento-rutina.scss',
@@ -52,8 +56,8 @@ export class SeguimientoRutina implements OnInit {
 
         for (let index = 0; index < ejercicioEntrenamiento.series; index++) {
           const serieForm = this.fb.group({
-            repeticiones: [10, Validators.required],
-            peso: [0, Validators.required],
+            repeticiones: [ejercicioEntrenamiento.repeticiones, Validators.required],
+            peso: [ejercicioEntrenamiento.peso, Validators.required],
           });
 
           seriesArray.push(serieForm);
@@ -67,6 +71,8 @@ export class SeguimientoRutina implements OnInit {
       });
       this.cdr.detectChanges();
     });
+
+    this.cdr.detectChanges();
   }
 
   getForm(id: number) {

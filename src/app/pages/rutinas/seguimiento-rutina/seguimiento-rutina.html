@@ -7,6 +7,36 @@
       {{ ejercicioEntrenamiento.ejercicio.nombre }}
     </ng-template>
 
+    <mat-card class="ejercicio-card">
+      <!-- Carousel -->
+      <mat-tab-group mat-stretch-tabs="false" animationDuration="500ms">
+        <!-- Fotos -->
+        <mat-tab *ngFor="let foto of ejercicioEntrenamiento.ejercicio.fotos">
+          <ng-template mat-tab-label> Foto </ng-template>
+
+          <img [src]="foto.foto" class="media-display" alt="foto de ejercicio" />
+        </mat-tab>
+
+        <!-- Videos -->
+        <mat-tab *ngFor="let vid of ejercicioEntrenamiento.ejercicio.videos">
+          <ng-template mat-tab-label> Video </ng-template>
+
+          <video class="media-display" [src]="vid.video" controls></video>
+        </mat-tab>
+      </mat-tab-group>
+
+      <!-- Info -->
+      <mat-card-content>
+        <h2>{{ ejercicioEntrenamiento.ejercicio.nombre }}</h2>
+        <p>{{ ejercicioEntrenamiento.ejercicio.descripcion }}</p>
+
+        <p>
+          <strong>Categoría:</strong>
+          {{ ejercicioEntrenamiento.ejercicio.categoria.categoria }}
+        </p>
+      </mat-card-content>
+    </mat-card>
+
     <form [formGroup]="getForm(ejercicioEntrenamiento.id)">
       <div formArrayName="ejercicioEntrenamiento">
         <div
