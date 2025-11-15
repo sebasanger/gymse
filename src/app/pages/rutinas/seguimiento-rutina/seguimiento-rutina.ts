@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
   FormArray,
@@ -8,23 +9,18 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
-import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
-import {
-  ProgresoRutina,
-  ProgresoRutinaActiva,
-} from '../../../interfaces/progresoRutina/progreso-rutina..interface';
-import { CommonModule } from '@angular/common';
-import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
-import { EjercicioEntrenamiento } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
+import { EjercicioEntrenamientoConProgreso } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 import { GuardarProgresoEjercicio } from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
+import { ProgresoRutinaActiva } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
+import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -50,7 +46,7 @@ export class SeguimientoRutina implements OnInit {
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   progresoRutina!: ProgresoRutinaActiva;
-  ejerciciosEntrenamientos: EjercicioEntrenamiento[] = [];
+  ejerciciosEntrenamientos: EjercicioEntrenamientoConProgreso[] = [];
 
   forms: { [ejercicioId: number]: FormGroup } = {};
 
@@ -61,24 +57,30 @@ export class SeguimientoRutina implements OnInit {
       this.ejerciciosEntrenamientos =
         this.progresoRutina?.entrenamientoSeleccionado.ejercicios || [];
 
-      this.ejerciciosEntrenamientos.forEach((ejercicioEntrenamiento: EjercicioEntrenamiento) => {
-        const seriesArray = this.fb.array<FormGroup>([]);
+      this.ejerciciosEntrenamientos.forEach(
+        (ejercicioEntrenamiento: EjercicioEntrenamientoConProgreso) => {
+          const seriesArray = this.fb.array<FormGroup>([]);
 
-        for (let index = 0; index < ejercicioEntrenamiento.series; index++) {
-          const serieForm = this.fb.group({
-            repeticiones: [ejercicioEntrenamiento.repeticiones, Validators.required],
-            peso: [ejercicioEntrenamiento.peso, Validators.required],
+          if (ejercicioEntrenamiento.progreso) {
+            console.log(ejercicioEntrenamiento.progreso);
+          }
+
+          for (let index = 0; index < ejercicioEntrenamiento.series; index++) {
+            const serieForm = this.fb.group({
+              repeticiones: [ejercicioEntrenamiento.repeticiones, Validators.required],
+              peso: [ejercicioEntrenamiento.peso, Validators.required],
+            });
+
+            seriesArray.push(serieForm);
+          }
+
+          const ejercicioForm = this.fb.group({
+            ejercicioEntrenamiento: seriesArray,
           });
 
-          seriesArray.push(serieForm);
+          this.forms[ejercicioEntrenamiento.id] = ejercicioForm;
         }
-
-        const ejercicioForm = this.fb.group({
-          ejercicioEntrenamiento: seriesArray,
-        });
-
-        this.forms[ejercicioEntrenamiento.id] = ejercicioForm;
-      });
+      );
       this.cdr.detectChanges();
     });
 
