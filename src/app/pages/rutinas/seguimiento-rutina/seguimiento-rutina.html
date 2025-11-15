@@ -7,28 +7,25 @@
       {{ ejercicioEntrenamiento.ejercicio.nombre }}
     </ng-template>
 
+    <!-- CARD PRINCIPAL -->
     <mat-card class="ejercicio-card">
       <!-- Carousel -->
-      <mat-tab-group mat-stretch-tabs="false" animationDuration="500ms">
-        <!-- Fotos -->
+      <mat-tab-group mat-stretch-tabs="false" animationDuration="300ms">
         <mat-tab *ngFor="let foto of ejercicioEntrenamiento.ejercicio.fotos">
           <ng-template mat-tab-label> Foto </ng-template>
-
-          <img [src]="foto.foto" class="media-display" alt="foto de ejercicio" />
+          <img [src]="foto.foto" class="media-display" />
         </mat-tab>
 
-        <!-- Videos -->
         <mat-tab *ngFor="let vid of ejercicioEntrenamiento.ejercicio.videos">
           <ng-template mat-tab-label> Video </ng-template>
-
           <video class="media-display" [src]="vid.video" controls></video>
         </mat-tab>
       </mat-tab-group>
 
       <!-- Info -->
       <mat-card-content>
-        <h2>{{ ejercicioEntrenamiento.ejercicio.nombre }}</h2>
-        <p>{{ ejercicioEntrenamiento.ejercicio.descripcion }}</p>
+        <h2 class="ej-titulo">{{ ejercicioEntrenamiento.ejercicio.nombre }}</h2>
+        <p class="ej-desc">{{ ejercicioEntrenamiento.ejercicio.descripcion }}</p>
 
         <p>
           <strong>Categoría:</strong>
@@ -37,40 +34,67 @@
       </mat-card-content>
     </mat-card>
 
-    <form [formGroup]="getForm(ejercicioEntrenamiento.id)">
-      <div formArrayName="ejercicioEntrenamiento">
+    <!-- FORM -->
+    <form [formGroup]="getForm(ejercicioEntrenamiento.id)" class="form-ejercicio">
+      <div formArrayName="ejercicioEntrenamiento" class="series-container">
+        <h3 class="subtitulo">Series</h3>
+        <mat-divider></mat-divider>
+
         <div
+          class="serie-card"
           *ngFor="
             let serie of getSeriesFormArray(ejercicioEntrenamiento.id).controls;
             let i = index
           "
           [formGroupName]="i"
         >
-          <p>
+          <div class="serie-header">
             <strong>Serie {{ i + 1 }}</strong>
-          </p>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Peso</mat-label>
-            <input matInput type="number" formControlName="peso" />
-          </mat-form-field>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="eliminarSerie(ejercicioEntrenamiento.id, i)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Repeticiones</mat-label>
-            <input matInput type="number" formControlName="repeticiones" />
-          </mat-form-field>
+          <div class="inputs-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Peso</mat-label>
+              <input matInput type="number" formControlName="peso" />
+            </mat-form-field>
 
-          <button mat-button (click)="eliminarSerie(ejercicioEntrenamiento.id, i)">
-            Eliminar serie
-          </button>
+            <mat-form-field appearance="outline">
+              <mat-label>Repeticiones</mat-label>
+              <input matInput type="number" formControlName="repeticiones" />
+            </mat-form-field>
+          </div>
         </div>
-        <button mat-button (click)="agregarSerie(ejercicioEntrenamiento.id)">Agregar serie</button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          class="btn-add"
+          (click)="agregarSerie(ejercicioEntrenamiento.id)"
+        >
+          <mat-icon>add</mat-icon>
+          Agregar serie
+        </button>
       </div>
 
-      <button mat-button matStepperNext>Siguiente</button>
-      <button mat-button (click)="guardarProgresoEjercicio(ejercicioEntrenamiento.id)">
-        Guardar
-      </button>
+      <div class="acciones-form">
+        <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+
+        <button
+          mat-flat-button
+          color="accent"
+          (click)="guardarProgresoEjercicio(ejercicioEntrenamiento.id)"
+        >
+          Guardar
+        </button>
+      </div>
     </form>
   </mat-step>
 

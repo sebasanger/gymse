@@ -18,6 +18,8 @@ import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
 import { EjercicioEntrenamiento } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -31,6 +33,8 @@ import { MatCardModule } from '@angular/material/card';
     MatButtonModule,
     MatTabsModule,
     MatCardModule,
+    MatIconModule,
+    MatDividerModule,
   ],
   templateUrl: './seguimiento-rutina.html',
   styleUrl: './seguimiento-rutina.scss',
