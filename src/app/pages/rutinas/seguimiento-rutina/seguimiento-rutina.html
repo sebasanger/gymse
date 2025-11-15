@@ -1,21 +1,29 @@
-<mat-stepper class="example-stepper" orientation="vertical">
-  <mat-step [stepControl]="firstFormGroup" label="Fill out your name">
-    <form [formGroup]="firstFormGroup">
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required />
+<mat-stepper linear orientation="vertical">
+  <mat-step *ngFor="let ej of ejercicios" [stepControl]="getForm(ej.id)">
+    <ng-template matStepLabel>
+      {{ ej.nombre }}
+    </ng-template>
+
+    <form [formGroup]="getForm(ej.id)">
+      <p><strong>Ejercicio:</strong> {{ ej.nombre }}</p>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Peso</mat-label>
+        <input matInput type="number" formControlName="peso" />
       </mat-form-field>
-      <div>
-        <button matButton matStepperNext>Next</button>
-      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Repeticiones</mat-label>
+        <input matInput type="number" formControlName="repeticiones" />
+      </mat-form-field>
+
+      <button mat-button matStepperNext>Siguiente</button>
     </form>
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button matButton matStepperPrevious>Back</button>
-    </div>
+    <ng-template matStepLabel>Finalizar</ng-template>
+    <p>Ya completaste todos los ejercicios.</p>
+    <button mat-button matStepperPrevious>Atrás</button>
   </mat-step>
 </mat-stepper>

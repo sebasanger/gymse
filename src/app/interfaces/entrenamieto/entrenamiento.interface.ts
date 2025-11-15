@@ -8,7 +8,7 @@ export interface Entrenamiento {
   descripcion: string;
   deleted: boolean;
   categoria: Categoria;
-  ejercicios: Ejercicio[];
+  ejerciciosEntrenamientos: Ejercicio[];
 }
 
 export interface CreateEntrenamientoDto {
