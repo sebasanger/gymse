@@ -1,4 +1,3 @@
-// Fondo del card con surface del tema
 .ejercicio-card {
   margin-bottom: 20px;
   border-radius: 12px;
@@ -7,7 +6,6 @@
   box-shadow: var(--mat-sys-level2);
 }
 
-// Estilo multimedia
 .media-display {
   width: 100%;
   height: 230px;
@@ -15,7 +13,6 @@
   border-radius: 8px;
 }
 
-// Titulos
 .ej-titulo {
   margin-top: 10px;
   font-size: 20px;
@@ -27,14 +24,12 @@
   opacity: 0.85;
 }
 
-// Contenedor del formulario
 .form-ejercicio {
   margin-top: 15px;
   padding: 10px 5px;
   border-radius: 12px;
 }
 
-// Contenedor general de series
 .series-container {
   margin-bottom: 20px;
 }
@@ -46,7 +41,6 @@
   color: var(--mat-sys-secondary);
 }
 
-// Cada serie como una tarjeta oscura suave
 .serie-card {
   padding: 16px;
   margin: 14px 0;
@@ -55,7 +49,6 @@
   box-shadow: var(--mat-sys-level1);
 }
 
-// Encabezado de serie
 .serie-header {
   display: flex;
   justify-content: space-between;
@@ -67,7 +60,6 @@
   }
 }
 
-// Inputs alineados
 .inputs-row {
   display: flex;
   gap: 16px;
@@ -77,13 +69,11 @@
   }
 }
 
-// Botón agregar serie
 .btn-add {
   width: 100%;
   margin-top: 16px;
 }
 
-// Acciones
 .acciones-form {
   display: flex;
   justify-content: space-between;

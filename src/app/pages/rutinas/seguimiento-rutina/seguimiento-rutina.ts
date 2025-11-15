@@ -20,6 +20,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
+import { GuardarProgresoEjercicio } from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -41,6 +43,7 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class SeguimientoRutina implements OnInit {
   private progresoRutinaService = inject(ProgresoRutinaService);
+  private progresoEjercicioService = inject(ProgresoEjercicioService);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
   progresoRutina!: ProgresoRutina;
@@ -109,6 +112,15 @@ export class SeguimientoRutina implements OnInit {
       return;
     }
 
-    console.log('✔ Form válido:', form.value);
+    const saveProgresoEjercicio: GuardarProgresoEjercicio = {
+      cantidadSeries: 3,
+      ejercicioId: id,
+      progresoRutinaId: this.progresoRutina.id,
+      series: form?.get('ejercicioEntrenamiento')?.value ?? [],
+    };
+
+    this.progresoEjercicioService.saveSpecific(saveProgresoEjercicio).subscribe((res) => {
+      console.log('Guardado');
+    });
   }
 }
