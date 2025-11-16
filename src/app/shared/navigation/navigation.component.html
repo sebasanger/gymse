@@ -33,9 +33,22 @@
       </button>
       }
       <div class="tittle-page">
+        @if (isHandset$ | async) {
+        <mat-icon class="icon-tittle-page">fitness_center</mat-icon>
+        }@else{
         <mat-icon class="icon-tittle-page">fitness_center</mat-icon>
         <span class="icon-tittle-text">gymse</span>
         <mat-icon class="icon-tittle-page">fitness_center</mat-icon>
+        }
+      </div>
+
+      <div class="tittle-page">
+        <mat-icon class="icon-tittle-page">person</mat-icon>
+        @if (isHandset$ | async) {
+        <span class="icon-tittle-text">{{ totalActivas }} </span>
+        }@else{
+        <span class="icon-tittle-text">{{ totalActivas }} personas actualmente</span>
+        }
       </div>
 
       <app-user-info></app-user-info>

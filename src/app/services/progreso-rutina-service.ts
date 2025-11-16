@@ -51,4 +51,8 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
         this.$currentUser.next(res);
       });
   }
+
+  getCountActivas() {
+    return this.http.get<number>(`${base_url}/${this.endpoint}/activas/count`);
+  }
 }

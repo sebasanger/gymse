@@ -35,6 +35,7 @@ export class NavigationComponent implements OnInit {
   private authService = inject(AuthService);
   private progresoRutinaService = inject(ProgresoRutinaService);
   private cdr = inject(ChangeDetectorRef);
+  public totalActivas = 0;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
     map((result) => result.matches),
@@ -108,6 +109,10 @@ export class NavigationComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
+    this.progresoRutinaService.getCountActivas().subscribe((res) => {
+      this.totalActivas = res;
+    });
+
     this.progresoRutinaService.getLastActiveRoutine();
 
     this.authService
