@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from '../shared/dashboard/dashboard.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { Pages } from './pages';
 import { EjerciciosComponent } from './ejercicios/ejercicios.component';
 import { CreateUpdateEjerciciosComponent } from './ejercicios/create-update-ejercicios/create-update-ejercicios.component';
