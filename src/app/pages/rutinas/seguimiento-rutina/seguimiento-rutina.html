@@ -2,6 +2,7 @@
   <mat-step
     *ngFor="let ejercicioEntrenamiento of ejerciciosEntrenamientos"
     [stepControl]="getForm(ejercicioEntrenamiento.id)"
+    [completed]="!!ejercicioEntrenamiento.progreso"
   >
     <ng-template matStepLabel>
       {{ ejercicioEntrenamiento.ejercicio.nombre }}
@@ -128,6 +129,7 @@
           mat-flat-button
           color="accent"
           (click)="guardarProgresoEjercicio(ejercicioEntrenamiento)"
+          *ngIf="!ejercicioEntrenamiento.progreso"
         >
           Guardar
         </button>
