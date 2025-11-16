@@ -7,8 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterModule } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { map, repeat, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { ProgresoRutinaService } from '../../services/progreso-rutina-service';
 import { UserInfo } from '../user-info/user-info';
@@ -109,9 +109,14 @@ export class NavigationComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
-    this.progresoRutinaService.getCountActivas().subscribe((res) => {
-      this.totalActivas = res;
-    });
+    interval(600_000) // cada 10 minutos
+      .pipe(
+        startWith(0),
+        switchMap(() => this.progresoRutinaService.getCountActivas())
+      )
+      .subscribe((res) => {
+        this.totalActivas = res;
+      });
 
     this.progresoRutinaService.getLastActiveRoutine();
 
