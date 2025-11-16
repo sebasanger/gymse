@@ -74,6 +74,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Seguir Rutina',
       visible: false,
     },
+    {
+      id: 'suscripcion',
+      icon: 'dashboard_customize',
+      redirection: '/pages/rutinas/suscripcion',
+      tittle: 'Suscripcion Rutina',
+      visible: false,
+    },
 
     // Admin
     {
@@ -123,6 +130,8 @@ export class NavigationComponent implements OnInit {
       .asObservable()
       .subscribe((res) => {
         //no se tiene check in, o progreso rutina
+        this.setVisible(['suscripcion'], true);
+
         if (!res) {
           this.setVisible(['seleccionar'], false);
           this.setVisible(['seguimiento'], false);

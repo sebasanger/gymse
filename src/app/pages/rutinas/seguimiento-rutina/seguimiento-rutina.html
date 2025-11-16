@@ -135,7 +135,7 @@
   </mat-step>
 
   <mat-step>
-    <ng-template matStepLabel>Finalizar</ng-template>
+    <ng-template matStepLabel>Resumen</ng-template>
 
     <h2 class="titulo-final">Resumen de tu progreso</h2>
 
@@ -167,11 +167,9 @@
     } @else {
     <p>No registraste ningún progreso todavía.</p>
     }
-
+    <h3 class="titulo-final">Para finalizar realiza el check out</h3>
     <div class="final-actions">
       <button mat-button matStepperPrevious>Atrás</button>
-
-      <button mat-raised-button color="primary">Finalizar rutina del día</button>
     </div>
   </mat-step>
 </mat-stepper>

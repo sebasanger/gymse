@@ -6,6 +6,7 @@ export interface Rutina {
   id: number;
   nombre: string;
   descripcion: string;
+  tipoRutina: tipoRutina;
   deleted: boolean;
   usuarios: UsuarioMinDto[];
   entrenamientos: EjercicioEntrenamiento[];
@@ -30,3 +31,14 @@ export interface AddRemoveUserRutine {
   userId: number;
   rutinaId: number;
 }
+
+export interface RutinaConFlag {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  tipoRutina: tipoRutina;
+  suscripto: boolean;
+  entrenamientos: EjercicioEntrenamiento[];
+}
+
+export type tipoRutina = 'PERSONALIZADA' | 'PREDETERMINADA';
