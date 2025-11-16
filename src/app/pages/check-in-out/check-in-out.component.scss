@@ -1,15 +1,111 @@
-.checkin-card {
-  max-width: 400px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
-
-.full-width {
+.checkin-container {
+  padding-top: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  max-width: 100%; /* opcional */
 }
 
-mat-card-actions {
+.checkin-card {
+  width: 100%;
+  max-width: 600px; /* ancho máximo en tablet */
+  padding: 2rem;
+  border-radius: 20px;
+  background: var(--mat-sys-surface); /* respeta tema oscuro */
+  color: var(--mat-sys-on-surface);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* shadow moderno */
+}
+
+.input-field {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 1rem;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.big-button {
+  font-size: 1.2rem;
+  padding: 1rem;
+  flex: 1;
+  border-radius: 12px;
+}
+
+/* Animaciones */
+.animate-card {
+  animation: popIn 0.5s ease-out;
+}
+@keyframes popIn {
+  0% {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fade {
+  animation: fadeIn 1s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-down {
+  animation: fadeDown 0.9s ease;
+}
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-down-delay {
+  animation: fadeDown 1s ease 0.2s both;
+}
+
+.animate-fade-up {
+  animation: fadeUp 1s ease;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.info-message {
+  margin: 1rem 0;
+  padding: 1rem 1.5rem;
+  background-color: rgba(50, 50, 50, 0.7); /* más oscuro, resalta sobre la card */
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--mat-sys-on-surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4); /* shadow para el mensaje */
+}
+
+.info-message p {
+  margin: 0;
+  line-height: 1.4;
 }

@@ -1,30 +1,33 @@
-<form [formGroup]="checkForm" novalidate>
-  <mat-card class="checkin-card">
+<form [formGroup]="checkForm" novalidate class="checkin-container">
+  <mat-card class="checkin-card animate-card">
     <mat-card-header>
-      <mat-card-title>Control de asistencia</mat-card-title>
+      <mat-card-title class="title animate-fade-down">Control de Asistencia</mat-card-title>
+      <mat-card-subtitle class="subtitle animate-fade-down-delay">
+        Identifícate por documento
+      </mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content>
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <mat-label>Documento del usuario</mat-label>
-            <input
-              matInput
-              placeholder="Ingrese el documento"
-              formControlName="documento"
-              type="text"
-            />
-          </mat-form-field>
-        </div>
-      </div>
+    <!-- Mensaje informativo -->
+    <div class="info-message animate-fade">
+      <p>
+        Para poder <strong>seleccionar una rutina</strong> debes realizar <strong>Check In</strong>.
+        Una vez finalizada la rutina, realiza <strong>Check Out</strong> para que tu progreso quede
+        registrado.
+      </p>
+    </div>
+
+    <mat-card-content class="animate-fade">
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Documento</mat-label>
+        <input matInput formControlName="documento" type="text" autocomplete="off" />
+      </mat-form-field>
     </mat-card-content>
 
-    <mat-card-actions align="end">
+    <mat-card-actions class="actions animate-fade-up">
       <button
         mat-raised-button
         color="primary"
-        type="button"
+        class="big-button"
         (click)="onCheckIn()"
         [disabled]="checkForm.invalid"
       >
@@ -34,7 +37,7 @@
       <button
         mat-raised-button
         color="warn"
-        type="button"
+        class="big-button"
         (click)="onCheckOut()"
         [disabled]="checkForm.invalid"
       >
