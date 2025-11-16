@@ -82,6 +82,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Suscripcion Rutina',
       visible: false,
     },
+    {
+      id: 'progreso',
+      icon: 'bar_chart',
+      redirection: '/pages/rutinas/progreso',
+      tittle: 'Progreso Rutina',
+      visible: false,
+    },
 
     // Admin
     {
@@ -141,6 +148,7 @@ export class NavigationComponent implements OnInit {
       .subscribe((res) => {
         //no se tiene check in, o progreso rutina
         this.setVisible(['suscripcion'], true);
+        this.setVisible(['progreso'], true);
 
         if (!res) {
           this.setVisible(['seleccionar'], false);
