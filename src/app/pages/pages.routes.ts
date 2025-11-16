@@ -11,6 +11,7 @@ import { CheckInOutComponent } from './check-in-out/check-in-out.component';
 import { SeleccionRutinasComponent } from './rutinas/seleccion-rutina/seleccion-rutina.component';
 import { SeguimientoRutina } from './rutinas/seguimiento-rutina/seguimiento-rutina';
 import { SuscripcionRutinasComponent } from './rutinas/suscripcion-rutinas/suscripcion-rutinas.component';
+import { CreateUpdateOwnRutinasComponent } from './rutinas/create-update-rutinas-own/create-update-rutinas-own.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -50,6 +51,15 @@ export const PAGES_ROUTES: Routes = [
         path: 'rutinas/update/:id',
         component: CreateUpdateRutinasComponent,
       },
+      {
+        path: 'rutinas/create/own',
+        component: CreateUpdateOwnRutinasComponent,
+      },
+      {
+        path: 'rutinas/update/own/:id',
+        component: CreateUpdateOwnRutinasComponent,
+      },
+
       { path: 'checkInOut', component: CheckInOutComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],

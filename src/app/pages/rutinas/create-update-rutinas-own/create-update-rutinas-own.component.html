@@ -1,0 +1,180 @@
+<form [formGroup]="rutinaForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="base-form-card">
+    <mat-card-header>
+      <mat-card-title class="title">Rutina</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- DATOS PRINCIPALES -->
+      <section class="section-container">
+        <div class="row">
+          <mat-form-field class="full-width">
+            <mat-label>Nombre de la rutina</mat-label>
+            <input matInput formControlName="nombre" />
+            <mat-error *ngIf="rutinaForm.get('nombre')?.hasError('required')">
+              El nombre de la rutina es <strong>requerido</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="descripcion"></textarea>
+            <mat-error *ngIf="rutinaForm.get('descripcion')?.hasError('required')">
+              La descripción es <strong>requerida</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </section>
+
+      <!-- ENTRENAMIENTOS -->
+      <section class="section-container">
+        <div formArrayName="entrenamientos">
+          @for (entrenamiento of entrenamientosForm.controls; track entrenamiento; let
+          indiceEntrenamiento = $index) {
+          <mat-card class="entrenamiento-card" [formGroupName]="indiceEntrenamiento">
+            <mat-card-header>
+              <mat-card-title>Entrenamiento #{{ indiceEntrenamiento + 1 }}</mat-card-title>
+              <button
+                mat-icon-button
+                color="warn"
+                type="button"
+                (click)="deleteEntrenamiento(indiceEntrenamiento)"
+                matTooltip="Eliminar entrenamiento"
+              >
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="row">
+                <mat-form-field class="full-width">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="nombre" />
+                  <mat-error *ngIf="entrenamiento.get('nombre')?.hasError('required')">
+                    El nombre del entrenamiento es requerido
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                  <mat-label>Descripción</mat-label>
+                  <input matInput formControlName="descripcion" />
+                  <mat-error *ngIf="entrenamiento.get('descripcion')?.hasError('required')">
+                    La descripción es requerida
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="full-width">
+                  <mat-label>Categoría</mat-label>
+                  <mat-select formControlName="categoria">
+                    @for (categoria of categorias; track categoria) {
+                    <mat-option [value]="categoria.categoria">{{ categoria.categoria }}</mat-option>
+                    }
+                  </mat-select>
+                  <mat-error *ngIf="entrenamiento.get('categoria')?.hasError('required')">
+                    La categoría es requerida
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- EJERCICIOS -->
+              <div formArrayName="ejercicioEntrenamiento" class="ejercicios-container">
+                <h3>Ejercicios</h3>
+
+                @for (ejercicio of getEjerciciosFormArray(indiceEntrenamiento).controls; track
+                ejercicio; let indiceEjercicio = $index) {
+                <div class="ejercicio-card" [formGroupName]="indiceEjercicio">
+                  <div class="ejercicio-header">
+                    <span>Ejercicio #{{ indiceEjercicio + 1 }}</span>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      (click)="deleteEjercicio(indiceEntrenamiento, indiceEjercicio)"
+                      matTooltip="Eliminar ejercicio"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+
+                  <div class="row">
+                    <mat-form-field class="full-width">
+                      <mat-label>Ejercicio</mat-label>
+                      <mat-select formControlName="ejercicioId" required>
+                        @for (ej of ejercicios; track ej) {
+                        <mat-option [value]="ej.id">{{ ej.nombre }}</mat-option>
+                        }
+                      </mat-select>
+                      <mat-error *ngIf="ejercicio.get('ejercicioId')?.hasError('required')">
+                        Debe seleccionar un ejercicio
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="small-field">
+                      <mat-label>Series</mat-label>
+                      <input matInput type="number" formControlName="series" />
+                      <mat-error *ngIf="ejercicio.get('series')?.hasError('required')">
+                        Campo requerido
+                      </mat-error>
+                      <mat-error *ngIf="ejercicio.get('series')?.hasError('min')">
+                        Mínimo 1 serie
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="small-field">
+                      <mat-label>Repeticiones</mat-label>
+                      <input matInput type="number" formControlName="repeticiones" />
+                      <mat-error *ngIf="ejercicio.get('repeticiones')?.hasError('required')">
+                        Campo requerido
+                      </mat-error>
+                      <mat-error *ngIf="ejercicio.get('repeticiones')?.hasError('min')">
+                        Mínimo 1 repetición
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="small-field">
+                      <mat-label>Peso (kg)</mat-label>
+                      <input matInput type="number" formControlName="peso" />
+                      <mat-error *ngIf="ejercicio.get('peso')?.hasError('required')">
+                        Campo requerido
+                      </mat-error>
+                      <mat-error *ngIf="ejercicio.get('peso')?.hasError('min')">
+                        El peso no puede ser negativo
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                }
+
+                <div class="add-btn-container">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="addEjercicio(indiceEntrenamiento)"
+                  >
+                    <mat-icon>add</mat-icon> Agregar ejercicio
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Botón debajo del último entrenamiento -->
+          @if (indiceEntrenamiento === entrenamientosForm.length - 1) {
+          <div class="add-btn-container">
+            <button mat-stroked-button color="accent" type="button" (click)="addEntrenamiento()">
+              <mat-icon>add</mat-icon> Agregar entrenamiento
+            </button>
+          </div>
+          } }
+        </div>
+      </section>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" type="submit" [disabled]="rutinaForm.invalid">
+        Guardar rutina
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

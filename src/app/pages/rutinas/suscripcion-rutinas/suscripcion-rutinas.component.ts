@@ -22,6 +22,7 @@ import { RutinaConFlag } from '../../../interfaces/rutina/rutina.interface';
 import { AlertService } from '../../../services/alert-service';
 import { AuthService } from '../../../services/auth.service';
 import { RutinaService } from '../../../services/rutina-service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-suscripcion-rutinas',
   templateUrl: './suscripcion-rutinas.component.html',
@@ -49,6 +50,7 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
   private readonly alertService = inject(AlertService);
   private readonly authService = inject(AuthService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
   private readonly rutinaService = inject(RutinaService);
   public includedDeleted: boolean = true;
@@ -157,5 +159,13 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
         },
       });
     });
+  }
+
+  add() {
+    this.router.navigateByUrl('pages/rutinas/create/own');
+  }
+
+  edit(userid: number) {
+    this.router.navigateByUrl('pages/rutinas/update/own/' + userid);
   }
 }

@@ -3,6 +3,8 @@
     <mat-label>Filtro</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />
   </mat-form-field>
+
+  <button (click)="add()" class="agregar-button" mat-icon-button>Agregar</button>
 </div>
 <div class="mat-elevation-z2">
   <table mat-table multiTemplateDataRows class="full-width-table" matSort aria-label="Elements">
