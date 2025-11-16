@@ -147,3 +147,32 @@
   margin-top: 4px;
   border-radius: 8px;
 }
+
+.titulo-final {
+  margin-bottom: 16px;
+}
+
+.resumen-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resumen-card {
+  background: #1e1e1e;
+  border-radius: 12px;
+}
+
+.resumen-serie {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+}
+
+.final-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 16px;
+}

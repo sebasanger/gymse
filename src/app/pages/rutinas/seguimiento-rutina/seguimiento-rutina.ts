@@ -177,4 +177,13 @@ export class SeguimientoRutina implements OnInit {
       }
     });
   }
+
+  get hasAnyProgress(): boolean {
+    return !!(
+      this.progresoRutina &&
+      this.progresoRutina.entrenamientoSeleccionado &&
+      Array.isArray(this.progresoRutina.entrenamientoSeleccionado.ejercicios) &&
+      this.progresoRutina.entrenamientoSeleccionado.ejercicios.some((e) => !!e.progreso)
+    );
+  }
 }

@@ -136,7 +136,42 @@
 
   <mat-step>
     <ng-template matStepLabel>Finalizar</ng-template>
-    <p>Ya completaste todos los ejercicios.</p>
-    <button mat-button matStepperPrevious>Atrás</button>
+
+    <h2 class="titulo-final">Resumen de tu progreso</h2>
+
+    @if ( hasAnyProgress ) {
+
+    <div class="resumen-container">
+      @for ( ej of progresoRutina.entrenamientoSeleccionado.ejercicios; track ej.id ) { @if
+      (ej.progreso) {
+      <mat-card class="resumen-card">
+        <mat-card-header>
+          <mat-card-title>{{ ej.ejercicio.nombre }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ ej.progreso.cantidadSeries }} series registradas
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          @for (serie of ej.progreso.series; track serie.id; let i = $index) {
+          <div class="resumen-serie">
+            <strong>Serie {{ i + 1 }}</strong>
+            <span>{{ serie.repeticiones }} reps — {{ serie.peso }} kg</span>
+          </div>
+          }
+        </mat-card-content>
+      </mat-card>
+      } }
+    </div>
+
+    } @else {
+    <p>No registraste ningún progreso todavía.</p>
+    }
+
+    <div class="final-actions">
+      <button mat-button matStepperPrevious>Atrás</button>
+
+      <button mat-raised-button color="primary">Finalizar rutina del día</button>
+    </div>
   </mat-step>
 </mat-stepper>
