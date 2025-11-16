@@ -21,6 +21,8 @@ import { GuardarProgresoEjercicio } from '../../../interfaces/progresoEjercicio/
 import { ProgresoRutinaActiva } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
+import { AlertService } from '../../../services/alert-service';
+import { Serie } from '../../../interfaces/serie/serie.interface';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -41,9 +43,7 @@ import { ProgresoRutinaService } from '../../../services/progreso-rutina-service
   styleUrl: './seguimiento-rutina.scss',
 })
 export class SeguimientoRutina implements OnInit {
-  eliminarProgreso(arg0: number) {
-    throw new Error('Method not implemented.');
-  }
+  private alertService = inject(AlertService);
   private progresoRutinaService = inject(ProgresoRutinaService);
   private progresoEjercicioService = inject(ProgresoEjercicioService);
   private fb = inject(FormBuilder);
@@ -54,9 +54,12 @@ export class SeguimientoRutina implements OnInit {
   forms: { [ejercicioId: number]: FormGroup } = {};
 
   ngOnInit(): void {
+    this.load();
+  }
+
+  load() {
     this.progresoRutinaService.getLastActiveRoutine().subscribe((res) => {
       this.progresoRutina = res;
-
       this.ejerciciosEntrenamientos =
         this.progresoRutina?.entrenamientoSeleccionado.ejercicios || [];
 
@@ -108,23 +111,42 @@ export class SeguimientoRutina implements OnInit {
     form.push(serieForm);
   }
 
-  guardarProgresoEjercicio(id: number) {
-    const form = this.getForm(id);
+  guardarProgresoEjercicio(ejercicioEntrenamientoConProgreso: EjercicioEntrenamientoConProgreso) {
+    const form = this.getForm(ejercicioEntrenamientoConProgreso.id);
+    console.log(ejercicioEntrenamientoConProgreso);
 
     if (form.invalid) {
       form.markAllAsTouched();
+
       return;
     }
 
+    const series: Serie[] = form?.get('ejercicioEntrenamiento')?.value ?? [];
+
     const saveProgresoEjercicio: GuardarProgresoEjercicio = {
-      cantidadSeries: 3,
-      ejercicioId: id,
+      cantidadSeries: series.length,
+      ejercicioId: ejercicioEntrenamientoConProgreso.ejercicio.id,
       progresoRutinaId: this.progresoRutina.id,
-      series: form?.get('ejercicioEntrenamiento')?.value ?? [],
+
+      series: series,
     };
 
     this.progresoEjercicioService.saveSpecific(saveProgresoEjercicio).subscribe((res) => {
-      console.log('Guardado');
+      this.load();
+    });
+  }
+
+  eliminarProgreso(progresoId: number) {
+    this.alertService.confirmDelete('¿Deseas eliminar el progreso?').then((result) => {
+      if (result.isConfirmed) {
+        this.progresoEjercicioService.deleteById(progresoId).subscribe({
+          next: () => {
+            this.alertService.success('Progreso eliminado');
+            this.load();
+          },
+          error: (err) => this.alertService.errorResponse(err),
+        });
+      }
     });
   }
 }
