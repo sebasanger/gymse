@@ -7,24 +7,24 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subject, takeUntil } from 'rxjs';
-import { RutinaConFlag } from '../../../interfaces/rutina/rutina.interface';
 import { RutinaService } from '../../../services/rutina-service';
+import { ProgresoRutina } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
+
 @Component({
   selector: 'app-progresos-rutinas',
   templateUrl: './progresos-rutinas.component.html',
-  styleUrl: './progresos-rutinas.component.scss',
+  styleUrls: ['./progresos-rutinas.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     MatTableModule,
@@ -34,37 +34,24 @@ import { RutinaService } from '../../../services/rutina-service';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
-    MatSlideToggleModule,
-    FormsModule,
     MatTooltipModule,
   ],
 })
 export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<RutinaConFlag>;
-  dataSource = new MatTableDataSource<RutinaConFlag>();
-  rutinas: RutinaConFlag[] = [];
+  @ViewChild(MatTable) table!: MatTable<ProgresoRutina>;
+
+  dataSource = new MatTableDataSource<ProgresoRutina>();
+  progresos: ProgresoRutina[] = [];
+  expandedProgreso: ProgresoRutina | null = null;
+
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
-  private readonly rutinaService = inject(RutinaService);
-  public includedDeleted: boolean = true;
-  expandedRutina: RutinaConFlag | null | undefined;
+  private readonly progresoRutinaService = inject(ProgresoRutinaService);
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'tipo'];
+  columnsToDisplay = ['id', 'rutina', 'entrenamiento', 'fecha', 'checkIn', 'checkOut', 'duracion'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
-
-  /** Checks whether an element is expanded. */
-  isExpanded(element: RutinaConFlag) {
-    return this.expandedRutina === element;
-  }
-
-  /** Toggles the expanded state of an element. */
-  toggle(element: RutinaConFlag) {
-    this.expandedRutina = this.isExpanded(element) ? null : element;
-  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -73,27 +60,33 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
   }
 
   load() {
-    this.rutinaService
-      .findWithSuscription()
+    this.progresoRutinaService
+      .findAll()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((rutinas) => {
-        this.rutinas = rutinas;
-
-        this.dataSource.data = rutinas;
+      .subscribe((progresos) => {
+        this.progresos = progresos;
+        this.dataSource.data = progresos;
         this.table.dataSource = this.dataSource;
         this.customFilters();
         this.cdr.detectChanges();
       });
   }
 
+  isExpanded(element: ProgresoRutina) {
+    return this.expandedProgreso === element;
+  }
+
+  toggle(element: ProgresoRutina) {
+    this.expandedProgreso = this.isExpanded(element) ? null : element;
+  }
+
   customFilters() {
-    this.dataSource.filterPredicate = (data: RutinaConFlag, filter: string) => {
+    this.dataSource.filterPredicate = (data: ProgresoRutina, filter: string) => {
       const normalizedFilter = filter.trim().toLowerCase();
-
-      const nombre = data.nombre?.toLowerCase() ?? '';
-      const id = String(data.id ?? '').toLowerCase();
-
-      return nombre.includes(normalizedFilter) || id.includes(normalizedFilter);
+      return (
+        data.rutina.nombre.toLowerCase().includes(normalizedFilter) ||
+        data.entrenamiento.nombre.toLowerCase().includes(normalizedFilter)
+      );
     };
   }
 
@@ -106,12 +99,10 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  applyFilterByCategory(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  getDuracionMinutes(row: ProgresoRutina) {
+    if (!row?.checkIn || !row?.checkOut) return null;
+    const diffMs = new Date(row.checkOut).getTime() - new Date(row.checkIn).getTime();
+    return Math.round(diffMs / 60000); // minutos
   }
 
   ngOnDestroy(): void {

@@ -4,96 +4,112 @@
     <input matInput (keyup)="applyFilter($event)" #input />
   </mat-form-field>
 </div>
+
 <div class="mat-elevation-z2">
-  <table mat-table multiTemplateDataRows class="full-width-table" matSort aria-label="Elements">
+  <table mat-table multiTemplateDataRows class="full-width-table" matSort aria-label="Progresos">
+    <!-- Id -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+      <td mat-cell *matCellDef="let row">{{ row?.id }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="nombre">
+    <!-- Rutina -->
+    <ng-container matColumnDef="rutina">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Rutina</th>
-      <td mat-cell *matCellDef="let row">{{ row.nombre }}</td>
+      <td mat-cell *matCellDef="let row">{{ row?.rutina?.nombre }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="descripcion">
-      <th mat-header-cell *matHeaderCellDef>Descripcion</th>
-      <td mat-cell *matCellDef="let row">{{ row.descripcion }}</td>
+    <!-- Entrenamiento -->
+    <ng-container matColumnDef="entrenamiento">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Entrenamiento</th>
+      <td mat-cell *matCellDef="let row">{{ row?.entrenamiento?.nombre }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="tipo">
-      <th mat-header-cell *matHeaderCellDef>Tipo</th>
-      <td mat-cell *matCellDef="let row">{{ row.tipoRutina }}</td>
+    <!-- Fecha -->
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+      <td mat-cell *matCellDef="let row">{{ row?.fecha | date : 'short' }}</td>
     </ng-container>
 
+    <!-- Check In -->
+    <ng-container matColumnDef="checkIn">
+      <th mat-header-cell *matHeaderCellDef>Check In</th>
+      <td mat-cell *matCellDef="let row">{{ row?.checkIn | date : 'shortTime' }}</td>
+    </ng-container>
+
+    <!-- Check Out -->
+    <ng-container matColumnDef="checkOut">
+      <th mat-header-cell *matHeaderCellDef>Check Out</th>
+      <td mat-cell *matCellDef="let row">{{ row?.checkOut | date : 'shortTime' }}</td>
+    </ng-container>
+
+    <!-- Duracion -->
+    <ng-container matColumnDef="duracion">
+      <th mat-header-cell *matHeaderCellDef>Duración (min)</th>
+      <td mat-cell *matCellDef="let row">{{ getDuracionMinutes(row) ?? '-' }}</td>
+    </ng-container>
+
+    <!-- Expand button -->
     <ng-container matColumnDef="expand">
-      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Detalles</th>
-      <td mat-cell *matCellDef="let element">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
         <button
-          matIconButton
-          aria-label="expand row"
-          (click)="toggle(element); $event.stopPropagation()"
-          class="example-toggle-button"
-          [class.example-toggle-button-expanded]="isExpanded(element)"
+          mat-icon-button
+          (click)="toggle(row); $event.stopPropagation()"
+          [class.example-toggle-button-expanded]="isExpanded(row)"
         >
           <mat-icon>keyboard_arrow_down</mat-icon>
         </button>
       </td>
     </ng-container>
 
-    <!-- Expanded Content Column -->
+    <!-- Expanded Detail -->
     <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+      <td mat-cell *matCellDef="let row" [attr.colspan]="columnsToDisplayWithExpand.length">
         <div
           class="example-element-detail-wrapper"
-          [class.example-element-detail-wrapper-expanded]="isExpanded(element)"
+          [class.example-element-detail-wrapper-expanded]="isExpanded(row)"
         >
-          <div class="example-element-detail">
-            @for (entrenamiento of element.entrenamientos; track entrenamiento; let i = $index) {
+          <div class="example-element-detail" *ngIf="isExpanded(row)">
             <div class="entrenamiento-element">
-              <div class="center">Entrenamiento: #{{ i + 1 }}</div>
-              <div>Nombre: {{ entrenamiento.nombre }}</div>
-              <div>Descripcion: {{ entrenamiento.descripcion }}</div>
-              <div>Categoria: {{ entrenamiento.categoria.categoria }}</div>
-              @for (ejercicioEntrenamiento of entrenamiento.ejerciciosEntrenamientos; track
-              ejercicioEntrenamiento; let j = $index) {
-              <div class="ejercicio-element">
-                <div class="center">Ejercicio: #{{ j + 1 }}</div>
-                <div>Nombre: {{ ejercicioEntrenamiento.ejercicio.nombre }}</div>
-                <div>Descripcion: {{ ejercicioEntrenamiento.ejercicio.descripcion }}</div>
-                <div>Categoria: {{ ejercicioEntrenamiento.ejercicio.categoria.categoria }}</div>
-                <div>Series: {{ ejercicioEntrenamiento.series }}</div>
-                <div>Repeticiones: {{ ejercicioEntrenamiento.repeticiones }}</div>
-                <div>Peso: {{ ejercicioEntrenamiento.peso }}</div>
+              <div class="center">Entrenamiento: {{ row?.entrenamiento?.nombre ?? '-' }}</div>
+              <div>Descripcion: {{ row?.entrenamiento?.descripcion ?? '-' }}</div>
+              <div>Categoria: {{ row?.entrenamiento?.categoria?.categoria ?? '-' }}</div>
+
+              <div
+                *ngFor="let progresoEj of row?.progresoEjercicio ?? []; let j = index"
+                class="ejercicio-element"
+              >
+                <div class="center">
+                  Ejercicio: {{ j + 1 }} - {{ progresoEj?.ejercicio?.nombre ?? '-' }}
+                </div>
+                <div>Series: {{ progresoEj?.series?.length ?? 0 }}</div>
+                <div>Repeticiones totales: {{ progresoEj?.cantidadSeries ?? '-' }}</div>
+                <div>Check In: {{ progresoEj?.checkIn | date : 'shortTime' }}</div>
+                <div>Check Out: {{ progresoEj?.checkOut | date : 'shortTime' }}</div>
               </div>
-              }
             </div>
-            }
           </div>
         </div>
       </td>
     </ng-container>
-    <!-- Expanded Content Column -->
 
     <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
     <tr
       mat-row
-      *matRowDef="let element; columns: columnsToDisplayWithExpand"
+      *matRowDef="let row; columns: columnsToDisplayWithExpand"
       class="example-element-row"
-      [class.example-expanded-row]="isExpanded(element)"
-      [class.deleted-row]="element.deleted"
-      (click)="toggle(element)"
+      [class.example-expanded-row]="isExpanded(row)"
+      (click)="toggle(row)"
     ></tr>
     <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
   </table>
 
   <mat-paginator
-    #paginator
     [length]="dataSource.data.length"
     [pageIndex]="0"
     [pageSize]="10"
     [pageSizeOptions]="[5, 10, 20]"
-    aria-label="Select page"
   >
   </mat-paginator>
 </div>
