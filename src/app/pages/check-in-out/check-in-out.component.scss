@@ -9,12 +9,12 @@
 
 .checkin-card {
   width: 100%;
-  max-width: 600px; /* ancho máximo en tablet */
+  max-width: 600px;
   padding: 2rem;
   border-radius: 20px;
-  background: var(--mat-sys-surface); /* respeta tema oscuro */
+  background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5); /* shadow moderno */
+  box-shadow: 0 8px 24px rgba(70, 69, 69, 0.5);
 }
 
 .input-field {
