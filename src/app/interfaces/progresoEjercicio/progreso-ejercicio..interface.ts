@@ -4,8 +4,8 @@ import { Serie } from '../serie/serie.interface';
 export interface ProgresoEjercicio {
   id: number;
   cantidadSeries: number;
-  ejericio: Ejercicio;
-  series: Serie;
+  ejercicio: Ejercicio;
+  series: Serie[];
   fecha: Date;
   checkIn: Date;
   checkOut: Date;

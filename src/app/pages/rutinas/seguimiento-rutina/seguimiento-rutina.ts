@@ -41,6 +41,9 @@ import { ProgresoRutinaService } from '../../../services/progreso-rutina-service
   styleUrl: './seguimiento-rutina.scss',
 })
 export class SeguimientoRutina implements OnInit {
+  eliminarProgreso(arg0: number) {
+    throw new Error('Method not implemented.');
+  }
   private progresoRutinaService = inject(ProgresoRutinaService);
   private progresoEjercicioService = inject(ProgresoEjercicioService);
   private fb = inject(FormBuilder);
@@ -60,10 +63,6 @@ export class SeguimientoRutina implements OnInit {
       this.ejerciciosEntrenamientos.forEach(
         (ejercicioEntrenamiento: EjercicioEntrenamientoConProgreso) => {
           const seriesArray = this.fb.array<FormGroup>([]);
-
-          if (ejercicioEntrenamiento.progreso) {
-            console.log(ejercicioEntrenamiento.progreso);
-          }
 
           for (let index = 0; index < ejercicioEntrenamiento.series; index++) {
             const serieForm = this.fb.group({

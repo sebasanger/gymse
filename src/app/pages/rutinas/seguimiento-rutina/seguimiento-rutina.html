@@ -34,7 +34,44 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- FORM -->
+    <!-- PROGRESO -->
+    @if (ejercicioEntrenamiento.progreso) {
+
+    <mat-card class="progreso-card">
+      <mat-card-header class="progreso-header">
+        <mat-card-title>Progreso anterior</mat-card-title>
+        <mat-card-subtitle>
+          {{ ejercicioEntrenamiento.progreso.cantidadSeries }} series registradas
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="mb-2">
+          <strong>Ejercicio:</strong>
+          {{ ejercicioEntrenamiento.progreso.ejercicio.nombre }}
+        </p>
+
+        @for (serie of ejercicioEntrenamiento.progreso.series; track serie.id; let i = $index) {
+        <div class="progreso-serie">
+          <strong>Serie {{ i + 1 }}</strong>
+          <span>{{ serie.repeticiones }} reps — {{ serie.peso }} kg</span>
+        </div>
+        }
+      </mat-card-content>
+
+      <div class="progreso-acciones">
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="eliminarProgreso(ejercicioEntrenamiento.progreso.id)"
+        >
+          Eliminar progreso
+        </button>
+      </div>
+    </mat-card>
+
+    } @else {
+    <!-- FORM SERIES -->
     <form [formGroup]="getForm(ejercicioEntrenamiento.id)" class="form-ejercicio">
       <div formArrayName="ejercicioEntrenamiento" class="series-container">
         <h3 class="subtitulo">Series</h3>
@@ -96,6 +133,7 @@
         </button>
       </div>
     </form>
+    }
   </mat-step>
 
   <mat-step>

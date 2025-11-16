@@ -79,3 +79,71 @@
   justify-content: space-between;
   margin-top: 25px;
 }
+
+/* ====== CARD DEL PROGRESO ANTERIOR ====== */
+.progreso-card {
+  margin-top: 22px;
+  padding: 10px 0 16px;
+  border-radius: 14px;
+  background: var(--mat-sys-surface-container-high);
+  box-shadow: var(--mat-sys-level2);
+  transition: 0.25s ease;
+
+  &:hover {
+    box-shadow: var(--mat-sys-level3);
+    transform: translateY(-1px);
+  }
+}
+
+.progreso-header mat-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--mat-sys-primary);
+}
+
+.progreso-header mat-card-subtitle {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Listado de series previas */
+.progreso-serie {
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+
+  background: var(--mat-sys-surface-container-low);
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: 0.2s;
+
+  &:hover {
+    background: var(--mat-sys-surface-container);
+    box-shadow: var(--mat-sys-level1);
+  }
+}
+
+.progreso-serie strong {
+  font-size: 15px;
+}
+
+.progreso-serie span {
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* Botón eliminar */
+.progreso-acciones {
+  padding: 4px 16px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.progreso-acciones button {
+  margin-top: 4px;
+  border-radius: 8px;
+}
