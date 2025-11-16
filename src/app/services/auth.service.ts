@@ -141,4 +141,11 @@ export class AuthService {
       })
     );
   }
+
+  checkUserRole(user: User | null, rol: Role): boolean {
+    if (!user) {
+      return false;
+    }
+    return (user?.roles.includes(rol) || user?.roles.includes('ROLE_' + rol)) ?? false;
+  }
 }

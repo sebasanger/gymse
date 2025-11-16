@@ -5,8 +5,10 @@ import {
   ProgresoRutinaActiva,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { User } from '../models/user.model';
+import { subscribe } from 'diagnostics_channel';
 const base_url = environment.base_url;
 
 @Injectable({
@@ -14,6 +16,12 @@ const base_url = environment.base_url;
 })
 export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
   protected override endpoint: string = 'progresoRutina';
+  private readonly $currentUser: BehaviorSubject<ProgresoRutinaActiva | null> =
+    new BehaviorSubject<ProgresoRutinaActiva | null>(null);
+
+  getCurrentRoutine(): BehaviorSubject<ProgresoRutinaActiva | null> {
+    return this.$currentUser;
+  }
 
   checkIn(documento: string): Observable<ProgresoRutina> {
     return this.http.post<ProgresoRutina>(`${base_url}/${this.endpoint}/checkIn`, documento);
@@ -33,6 +41,18 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
   }
 
   getLastActiveRoutine(): Observable<ProgresoRutinaActiva> {
-    return this.http.get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`);
+    return this.http.get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`).pipe(
+      tap((res) => {
+        this.$currentUser.next(res);
+      })
+    );
+  }
+
+  getLastActiveRoutineDos() {
+    this.http
+      .get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`)
+      .subscribe((res) => {
+        this.$currentUser.next(res);
+      });
   }
 }

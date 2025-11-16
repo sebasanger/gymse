@@ -9,7 +9,8 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      @for (menuItem of menuItems; track menuItem.tittle) {
+      @for (menuItem of menuItems; track menuItem.tittle) { @if (menuItem.visible ||
+      menuItem.default) {
       <a
         mat-list-item
         [routerLink]="menuItem.redirection"
@@ -21,7 +22,7 @@
           <span>{{ menuItem.tittle }}</span>
         </div>
       </a>
-      }
+      } }
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
