@@ -19,7 +19,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { Categoria } from '../../../interfaces/categoria/categoria.interface';
 import { Ejercicio } from '../../../interfaces/ejercicio/ejercicio.interface';
-import { CreateRutinaDto, Rutina } from '../../../interfaces/rutina/rutina.interface';
+import {
+  CreateRutinaDto,
+  Rutina,
+  tipoRutina,
+  TIPOS_RUTINAS,
+} from '../../../interfaces/rutina/rutina.interface';
 import { Usuario } from '../../../interfaces/user/usuario.interface';
 import { AlertService } from '../../../services/alert-service';
 import { CategoriaService } from '../../../services/categoria-service';
@@ -66,11 +71,15 @@ export class CreateUpdateRutinasComponent implements OnInit {
   public ejercicios: Ejercicio[] = [];
   public usuarios: Usuario[] = [];
   public categorias: Categoria[] = [];
+  public tiposRutinas: tipoRutina[] = TIPOS_RUTINAS;
+  public tipoRutinaDefault: tipoRutina = 'PREDETERMINADA';
 
   rutinaForm = this.fb.group({
     nombre: ['', Validators.required],
     descripcion: ['', Validators.required],
-    usuarios: this.fb.control<number[]>([], Validators.required),
+    usuarios: this.fb.control<number[]>([]),
+    usuario: this.fb.control<number>(0),
+    tipo: [this.tipoRutinaDefault, Validators.required],
 
     entrenamientos: this.fb.array(
       [
@@ -151,11 +160,20 @@ export class CreateUpdateRutinasComponent implements OnInit {
 
   onSubmit(): void {
     const formValue = this.rutinaForm.value;
+    const tipo: tipoRutina = formValue.tipo ?? this.tipoRutinaDefault;
 
+    let usuariosFinales: number[] = formValue.usuarios ?? [];
+
+    if (tipo === 'PERSONALIZADA') {
+      const usuario = formValue.usuario;
+
+      usuariosFinales = Array.isArray(usuario) ? usuario : usuario != null ? [usuario] : [];
+    }
     const dto: CreateRutinaDto = {
       nombre: formValue.nombre ?? '',
       descripcion: formValue.descripcion ?? '',
-      usuariosId: formValue.usuarios ?? [],
+      usuariosId: usuariosFinales,
+      tipoRutina: tipo,
       entrenamientos: (formValue.entrenamientos ?? []).map((entrenamiento: any) => ({
         nombre: entrenamiento.nombre ?? '',
         descripcion: entrenamiento.descripcion ?? '',
@@ -232,6 +250,8 @@ export class CreateUpdateRutinasComponent implements OnInit {
     this.rutinaForm.patchValue({
       nombre: rutina.nombre,
       descripcion: rutina.descripcion,
+      tipo: rutina.tipoRutina,
+      usuario: rutina.usuarios.map((u) => u.id)[0],
       usuarios: rutina.usuarios.map((u) => u.id),
     });
 

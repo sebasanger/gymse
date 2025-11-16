@@ -15,9 +15,21 @@
               El nombre de la rutina es <strong>requerido</strong>
             </mat-error>
           </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <span>Tipo de rutina</span>
+            <mat-select formControlName="tipo">
+              <mat-option *ngFor="let tipoRutina of tiposRutinas" [value]="tipoRutina">
+                {{ tipoRutina }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="row">
           <mat-form-field class="full-width">
             <mat-label>Usuarios asignados</mat-label>
-
+            @if(rutinaForm.get('tipo')?.value == 'PREDETERMINADA'){
             <mat-select
               formControlName="usuarios"
               multiple
@@ -34,13 +46,22 @@
                 {{ usuario.fullName }} - {{ usuario.documento }}
               </mat-option>
             </mat-select>
+            }@else{
+            <mat-select formControlName="usuario">
+              <mat-option *ngFor="let usuario of usuarios" [value]="usuario.id">
+                {{ usuario.fullName }} - {{ usuario.documento }}
+              </mat-option>
+            </mat-select>
 
-            <mat-error *ngIf="rutinaForm.get('usuarios')?.hasError('required')">
+            }
+            <mat-error
+              *ngIf="!rutinaForm.get('usuarios')?.value || !rutinaForm.get('usuario')?.value"
+            >
               Debe seleccionar al menos un usuario
             </mat-error>
           </mat-form-field>
         </div>
-
+        @if(rutinaForm.get('tipo')?.value == 'PREDETERMINADA'){
         <!-- USUARIOS SELECCIONADOS-->
         <div class="row selected-users">
           <h4>Usuarios seleccionados</h4>
@@ -59,7 +80,7 @@
             </mat-chip-listbox>
           </div>
         </div>
-
+        }
         <!-- USUARIOS SELECCIONADOS-->
 
         <mat-form-field class="full-width">

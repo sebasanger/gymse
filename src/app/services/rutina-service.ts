@@ -16,6 +16,14 @@ const base_url = environment.base_url;
 export class RutinaService extends BaseService<Rutina, CreateRutinaDto, UpdateRutinaDto> {
   protected override endpoint: string = 'rutina';
 
+  createOwn(createRutinaDto: CreateRutinaDto): Observable<Rutina[]> {
+    return this.http.post<Rutina[]>(`${base_url}/${this.endpoint}/save/own`, createRutinaDto);
+  }
+
+  updateOwn(updateRutinaDto: UpdateRutinaDto): Observable<Rutina[]> {
+    return this.http.put<Rutina[]>(`${base_url}/${this.endpoint}/update/own`, updateRutinaDto);
+  }
+
   findByUserIr(userId: number): Observable<Rutina[]> {
     return this.http.get<Rutina[]>(`${base_url}/${this.endpoint}/usuario/${userId}`);
   }

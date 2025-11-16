@@ -6,7 +6,7 @@ import { CreateUpdateEjerciciosComponent } from './ejercicios/create-update-ejer
 import { CreateUpdateUsuariosComponent } from './usuarios/create-update-usuarios/create-update-usuarios.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { RutinasComponent } from './rutinas/rutinas.component';
-import { CreateUpdateRutinasComponent } from './rutinas/create-update-ejercicios/create-update-rutinas.component';
+import { CreateUpdateRutinasComponent } from './rutinas/create-update-rutinas/create-update-rutinas.component';
 import { CheckInOutComponent } from './check-in-out/check-in-out.component';
 import { SeleccionRutinasComponent } from './rutinas/seleccion-rutina/seleccion-rutina.component';
 import { SeguimientoRutina } from './rutinas/seguimiento-rutina/seguimiento-rutina';

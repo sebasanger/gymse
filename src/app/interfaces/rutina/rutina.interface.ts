@@ -14,6 +14,7 @@ export interface Rutina {
 
 export interface CreateRutinaDto {
   nombre: string;
+  tipoRutina: tipoRutina;
   descripcion: string;
   usuariosId?: number[];
   entrenamientos: CreateEntrenamientoDto[];
@@ -42,3 +43,5 @@ export interface RutinaConFlag {
 }
 
 export type tipoRutina = 'PERSONALIZADA' | 'PREDETERMINADA';
+
+export const TIPOS_RUTINAS: tipoRutina[] = ['PERSONALIZADA', 'PREDETERMINADA'];
