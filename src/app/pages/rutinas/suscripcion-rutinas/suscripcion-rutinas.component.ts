@@ -46,7 +46,7 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatTable) table!: MatTable<RutinaConFlag>;
   dataSource = new MatTableDataSource<RutinaConFlag>();
   rutinas: RutinaConFlag[] = [];
-  private readonly alert = inject(AlertService);
+  private readonly alertService = inject(AlertService);
   private readonly authService = inject(AuthService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
@@ -121,7 +121,41 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
     this.destroy$.complete();
   }
 
-  suscribir(rutinaId: number) {}
+  suscribir(rutinaId: number) {
+    this.alertService.confirm('¿Deseás suscribirte a esta rutina?', '').then((result) => {
+      if (!result.isConfirmed) return;
 
-  desuscribir(rutinaId: number) {}
+      this.rutinaService.suscribe(rutinaId).subscribe({
+        next: () => {
+          this.load();
+          this.alertService.success(
+            'Suscripción exitosa',
+            'Te suscribiste a la rutina correctamente.'
+          );
+        },
+        error: (err) => {
+          this.alertService.errorResponse(err);
+        },
+      });
+    });
+  }
+
+  desuscribir(rutinaId: number) {
+    this.alertService.confirm('¿Deseás desuscribirte de esta rutina?', '').then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.rutinaService.unsuscribe(rutinaId).subscribe({
+        next: () => {
+          this.load();
+          this.alertService.success(
+            'Desuscripción exitosa',
+            'Te desuscribiste de la rutina correctamente.'
+          );
+        },
+        error: (err) => {
+          this.alertService.errorResponse(err);
+        },
+      });
+    });
+  }
 }

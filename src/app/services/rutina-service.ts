@@ -27,4 +27,12 @@ export class RutinaService extends BaseService<Rutina, CreateRutinaDto, UpdateRu
   findWithSuscription(): Observable<RutinaConFlag[]> {
     return this.http.get<RutinaConFlag[]>(`${base_url}/${this.endpoint}/suscripciones`);
   }
+
+  suscribe(rutinaId: number): Observable<Rutina[]> {
+    return this.http.post<Rutina[]>(`${base_url}/${this.endpoint}/suscribe/${rutinaId}`, null);
+  }
+
+  unsuscribe(rutinaId: number): Observable<Rutina[]> {
+    return this.http.delete<Rutina[]>(`${base_url}/${this.endpoint}/unsuscribe/${rutinaId}`);
+  }
 }
