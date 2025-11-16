@@ -12,7 +12,7 @@ import { SeleccionRutinasComponent } from './rutinas/seleccion-rutina/seleccion-
 import { SeguimientoRutina } from './rutinas/seguimiento-rutina/seguimiento-rutina';
 import { SuscripcionRutinasComponent } from './rutinas/suscripcion-rutinas/suscripcion-rutinas.component';
 import { CreateUpdateOwnRutinasComponent } from './rutinas/create-update-rutinas-own/create-update-rutinas-own.component';
-import { ProgresosRutinasComponent } from './rutinas/progresos-rutinas/progresos-rutinas.component';
+import { ProgresosRutinasComponent } from './progresos-rutinas/progresos-rutinas/progresos-rutinas.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -44,7 +44,6 @@ export const PAGES_ROUTES: Routes = [
       { path: 'rutinas/seleccionar', component: SeleccionRutinasComponent },
       { path: 'rutinas/seguimiento', component: SeguimientoRutina },
       { path: 'rutinas/suscripcion', component: SuscripcionRutinasComponent },
-      { path: 'rutinas/progreso', component: ProgresosRutinasComponent },
       {
         path: 'rutinas/create',
         component: CreateUpdateRutinasComponent,
@@ -61,6 +60,8 @@ export const PAGES_ROUTES: Routes = [
         path: 'rutinas/update/own/:id',
         component: CreateUpdateOwnRutinasComponent,
       },
+
+      { path: 'progresos/rutinas', component: ProgresosRutinasComponent },
 
       { path: 'checkInOut', component: CheckInOutComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },

@@ -85,7 +85,7 @@ export class NavigationComponent implements OnInit {
     {
       id: 'progreso',
       icon: 'bar_chart',
-      redirection: '/pages/rutinas/progreso',
+      redirection: '/pages/progresos/rutinas',
       tittle: 'Progreso Rutina',
       visible: false,
     },
