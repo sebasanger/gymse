@@ -59,7 +59,7 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   selectedEntrenamiento: any | null = null;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'edit'];
+  columnsToDisplay = ['id', 'nombre', 'descripcion'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
   /** Checks whether an element is expanded. */
@@ -120,14 +120,6 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  add() {
-    this.router.navigateByUrl('pages/rutinas/create');
-  }
-
-  edit(userid: number) {
-    this.router.navigateByUrl('pages/rutinas/update/' + userid);
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -158,6 +150,7 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
                   'Entrenamiento seleccionado',
                   `El entrenamiento "${entrenamiento.nombre}" fue asignado correctamente.`
                 );
+                this.router.navigateByUrl('pages/rutinas/seguimiento');
               },
               error: (err) => {
                 console.error(err);

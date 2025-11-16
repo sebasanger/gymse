@@ -122,9 +122,6 @@ export class NavigationComponent implements OnInit {
       .getCurrentRoutine()
       .asObservable()
       .subscribe((res) => {
-        console.log('ROL CLIENTE');
-        console.log(res);
-
         //no se tiene check in, o progreso rutina
         if (!res) {
           this.setVisible(['seleccionar'], false);

@@ -29,6 +29,7 @@ import { UserService } from '../../../services/user.service';
 import { minLengthArray } from '../../../utils/validators';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatChipsModule } from '@angular/material/chips';
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-create-update-rutinas',
   templateUrl: './create-update-rutinas.component.html',
@@ -50,6 +51,7 @@ export class CreateUpdateRutinasComponent implements OnInit {
   private fb = inject(FormBuilder);
   private alert = inject(AlertService);
   private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly rutinaService = inject(RutinaService);
   private readonly usuarioService = inject(UserService);
@@ -102,20 +104,22 @@ export class CreateUpdateRutinasComponent implements OnInit {
       this.ejercicios = res;
     });
 
-    this.usuarioService.findAll().subscribe((res) => {
-      this.usuarios = res;
-      this.filteredUsuarios.next(this.usuarios);
+    if (!this.authService.checkUserRole(this.authService.getCurrentUser().value, 'CLIENTE')) {
+      this.usuarioService.findAll().subscribe((res) => {
+        this.usuarios = res;
+        this.filteredUsuarios.next(this.usuarios);
 
-      // si hay usuarios seleccionados inicialmente
-      const selectedIds: number[] = this.rutinaForm.get('usuarios')?.value ?? [];
-      this.selectedUsuarios = this.usuarios.filter((u) => selectedIds.includes(u.id));
+        // si hay usuarios seleccionados inicialmente
+        const selectedIds: number[] = this.rutinaForm.get('usuarios')?.value ?? [];
+        this.selectedUsuarios = this.usuarios.filter((u) => selectedIds.includes(u.id));
 
-      // suscripción para actualizar chips cuando cambien
-      this.rutinaForm.get('usuarios')!.valueChanges.subscribe((ids: number[] | null) => {
-        const safeIds = ids ?? [];
-        this.selectedUsuarios = this.usuarios.filter((u) => safeIds.includes(u.id));
+        // suscripción para actualizar chips cuando cambien
+        this.rutinaForm.get('usuarios')!.valueChanges.subscribe((ids: number[] | null) => {
+          const safeIds = ids ?? [];
+          this.selectedUsuarios = this.usuarios.filter((u) => safeIds.includes(u.id));
+        });
       });
-    });
+    }
 
     this.categoriaService.findAll().subscribe((res) => {
       this.categorias = res;
