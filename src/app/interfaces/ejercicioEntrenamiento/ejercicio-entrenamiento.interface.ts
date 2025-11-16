@@ -26,5 +26,5 @@ export interface EjercicioEntrenamientoConProgreso {
   peso: number;
   ejerciciosAlternativos: Ejercicio[];
   ejercicio: Ejercicio;
-  progreso: ProgresoEjercicio;
+  progreso?: ProgresoEjercicio;
 }

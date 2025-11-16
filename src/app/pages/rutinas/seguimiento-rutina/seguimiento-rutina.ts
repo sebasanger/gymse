@@ -16,8 +16,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
-import { EjercicioEntrenamientoConProgreso } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
-import { GuardarProgresoEjercicio } from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
+import {
+  EjercicioEntrenamiento,
+  EjercicioEntrenamientoConProgreso,
+} from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
+import {
+  GuardarProgresoEjercicio,
+  ProgresoEjercicio,
+} from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
 import { ProgresoRutinaActiva } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
@@ -140,20 +146,25 @@ export class SeguimientoRutina implements OnInit {
     };
 
     this.progresoEjercicioService.saveSpecific(saveProgresoEjercicio).subscribe((res) => {
-      this.load();
+      ejercicioEntrenamientoConProgreso.progreso = res;
+      this.cdr.detectChanges();
     });
   }
 
-  eliminarProgreso(progresoId: number) {
+  eliminarProgreso(ejercicioEntrenamiento: EjercicioEntrenamientoConProgreso) {
     this.alertService.confirmDelete('¿Deseas eliminar el progreso?').then((result) => {
       if (result.isConfirmed) {
-        this.progresoEjercicioService.deleteById(progresoId).subscribe({
-          next: () => {
-            this.alertService.success('Progreso eliminado');
-            this.load();
-          },
-          error: (err) => this.alertService.errorResponse(err),
-        });
+        this.progresoEjercicioService
+          .deleteById(ejercicioEntrenamiento.progreso?.id ?? 0)
+          .subscribe({
+            next: () => {
+              ejercicioEntrenamiento.progreso = undefined;
+
+              this.cdr.detectChanges();
+              this.alertService.success('Progreso eliminado');
+            },
+            error: (err) => this.alertService.errorResponse(err),
+          });
       }
     });
   }
