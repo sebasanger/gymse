@@ -23,6 +23,7 @@ import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-s
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
 import { AlertService } from '../../../services/alert-service';
 import { Serie } from '../../../interfaces/serie/serie.interface';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -38,6 +39,12 @@ import { Serie } from '../../../interfaces/serie/serie.interface';
     MatCardModule,
     MatIconModule,
     MatDividerModule,
+  ],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
   ],
   templateUrl: './seguimiento-rutina.html',
   styleUrl: './seguimiento-rutina.scss',
@@ -60,8 +67,10 @@ export class SeguimientoRutina implements OnInit {
   load() {
     this.progresoRutinaService.getLastActiveRoutine().subscribe((res) => {
       this.progresoRutina = res;
-      this.ejerciciosEntrenamientos =
-        this.progresoRutina?.entrenamientoSeleccionado.ejercicios || [];
+
+      this.ejerciciosEntrenamientos = (
+        this.progresoRutina?.entrenamientoSeleccionado.ejercicios || []
+      ).sort((a, b) => a.id - b.id);
 
       this.ejerciciosEntrenamientos.forEach(
         (ejercicioEntrenamiento: EjercicioEntrenamientoConProgreso) => {
@@ -113,7 +122,6 @@ export class SeguimientoRutina implements OnInit {
 
   guardarProgresoEjercicio(ejercicioEntrenamientoConProgreso: EjercicioEntrenamientoConProgreso) {
     const form = this.getForm(ejercicioEntrenamientoConProgreso.id);
-    console.log(ejercicioEntrenamientoConProgreso);
 
     if (form.invalid) {
       form.markAllAsTouched();
