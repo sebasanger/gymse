@@ -71,7 +71,10 @@ export class SeguimientoRutina implements OnInit {
   }
 
   load() {
-    this.progresoRutinaService.getLastActiveRoutine().subscribe((res) => {
+    this.progresoRutinaService.getCurrentRoutine().subscribe((res) => {
+      if (!res) {
+        return;
+      }
       this.progresoRutina = res;
 
       this.ejerciciosEntrenamientos = (

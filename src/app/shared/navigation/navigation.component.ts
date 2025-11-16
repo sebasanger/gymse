@@ -101,7 +101,7 @@ export class NavigationComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
-    this.progresoRutinaService.getLastActiveRoutineDos();
+    this.progresoRutinaService.getLastActiveRoutine();
 
     this.authService
       .getCurrentUser()

@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 import {
   GuardarRutinaEntrenamiento,
   ProgresoRutina,
   ProgresoRutinaActiva,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { User } from '../models/user.model';
-import { subscribe } from 'diagnostics_channel';
 const base_url = environment.base_url;
 
 @Injectable({
@@ -40,15 +38,7 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
     );
   }
 
-  getLastActiveRoutine(): Observable<ProgresoRutinaActiva> {
-    return this.http.get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`).pipe(
-      tap((res) => {
-        this.$currentUser.next(res);
-      })
-    );
-  }
-
-  getLastActiveRoutineDos() {
+  getLastActiveRoutine() {
     this.http
       .get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`)
       .subscribe((res) => {
