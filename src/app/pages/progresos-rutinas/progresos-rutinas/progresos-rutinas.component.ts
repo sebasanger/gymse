@@ -17,8 +17,12 @@ import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subject, takeUntil } from 'rxjs';
 import { RutinaService } from '../../../services/rutina-service';
-import { ProgresoRutina } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import {
+  ProgresoRutina,
+  ProgresoRutinaConProgreso,
+} from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-progresos-rutinas',
@@ -35,16 +39,17 @@ import { ProgresoRutinaService } from '../../../services/progreso-rutina-service
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
+    MatCardModule,
   ],
 })
 export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<ProgresoRutina>;
+  @ViewChild(MatTable) table!: MatTable<ProgresoRutinaConProgreso>;
 
-  dataSource = new MatTableDataSource<ProgresoRutina>();
-  progresos: ProgresoRutina[] = [];
-  expandedProgreso: ProgresoRutina | null = null;
+  dataSource = new MatTableDataSource<ProgresoRutinaConProgreso>();
+  progresos: ProgresoRutinaConProgreso[] = [];
+  expandedProgreso: ProgresoRutinaConProgreso | null = null;
 
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
@@ -61,10 +66,12 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
 
   load() {
     this.progresoRutinaService
-      .findAll()
+      .getAllOwnProgressRoutine()
       .pipe(takeUntil(this.destroy$))
       .subscribe((progresos) => {
         this.progresos = progresos;
+        console.log(this.progresos);
+
         this.dataSource.data = progresos;
         this.table.dataSource = this.dataSource;
         this.customFilters();
@@ -72,21 +79,18 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
       });
   }
 
-  isExpanded(element: ProgresoRutina) {
+  isExpanded(element: ProgresoRutinaConProgreso) {
     return this.expandedProgreso === element;
   }
 
-  toggle(element: ProgresoRutina) {
+  toggle(element: ProgresoRutinaConProgreso) {
     this.expandedProgreso = this.isExpanded(element) ? null : element;
   }
 
   customFilters() {
-    this.dataSource.filterPredicate = (data: ProgresoRutina, filter: string) => {
+    this.dataSource.filterPredicate = (data: ProgresoRutinaConProgreso, filter: string) => {
       const normalizedFilter = filter.trim().toLowerCase();
-      return (
-        data.rutina.nombre.toLowerCase().includes(normalizedFilter) ||
-        data.entrenamiento.nombre.toLowerCase().includes(normalizedFilter)
-      );
+      return data.rutina.nombre.toLowerCase().includes(normalizedFilter);
     };
   }
 

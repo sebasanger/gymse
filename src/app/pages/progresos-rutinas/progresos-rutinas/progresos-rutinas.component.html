@@ -22,7 +22,7 @@
     <!-- Entrenamiento -->
     <ng-container matColumnDef="entrenamiento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Entrenamiento</th>
-      <td mat-cell *matCellDef="let row">{{ row?.entrenamiento?.nombre }}</td>
+      <td mat-cell *matCellDef="let row">{{ row?.entrenamientoSeleccionado?.nombre }}</td>
     </ng-container>
 
     <!-- Fecha -->
@@ -65,30 +65,28 @@
 
     <!-- Expanded Detail -->
     <ng-container matColumnDef="expandedDetail">
-      <td mat-cell *matCellDef="let row" [attr.colspan]="columnsToDisplayWithExpand.length">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
         <div
           class="example-element-detail-wrapper"
-          [class.example-element-detail-wrapper-expanded]="isExpanded(row)"
+          [class.example-element-detail-wrapper-expanded]="isExpanded(element)"
         >
-          <div class="example-element-detail" *ngIf="isExpanded(row)">
+          <div class="example-element-detail">
+            @for (entrenamientoSeleccionado of element.entrenamientoSeleccionado.ejercicios; track
+            entrenamientoSeleccionado; let i = $index) {
             <div class="entrenamiento-element">
-              <div class="center">Entrenamiento: {{ row?.entrenamiento?.nombre ?? '-' }}</div>
-              <div>Descripcion: {{ row?.entrenamiento?.descripcion ?? '-' }}</div>
-              <div>Categoria: {{ row?.entrenamiento?.categoria?.categoria ?? '-' }}</div>
-
-              <div
-                *ngFor="let progresoEj of row?.progresoEjercicio ?? []; let j = index"
-                class="ejercicio-element"
-              >
-                <div class="center">
-                  Ejercicio: {{ j + 1 }} - {{ progresoEj?.ejercicio?.nombre ?? '-' }}
-                </div>
-                <div>Series: {{ progresoEj?.series?.length ?? 0 }}</div>
-                <div>Repeticiones totales: {{ progresoEj?.cantidadSeries ?? '-' }}</div>
-                <div>Check In: {{ progresoEj?.checkIn | date : 'shortTime' }}</div>
-                <div>Check Out: {{ progresoEj?.checkOut | date : 'shortTime' }}</div>
+              <div class="center">Ejercicio: #{{ i + 1 }}</div>
+              <div>Nombre: {{ entrenamientoSeleccionado.ejercicio.nombre }}</div>
+              <div>Descripcion: {{ entrenamientoSeleccionado.ejercicio.descripcion }}</div>
+              @for (progreso of entrenamientoSeleccionado?.progreso?.series; track progreso; let j =
+              $index) {
+              <div class="ejercicio-element">
+                <div class="center">Serie: #{{ j + 1 }}</div>
+                <div>Repeticiones: {{ progreso.repeticiones }}</div>
+                <div>Peso: {{ progreso.peso }}</div>
               </div>
+              }
             </div>
+            }
           </div>
         </div>
       </td>

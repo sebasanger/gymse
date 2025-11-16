@@ -24,7 +24,7 @@ import {
   GuardarProgresoEjercicio,
   ProgresoEjercicio,
 } from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
-import { ProgresoRutinaActiva } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import { ProgresoRutinaConProgreso } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
 import { AlertService } from '../../../services/alert-service';
@@ -61,7 +61,7 @@ export class SeguimientoRutina implements OnInit {
   private progresoEjercicioService = inject(ProgresoEjercicioService);
   private fb = inject(FormBuilder);
   private cdr = inject(ChangeDetectorRef);
-  progresoRutina!: ProgresoRutinaActiva;
+  progresoRutina!: ProgresoRutinaConProgreso;
   ejerciciosEntrenamientos: EjercicioEntrenamientoConProgreso[] = [];
 
   forms: { [ejercicioId: number]: FormGroup } = {};

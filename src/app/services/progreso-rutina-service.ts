@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import {
   GuardarRutinaEntrenamiento,
   ProgresoRutina,
-  ProgresoRutinaActiva,
+  ProgresoRutinaConProgreso,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
 const base_url = environment.base_url;
@@ -14,10 +14,10 @@ const base_url = environment.base_url;
 })
 export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
   protected override endpoint: string = 'progresoRutina';
-  private readonly $currentUser: BehaviorSubject<ProgresoRutinaActiva | null> =
-    new BehaviorSubject<ProgresoRutinaActiva | null>(null);
+  private readonly $currentUser: BehaviorSubject<ProgresoRutinaConProgreso | null> =
+    new BehaviorSubject<ProgresoRutinaConProgreso | null>(null);
 
-  getCurrentRoutine(): BehaviorSubject<ProgresoRutinaActiva | null> {
+  getCurrentRoutine(): BehaviorSubject<ProgresoRutinaConProgreso | null> {
     return this.$currentUser;
   }
 
@@ -46,10 +46,14 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
 
   getLastActiveRoutine() {
     this.http
-      .get<ProgresoRutinaActiva>(`${base_url}/${this.endpoint}/last/active`)
+      .get<ProgresoRutinaConProgreso>(`${base_url}/${this.endpoint}/last/active`)
       .subscribe((res) => {
         this.$currentUser.next(res);
       });
+  }
+
+  getAllOwnProgressRoutine(): Observable<ProgresoRutinaConProgreso[]> {
+    return this.http.get<ProgresoRutinaConProgreso[]>(`${base_url}/${this.endpoint}/own`);
   }
 
   getCountActivas() {

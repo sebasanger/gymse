@@ -17,7 +17,7 @@ export interface GuardarRutinaEntrenamiento {
   entrenamientoId: number;
 }
 
-export interface ProgresoRutinaActiva {
+export interface ProgresoRutinaConProgreso {
   id: number;
   rutina: Rutina;
   entrenamientoSeleccionado: EntrenamientoConProgreso;
