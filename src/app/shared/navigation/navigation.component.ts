@@ -123,6 +123,7 @@ export class NavigationComponent implements OnInit {
       )
       .subscribe((res) => {
         this.totalActivas = res;
+        this.cdr.detectChanges();
       });
 
     this.progresoRutinaService.getLastActiveRoutine();

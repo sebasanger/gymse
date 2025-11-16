@@ -12,14 +12,23 @@
     <mat-card class="ejercicio-card">
       <!-- Carousel -->
       <mat-tab-group mat-stretch-tabs="false" animationDuration="300ms">
-        <mat-tab *ngFor="let foto of ejercicioEntrenamiento.ejercicio.fotos">
-          <ng-template mat-tab-label> Foto </ng-template>
-          <img [src]="foto.foto" class="media-display" />
+        <mat-tab *ngFor="let foto of ejercicioEntrenamiento.ejercicio.fotos; let i = index">
+          <ng-template mat-tab-label> Foto #{{ i + 1 }}</ng-template>
+          <img width="400" height="400" [src]="foto.foto | safeUrl" />
         </mat-tab>
 
-        <mat-tab *ngFor="let vid of ejercicioEntrenamiento.ejercicio.videos">
-          <ng-template mat-tab-label> Video </ng-template>
-          <video class="media-display" [src]="vid.video" controls></video>
+        <mat-tab *ngFor="let vid of ejercicioEntrenamiento.ejercicio.videos; let j = index">
+          <ng-template mat-tab-label> Video #{{ j + 1 }}</ng-template>
+          <iframe
+            width="400"
+            height="400"
+            src="https://www.youtube.com/embed/hWbUlkb5Ms4"
+            title="How To Bench Press With Perfect Technique (5 Steps)"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
         </mat-tab>
       </mat-tab-group>
 

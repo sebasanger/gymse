@@ -1,3 +1,4 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
@@ -16,20 +17,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
-import {
-  EjercicioEntrenamiento,
-  EjercicioEntrenamientoConProgreso,
-} from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
-import {
-  GuardarProgresoEjercicio,
-  ProgresoEjercicio,
-} from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
+import { EjercicioEntrenamientoConProgreso } from '../../../interfaces/ejercicioEntrenamiento/ejercicio-entrenamiento.interface';
+import { GuardarProgresoEjercicio } from '../../../interfaces/progresoEjercicio/progreso-ejercicio..interface';
 import { ProgresoRutinaConProgreso } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
+import { Serie } from '../../../interfaces/serie/serie.interface';
+import { AlertService } from '../../../services/alert-service';
 import { ProgresoEjercicioService } from '../../../services/progreso-ejercicio-service';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
-import { AlertService } from '../../../services/alert-service';
-import { Serie } from '../../../interfaces/serie/serie.interface';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { SafeUrlPipe } from '../../../pipes/SafeUrlPipe';
 
 @Component({
   selector: 'app-seguimiento-rutina',
@@ -45,6 +40,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     MatCardModule,
     MatIconModule,
     MatDividerModule,
+    SafeUrlPipe,
   ],
   providers: [
     {
