@@ -150,7 +150,9 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
                   'Entrenamiento seleccionado',
                   `El entrenamiento "${entrenamiento.nombre}" fue asignado correctamente.`
                 );
-                this.router.navigateByUrl('pages/rutinas/seguimiento');
+                setTimeout(() => {
+                  this.router.navigateByUrl('pages/rutinas/seguimiento');
+                }, 2000);
               },
               error: (err) => {
                 console.error(err);
