@@ -23,6 +23,7 @@ import { AlertService } from '../../../services/alert-service';
 import { AuthService } from '../../../services/auth.service';
 import { RutinaService } from '../../../services/rutina-service';
 import { Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-suscripcion-rutinas',
   templateUrl: './suscripcion-rutinas.component.html',
@@ -39,6 +40,7 @@ import { Router } from '@angular/router';
     MatSelectModule,
     MatSlideToggleModule,
     FormsModule,
+    MatTooltipModule,
   ],
 })
 export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
@@ -57,7 +59,7 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
   expandedRutina: RutinaConFlag | null | undefined;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'action'];
+  columnsToDisplay = ['id', 'nombre', 'descripcion', 'tipo', 'edit', 'action'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
   /** Checks whether an element is expanded. */
