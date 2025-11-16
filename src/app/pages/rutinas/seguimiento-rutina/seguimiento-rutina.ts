@@ -131,24 +131,33 @@ export class SeguimientoRutina implements OnInit {
 
     if (form.invalid) {
       form.markAllAsTouched();
-
       return;
     }
 
-    const series: Serie[] = form?.get('ejercicioEntrenamiento')?.value ?? [];
+    this.alertService
+      .confirm('¿Guardar progreso?', 'Se registrará el progreso del ejercicio.')
+      .then((result) => {
+        if (!result.isConfirmed) return;
 
-    const saveProgresoEjercicio: GuardarProgresoEjercicio = {
-      cantidadSeries: series.length,
-      ejercicioId: ejercicioEntrenamientoConProgreso.ejercicio.id,
-      progresoRutinaId: this.progresoRutina.id,
+        const series: Serie[] = form.get('ejercicioEntrenamiento')?.value ?? [];
 
-      series: series,
-    };
+        const saveProgresoEjercicio: GuardarProgresoEjercicio = {
+          cantidadSeries: series.length,
+          ejercicioId: ejercicioEntrenamientoConProgreso.ejercicio.id,
+          progresoRutinaId: this.progresoRutina.id,
+          series: series,
+        };
 
-    this.progresoEjercicioService.saveSpecific(saveProgresoEjercicio).subscribe((res) => {
-      ejercicioEntrenamientoConProgreso.progreso = res;
-      this.cdr.detectChanges();
-    });
+        this.progresoEjercicioService.saveSpecific(saveProgresoEjercicio).subscribe({
+          next: (res) => {
+            ejercicioEntrenamientoConProgreso.progreso = res;
+
+            this.cdr.detectChanges();
+            this.alertService.success('Progreso guardado');
+          },
+          error: (err) => this.alertService.errorResponse(err),
+        });
+      });
   }
 
   eliminarProgreso(ejercicioEntrenamiento: EjercicioEntrenamientoConProgreso) {
