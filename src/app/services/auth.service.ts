@@ -114,6 +114,7 @@ export class AuthService {
   logout() {
     this.router.navigateByUrl('/auth/login');
     this.removeDataFromStorage();
+    this.$currentUser.next(null);
     return of(true);
   }
 

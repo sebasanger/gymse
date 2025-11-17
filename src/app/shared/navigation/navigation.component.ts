@@ -116,15 +116,9 @@ export class NavigationComponent implements OnInit {
 
   constructor() {}
   ngOnInit(): void {
-    interval(600_000) // cada 10 minutos
-      .pipe(
-        startWith(0),
-        switchMap(() => this.progresoRutinaService.getCountActivas())
-      )
-      .subscribe((res) => {
-        this.totalActivas = res;
-        this.cdr.detectChanges();
-      });
+    this.progresoRutinaService.getCurrentActiveCustomers().subscribe((res) => {
+      this.totalActivas = res;
+    });
 
     this.progresoRutinaService.getLastActiveRoutine();
 

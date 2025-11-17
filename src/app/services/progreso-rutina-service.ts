@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, interval, Observable, startWith, switchMap, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
   GuardarRutinaEntrenamiento,
@@ -16,9 +16,19 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
   protected override endpoint: string = 'progresoRutina';
   private readonly $currentUser: BehaviorSubject<ProgresoRutinaConProgreso | null> =
     new BehaviorSubject<ProgresoRutinaConProgreso | null>(null);
+  private readonly $activeCustomers: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
+  constructor() {
+    super();
+    this.updateCountActivas();
+  }
 
   getCurrentRoutine(): BehaviorSubject<ProgresoRutinaConProgreso | null> {
     return this.$currentUser;
+  }
+
+  getCurrentActiveCustomers(): BehaviorSubject<number> {
+    return this.$activeCustomers;
   }
 
   checkIn(documento: string): Observable<ProgresoRutina> {
@@ -56,7 +66,14 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
     return this.http.get<ProgresoRutinaConProgreso[]>(`${base_url}/${this.endpoint}/own`);
   }
 
-  getCountActivas() {
-    return this.http.get<number>(`${base_url}/${this.endpoint}/activas/count`);
+  private updateCountActivas() {
+    interval(600_000) // cada 10 minutos
+      .pipe(
+        startWith(0),
+        switchMap(() => this.http.get<number>(`${base_url}/${this.endpoint}/activas/count`))
+      )
+      .subscribe((res) => {
+        this.$activeCustomers.next(res);
+      });
   }
 }

@@ -8,3 +8,8 @@ export const ROLES: Role[] = [
   'INSTRUCTOR',
   'RECEPCIONSITA',
 ];
+
+export interface Rol {
+  id: number;
+  rol: Role;
+}

@@ -5,7 +5,12 @@ import { environment } from '../../environments/environment';
 
 const base_url = environment.base_url;
 
-export abstract class BaseService<T extends { id?: number }, S = T, U extends { id?: number } = T> {
+export abstract class BaseService<
+  T extends { id?: number },
+  S = T,
+  U extends { id?: number } = T,
+  G = T
+> {
   protected readonly http = inject(HttpClient);
   protected abstract endpoint: string;
 
@@ -17,8 +22,8 @@ export abstract class BaseService<T extends { id?: number }, S = T, U extends { 
     return this.http.get<T[]>(`${base_url}/${this.endpoint}/includedDeleted`);
   }
 
-  findById(id: number): Observable<T> {
-    return this.http.get<T>(`${base_url}/${this.endpoint}/${id}`);
+  findById(id: number): Observable<G> {
+    return this.http.get<G>(`${base_url}/${this.endpoint}/${id}`);
   }
 
   save(entity: T): Observable<T> {

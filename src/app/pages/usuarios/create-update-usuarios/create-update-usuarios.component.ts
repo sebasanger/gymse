@@ -9,9 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Role, ROLES } from '../../../interfaces/roles/roles.enum';
-import { Usuario } from '../../../interfaces/user/usuario.interface';
+import { GetUser } from '../../../interfaces/user/get-user.interface';
 import { AlertService } from '../../../services/alert-service';
-import { CategoriaService } from '../../../services/categoria-service';
 import { UserService } from '../../../services/user.service';
 @Component({
   selector: 'app-create-update-usuarios',
@@ -32,11 +31,10 @@ export class CreateUpdateUsuariosComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
-  private readonly categoriaService = inject(CategoriaService);
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   public usuarioId: number | undefined;
-  public ejercicio: Usuario | undefined;
+  public usuario: GetUser | undefined;
   public roles: Role[] = ROLES;
 
   ejercicioForm = this.fb.group({
@@ -53,12 +51,12 @@ export class CreateUpdateUsuariosComponent implements OnInit {
 
       if (this.usuarioId && this.usuarioId > 0) {
         this.userService.findById(this.usuarioId).subscribe((res) => {
-          this.ejercicio = res;
+          this.usuario = res;
           this.ejercicioForm.patchValue({
             fullName: res.fullName,
             email: res.email,
             documento: res.documento,
-            roles: res.roles ?? [],
+            roles: (res.roles as Role[]) ?? [],
           });
         });
       }
@@ -86,7 +84,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
     action.subscribe({
       next: () => {
         this.alert.success(this.usuarioId ? 'Usuario actualizado' : 'Usuario guardado');
-        this.router.navigateByUrl('pages/ejercicios');
+        this.router.navigateByUrl('pages/usuarios');
       },
       error: (err) => {
         this.alert.errorResponse(err, this.usuarioId ? 'Error al actualizar' : 'Error al guardar');

@@ -1,6 +1,7 @@
 export interface GetUser {
   id: number;
   fullName: string;
+  documento: string;
   email: string;
   roles: string[];
   enable: boolean;

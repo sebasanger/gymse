@@ -84,9 +84,12 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
       const normalizedFilter = filter.trim().toLowerCase();
 
       const nombre = data.fullName?.toLowerCase() ?? '';
+
       const id = String(data.id ?? '').toLowerCase();
 
-      return nombre.includes(normalizedFilter) || id.includes(normalizedFilter);
+      const rol: boolean = data.roles.some((r) => r.rol == (filter.toUpperCase() as Role));
+
+      return nombre.includes(normalizedFilter) || id.includes(normalizedFilter) || rol;
     };
   }
 
@@ -100,8 +103,6 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
   }
 
   toggleIncludeDeleted(): void {
-    console.log(this.usuarios);
-
     if (this.includedDeleted) {
       this.dataSource.data = this.usuarios;
     } else {

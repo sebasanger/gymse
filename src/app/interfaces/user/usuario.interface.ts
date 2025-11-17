@@ -1,10 +1,10 @@
-import { Role } from '../roles/roles.enum';
+import { Rol, Role } from '../roles/roles.enum';
 
 export interface Usuario {
   email: string;
   documento: string;
   fullName: string;
-  roles: Role[];
+  roles: Rol[];
   id: number;
   avatar?: string;
   createdAt?: Date;
