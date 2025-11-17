@@ -71,7 +71,7 @@
           [class.example-element-detail-wrapper-expanded]="isExpanded(element)"
         >
           <div class="example-element-detail">
-            @for (entrenamientoSeleccionado of element.entrenamientoSeleccionado.ejercicios; track
+            @for (entrenamientoSeleccionado of element?.entrenamientoSeleccionado?.ejercicios; track
             entrenamientoSeleccionado; let i = $index) {
             <div class="entrenamiento-element">
               <div class="center">Ejercicio: #{{ i + 1 }}</div>
