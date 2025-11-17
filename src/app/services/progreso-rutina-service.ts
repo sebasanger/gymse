@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, inject, Injectable } from '@angular/core';
 import { BehaviorSubject, interval, Observable, startWith, switchMap, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
@@ -7,6 +7,7 @@ import {
   ProgresoRutinaConProgreso,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 const base_url = environment.base_url;
 
 @Injectable({
@@ -14,6 +15,7 @@ const base_url = environment.base_url;
 })
 export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
   protected override endpoint: string = 'progresoRutina';
+  private destroyRef = inject(DestroyRef);
   private readonly $currentUser: BehaviorSubject<ProgresoRutinaConProgreso | null> =
     new BehaviorSubject<ProgresoRutinaConProgreso | null>(null);
   private readonly $activeCustomers: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -67,13 +69,14 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
   }
 
   private updateCountActivas() {
-    interval(600_000) // cada 10 minutos
-      .pipe(
-        startWith(0),
-        switchMap(() => this.http.get<number>(`${base_url}/${this.endpoint}/activas/count`))
-      )
-      .subscribe((res) => {
-        this.$activeCustomers.next(res);
-      });
+    interval(600000)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.getCountAndUpdate());
+  }
+
+  getCountAndUpdate() {
+    this.http.get<number>(`${base_url}/${this.endpoint}/activas/count`).subscribe((res) => {
+      this.$activeCustomers.next(res);
+    });
   }
 }
