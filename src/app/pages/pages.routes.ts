@@ -13,6 +13,7 @@ import { SeguimientoRutina } from './rutinas/seguimiento-rutina/seguimiento-ruti
 import { SuscripcionRutinasComponent } from './rutinas/suscripcion-rutinas/suscripcion-rutinas.component';
 import { CreateUpdateOwnRutinasComponent } from './rutinas/create-update-rutinas-own/create-update-rutinas-own.component';
 import { ProgresosRutinasComponent } from './progresos-rutinas/progresos-rutinas/progresos-rutinas.component';
+import { MembresiasComponent } from './membresias/membresias.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -20,6 +21,8 @@ export const PAGES_ROUTES: Routes = [
     component: Pages,
     children: [
       { path: 'dashboard', component: DashboardComponent },
+      //usuarios
+
       { path: 'usuarios', component: UsuariosComponent },
       {
         path: 'usuarios/create',
@@ -30,6 +33,7 @@ export const PAGES_ROUTES: Routes = [
         component: CreateUpdateUsuariosComponent,
       },
 
+      //ejercicios
       { path: 'ejercicios', component: EjerciciosComponent },
       {
         path: 'ejercicios/create',
@@ -40,6 +44,7 @@ export const PAGES_ROUTES: Routes = [
         component: CreateUpdateEjerciciosComponent,
       },
 
+      //rutinas
       { path: 'rutinas', component: RutinasComponent },
       { path: 'rutinas/seleccionar', component: SeleccionRutinasComponent },
       { path: 'rutinas/seguimiento', component: SeguimientoRutina },
@@ -61,9 +66,15 @@ export const PAGES_ROUTES: Routes = [
         component: CreateUpdateOwnRutinasComponent,
       },
 
+      //progresos rutinas
       { path: 'progresos/rutinas', component: ProgresosRutinasComponent },
 
+      //membresias
+      { path: 'membresias', component: MembresiasComponent },
+
+      //check in
       { path: 'checkInOut', component: CheckInOutComponent },
+
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

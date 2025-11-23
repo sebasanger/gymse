@@ -112,6 +112,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Rutinas',
       visible: false,
     },
+    {
+      id: 'membresias',
+      icon: 'currency_exchange',
+      redirection: '/pages/membresias',
+      tittle: 'Membresias',
+      visible: false,
+    },
   ];
 
   constructor() {}
@@ -167,7 +174,7 @@ export class NavigationComponent implements OnInit {
   }
 
   activateAdminMenu() {
-    this.setVisible(['usuarios', 'ejercicios', 'rutinas'], true);
+    this.setVisible(['usuarios', 'ejercicios', 'rutinas', 'membresias'], true);
   }
 
   setVisible(ids: string[], value: boolean) {
