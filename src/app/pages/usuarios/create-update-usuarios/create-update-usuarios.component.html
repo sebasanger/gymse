@@ -1,4 +1,4 @@
-<form [formGroup]="ejercicioForm" novalidate (ngSubmit)="onSubmit()">
+<form [formGroup]="usuarioForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="base-form-card">
     <mat-card-header>
       <mat-card-title>Usuario</mat-card-title>
@@ -8,7 +8,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <input matInput placeholder="Nombre completo" formControlName="fullName" />
-            @if (ejercicioForm.controls['fullName'].hasError('required')) {
+            @if (usuarioForm.controls['fullName'].hasError('required')) {
             <mat-error>Nombre es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
@@ -17,7 +17,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <input matInput placeholder="Email" type="email" formControlName="email" />
-            @if (ejercicioForm.controls['email'].hasError('required')) {
+            @if (usuarioForm.controls['email'].hasError('required')) {
             <mat-error>Email es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
@@ -32,7 +32,7 @@
               <mat-option [value]="rol">{{ rol }}</mat-option>
               }
             </mat-select>
-            @if (ejercicioForm.controls['roles'].hasError('required')) {
+            @if (usuarioForm.controls['roles'].hasError('required')) {
             <mat-error>Rol es <strong>requiredo</strong></mat-error>
             }
           </mat-form-field>
@@ -41,7 +41,7 @@
         <div class="col">
           <mat-form-field class="full-width">
             <input matInput placeholder="documento" formControlName="documento" />
-            @if (ejercicioForm.controls['documento'].hasError('required')) {
+            @if (usuarioForm.controls['documento'].hasError('required')) {
             <mat-error>Documento es <strong>requerido</strong></mat-error>
             }
           </mat-form-field>
@@ -49,7 +49,9 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button matButton="elevated" color="primary" type="submit">Guardar</button>
+      <button matButton="elevated" color="primary" type="submit" [disabled]="usuarioForm.invalid">
+        Guardar
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>

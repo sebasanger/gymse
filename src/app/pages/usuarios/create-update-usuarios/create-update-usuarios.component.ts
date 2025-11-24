@@ -37,7 +37,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
   public usuario: GetUser | undefined;
   public roles: Role[] = ROLES;
 
-  ejercicioForm = this.fb.group({
+  usuarioForm = this.fb.group({
     fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     documento: ['', Validators.required],
@@ -52,7 +52,7 @@ export class CreateUpdateUsuariosComponent implements OnInit {
       if (this.usuarioId && this.usuarioId > 0) {
         this.userService.findById(this.usuarioId).subscribe((res) => {
           this.usuario = res;
-          this.ejercicioForm.patchValue({
+          this.usuarioForm.patchValue({
             fullName: res.fullName,
             email: res.email,
             documento: res.documento,
@@ -64,9 +64,9 @@ export class CreateUpdateUsuariosComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.ejercicioForm.invalid) return;
+    if (this.usuarioForm.invalid) return;
 
-    const formValue = this.ejercicioForm.value;
+    const formValue = this.usuarioForm.value;
     const dto = {
       fullName: formValue.fullName ?? '',
       email: formValue.email ?? '',

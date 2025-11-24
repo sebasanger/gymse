@@ -1,0 +1,51 @@
+<form [formGroup]="membresiaForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="base-form-card">
+    <mat-card-header>
+      <mat-card-title>Usuario</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre" formControlName="nombre" />
+            @if (membresiaForm.controls['nombre'].hasError('required')) {
+            <mat-error>Nombre es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Descripcion" type="text" formControlName="descripcion" />
+            @if (membresiaForm.controls['descripcion'].hasError('required')) {
+            <mat-error>Descripcion es <strong>requerida</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width" floatLabel="always">
+            <input matInput placeholder="Precio" type="number" formControlName="precio" />
+            <span matTextPrefix>$&nbsp;</span>
+            @if (membresiaForm.controls['precio'].hasError('required')) {
+            <mat-error>Precio es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Cantidad de clases" formControlName="cantidadClases" />
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button matButton="elevated" color="primary" type="submit" [disabled]="membresiaForm.invalid">
+        Guardar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

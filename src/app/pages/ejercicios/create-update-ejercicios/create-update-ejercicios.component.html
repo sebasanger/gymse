@@ -40,7 +40,9 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button matButton="elevated" color="primary" type="submit">Guardar</button>
+      <button matButton="elevated" color="primary" type="submit" [disabled]="ejercicioForm.invalid">
+        Guardar
+      </button>
     </mat-card-actions>
   </mat-card>
 </form>

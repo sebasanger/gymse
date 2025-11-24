@@ -1,8 +1,8 @@
 export interface Membresia {
-  id: number;
+  id?: number;
   nombre: string;
   precio: number;
-  deleted: boolean;
+  deleted?: boolean;
   descripcion: string;
   cantidadClases: number;
 }

@@ -14,6 +14,7 @@ import { SuscripcionRutinasComponent } from './rutinas/suscripcion-rutinas/suscr
 import { CreateUpdateOwnRutinasComponent } from './rutinas/create-update-rutinas-own/create-update-rutinas-own.component';
 import { ProgresosRutinasComponent } from './progresos-rutinas/progresos-rutinas/progresos-rutinas.component';
 import { MembresiasComponent } from './membresias/membresias.component';
+import { CreateUpdateMembresiasComponent } from './membresias/create-update-membresias/create-update-membresias.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -71,6 +72,14 @@ export const PAGES_ROUTES: Routes = [
 
       //membresias
       { path: 'membresias', component: MembresiasComponent },
+      {
+        path: 'membresias/create',
+        component: CreateUpdateMembresiasComponent,
+      },
+      {
+        path: 'membresias/update/:id',
+        component: CreateUpdateMembresiasComponent,
+      },
 
       //check in
       { path: 'checkInOut', component: CheckInOutComponent },
