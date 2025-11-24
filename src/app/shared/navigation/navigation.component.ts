@@ -93,9 +93,16 @@ export class NavigationComponent implements OnInit {
     // Admin
     {
       id: 'usuarios',
-      icon: 'person',
+      icon: 'support_agent',
       redirection: '/pages/usuarios',
-      tittle: 'Usuarios',
+      tittle: 'Personal',
+      visible: false,
+    },
+    {
+      id: 'clientes',
+      icon: 'person',
+      redirection: '/pages/clientes',
+      tittle: 'Clientes',
       visible: false,
     },
     {
@@ -174,7 +181,7 @@ export class NavigationComponent implements OnInit {
   }
 
   activateAdminMenu() {
-    this.setVisible(['usuarios', 'ejercicios', 'rutinas', 'membresias'], true);
+    this.setVisible(['usuarios', 'ejercicios', 'rutinas', 'membresias', 'clientes'], true);
   }
 
   setVisible(ids: string[], value: boolean) {

@@ -9,6 +9,14 @@ export const ROLES: Role[] = [
   'RECEPCIONSITA',
 ];
 
+export const ROLES_PERSONAL: Role[] = [
+  'ADMIN',
+  'GIMNASIO',
+  'ENTRENADOR',
+  'INSTRUCTOR',
+  'RECEPCIONSITA',
+];
+
 export interface Rol {
   id: number;
   rol: Role;

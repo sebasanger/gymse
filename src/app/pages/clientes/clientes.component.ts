@@ -23,11 +23,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { Usuario } from '../../interfaces/user/usuario.interface';
 import { AlertService } from '../../services/alert-service';
 import { UserService } from '../../services/user.service';
-import { Role, ROLES, ROLES_PERSONAL } from '../../interfaces/roles/roles.enum';
+import { Role, ROLES } from '../../interfaces/roles/roles.enum';
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrl: './usuarios.component.scss',
+  selector: 'app-clientes',
+  templateUrl: './clientes.component.html',
+  styleUrl: './clientes.component.scss',
   imports: [
     CommonModule,
     MatTableModule,
@@ -42,7 +42,7 @@ import { Role, ROLES, ROLES_PERSONAL } from '../../interfaces/roles/roles.enum';
     FormsModule,
   ],
 })
-export class UsuariosComponent implements OnDestroy, AfterViewInit {
+export class ClientesComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<Usuario>;
@@ -55,7 +55,6 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
   private readonly usuarioService = inject(UserService);
   public membresias: Map<number, string> = new Map();
   public includedDeleted: boolean = true;
-  public roles: Role[] = ROLES_PERSONAL;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'fullName', 'email', 'edit', 'delete'];
@@ -68,7 +67,7 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
 
   load() {
     this.usuarioService
-      .findAllByRol(true, ROLES_PERSONAL)
+      .findAllByRol(true, ['CLIENTE'])
       .pipe(takeUntil(this.destroy$))
       .subscribe((usuarios) => {
         this.usuarios = usuarios;

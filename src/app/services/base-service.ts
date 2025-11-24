@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Role } from '../interfaces/roles/roles.enum';
 
 const base_url = environment.base_url;
 
@@ -18,8 +19,12 @@ export abstract class BaseService<
     return this.http.get<T[]>(`${base_url}/${this.endpoint}`);
   }
 
+  findByRol(rol: Role): Observable<T[]> {
+    return this.http.get<T[]>(`${base_url}/${this.endpoint}?rol=${rol}`);
+  }
+
   findAllIncludingDeleted(): Observable<T[]> {
-    return this.http.get<T[]>(`${base_url}/${this.endpoint}/includedDeleted`);
+    return this.http.get<T[]>(`${base_url}/${this.endpoint}?includeDeleted=true`);
   }
 
   findById(id: number): Observable<G> {

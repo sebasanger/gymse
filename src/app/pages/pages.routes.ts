@@ -15,6 +15,8 @@ import { CreateUpdateOwnRutinasComponent } from './rutinas/create-update-rutinas
 import { ProgresosRutinasComponent } from './progresos-rutinas/progresos-rutinas/progresos-rutinas.component';
 import { MembresiasComponent } from './membresias/membresias.component';
 import { CreateUpdateMembresiasComponent } from './membresias/create-update-membresias/create-update-membresias.component';
+import { CreateUpdateClientesComponent } from './clientes/create-update-clientes/create-update-clientes.component';
+import { ClientesComponent } from './clientes/clientes.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -22,8 +24,8 @@ export const PAGES_ROUTES: Routes = [
     component: Pages,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      //usuarios
 
+      //usuarios
       { path: 'usuarios', component: UsuariosComponent },
       {
         path: 'usuarios/create',
@@ -32,6 +34,17 @@ export const PAGES_ROUTES: Routes = [
       {
         path: 'usuarios/update/:id',
         component: CreateUpdateUsuariosComponent,
+      },
+
+      //usuarios
+      { path: 'clientes', component: ClientesComponent },
+      {
+        path: 'clientes/create',
+        component: CreateUpdateClientesComponent,
+      },
+      {
+        path: 'clientes/update/:id',
+        component: CreateUpdateClientesComponent,
       },
 
       //ejercicios
