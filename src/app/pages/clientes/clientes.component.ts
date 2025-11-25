@@ -67,7 +67,7 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
 
   load() {
     this.clienteService
-      .findAllClientes()
+      .findAllClientes(true)
       .pipe(takeUntil(this.destroy$))
       .subscribe((usuarios) => {
         this.usuarios = usuarios;
