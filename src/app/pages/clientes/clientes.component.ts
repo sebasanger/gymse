@@ -165,6 +165,13 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
     });
   }
 
+  isMembresiaValida(row: any): boolean {
+    if (!row.membresiaActiva) return false;
+    const hoy = new Date();
+    const fechaVencimiento = new Date(row.membresiaActiva.fechaVencimiento);
+    return fechaVencimiento > hoy;
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

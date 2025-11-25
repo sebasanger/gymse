@@ -56,6 +56,8 @@
       mat-row
       *matRowDef="let row; columns: displayedColumns"
       [class.deleted-row]="row.deleted"
+      [class.valid-member]="!row.deleted && isMembresiaValida(row)"
+      [class.invalid-member]="!row.deleted && !isMembresiaValida(row)"
     ></tr>
   </table>
 
