@@ -57,7 +57,16 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   public includedDeleted: boolean = true;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'fullName', 'email', 'edit', 'delete'];
+  displayedColumns = [
+    'id',
+    'fullName',
+    'email',
+    'membresia',
+    'vencimiento',
+    'ultimoPago',
+    'edit',
+    'delete',
+  ];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
