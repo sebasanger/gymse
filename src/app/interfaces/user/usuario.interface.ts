@@ -1,3 +1,4 @@
+import { MembresiaUsuario } from '../membresiaUsuario/membresia-usuario.interface';
 import { Rol, Role } from '../roles/roles.enum';
 
 export interface Usuario {
@@ -33,4 +34,13 @@ export interface UsuarioMinDto {
   id: number;
   documento: string;
   fullName: string;
+}
+
+export interface UsuarioConMembresia {
+  id: number;
+  deleted: boolean;
+  documento: string;
+  email: string;
+  fullName: string;
+  membresiaActiva: MembresiaUsuario;
 }

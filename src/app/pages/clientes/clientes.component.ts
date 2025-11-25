@@ -6,7 +6,6 @@ import {
   inject,
   OnDestroy,
   ViewChild,
-  ViewEncapsulation,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,10 +19,10 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Usuario } from '../../interfaces/user/usuario.interface';
+import { UsuarioConMembresia } from '../../interfaces/user/usuario.interface';
 import { AlertService } from '../../services/alert-service';
+import { ClienteService } from '../../services/cliente.service';
 import { UserService } from '../../services/user.service';
-import { Role, ROLES } from '../../interfaces/roles/roles.enum';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -45,14 +44,15 @@ import { Role, ROLES } from '../../interfaces/roles/roles.enum';
 export class ClientesComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Usuario>;
-  dataSource = new MatTableDataSource<Usuario>();
-  usuarios: Usuario[] = [];
+  @ViewChild(MatTable) table!: MatTable<UsuarioConMembresia>;
+  dataSource = new MatTableDataSource<UsuarioConMembresia>();
+  usuarios: UsuarioConMembresia[] = [];
   private readonly alert = inject(AlertService);
+  private readonly userService = inject(UserService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
-  private readonly usuarioService = inject(UserService);
+  private readonly clienteService = inject(ClienteService);
   public membresias: Map<number, string> = new Map();
   public includedDeleted: boolean = true;
 
@@ -66,8 +66,8 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   }
 
   load() {
-    this.usuarioService
-      .findAllByRol(true, ['CLIENTE'])
+    this.clienteService
+      .findAllClientes()
       .pipe(takeUntil(this.destroy$))
       .subscribe((usuarios) => {
         this.usuarios = usuarios;
@@ -79,16 +79,14 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   }
 
   customFilters() {
-    this.dataSource.filterPredicate = (data: Usuario, filter: string) => {
+    this.dataSource.filterPredicate = (data: UsuarioConMembresia, filter: string) => {
       const normalizedFilter = filter.trim().toLowerCase();
 
       const nombre = data.fullName?.toLowerCase() ?? '';
 
       const id = String(data.id ?? '').toLowerCase();
 
-      const rol: boolean = data.roles.some((r) => r.rol == (filter.toUpperCase() as Role));
-
-      return nombre.includes(normalizedFilter) || id.includes(normalizedFilter) || rol;
+      return nombre.includes(normalizedFilter) || id.includes(normalizedFilter);
     };
   }
 
@@ -119,27 +117,27 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   }
 
   create() {
-    this.router.navigateByUrl('pages/usuarios/create');
+    this.router.navigateByUrl('pages/clientes/create');
   }
 
   edit(userid: number) {
-    this.router.navigateByUrl('pages/usuarios/update/' + userid);
+    this.router.navigateByUrl('pages/clientes/update/' + userid);
   }
 
   delete(id: number) {
-    this.alert.confirmDelete('Deshabilitar usuario?').then((result) => {
+    this.alert.confirmDelete('Deshabilitar cliente?').then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.deleteById(id).subscribe({
+        this.userService.deleteById(id).subscribe({
           next: () => {
             this.alert.success(
-              'Usuario deshabilitado',
-              'El usuario fue deshabilitado correctamente.'
+              'Cliente deshabilitado',
+              'El cliente fue deshabilitado correctamente.'
             );
             this.load();
           },
           error: (err) => {
             console.error(err);
-            this.alert.errorResponse(err, 'No se pudo deshabilitar el usuario');
+            this.alert.errorResponse(err, 'No se pudo deshabilitar el cliente');
           },
         });
       } else {
@@ -149,16 +147,16 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   }
 
   recover(id: number) {
-    this.alert.confirmRecover('Habilitar usuario?').then((result) => {
+    this.alert.confirmRecover('Habilitar cliente?').then((result) => {
       if (result.isConfirmed) {
-        this.usuarioService.recoverById(id).subscribe({
+        this.userService.recoverById(id).subscribe({
           next: () => {
-            this.alert.success('Usuario habilitado', 'El usuario fue habilitado correctamente.');
+            this.alert.success('Cliente habilitado', 'El cliente fue habilitado correctamente.');
             this.load();
           },
           error: (err) => {
             console.error(err);
-            this.alert.errorResponse(err, 'No se pudo habilitar el usuario');
+            this.alert.errorResponse(err, 'No se pudo habilitar el cliente');
           },
         });
       } else {

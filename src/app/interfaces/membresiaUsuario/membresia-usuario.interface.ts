@@ -7,6 +7,7 @@ export interface MembresiaUsuario {
   membresia: Membresia;
   fechaInscripcion: Date;
   fechaVencimiento: Date;
+  fechaUltimoPago: Date;
   enabled: boolean;
   deleted: boolean;
   pagos?: any;

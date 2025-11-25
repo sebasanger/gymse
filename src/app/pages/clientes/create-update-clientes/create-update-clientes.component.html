@@ -1,7 +1,7 @@
 <form [formGroup]="usuarioForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="base-form-card">
     <mat-card-header>
-      <mat-card-title>Usuario</mat-card-title>
+      <mat-card-title>Cliente</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row">
@@ -16,6 +16,17 @@
 
         <div class="col">
           <mat-form-field class="full-width">
+            <input matInput placeholder="documento" formControlName="documento" />
+            @if (usuarioForm.controls['documento'].hasError('required')) {
+            <mat-error>Documento es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
             <input matInput placeholder="Email" type="email" formControlName="email" />
             @if (usuarioForm.controls['email'].hasError('required')) {
             <mat-error>Email es <strong>requerido</strong></mat-error>
@@ -27,23 +38,14 @@
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
-            <mat-select placeholder="Roles" formControlName="roles" multiple>
-              @for (rol of roles; track rol) {
-              <mat-option [value]="rol">{{ rol }}</mat-option>
+            <mat-select placeholder="Membresia" formControlName="membresia">
+              @for (membresia of membresias; track membresia) {
+              <mat-option [value]="membresia"
+                >{{ membresia.nombre }} - ${{ membresia.precio }} -
+                {{ membresia.descripcion }}</mat-option
+              >
               }
             </mat-select>
-            @if (usuarioForm.controls['roles'].hasError('required')) {
-            <mat-error>Rol es <strong>requiredo</strong></mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="documento" formControlName="documento" />
-            @if (usuarioForm.controls['documento'].hasError('required')) {
-            <mat-error>Documento es <strong>requerido</strong></mat-error>
-            }
           </mat-form-field>
         </div>
       </div>

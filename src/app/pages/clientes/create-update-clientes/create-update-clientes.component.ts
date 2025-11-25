@@ -12,6 +12,8 @@ import { Role, ROLES } from '../../../interfaces/roles/roles.enum';
 import { GetUser } from '../../../interfaces/user/get-user.interface';
 import { AlertService } from '../../../services/alert-service';
 import { UserService } from '../../../services/user.service';
+import { Membresia } from '../../../interfaces/membresia/membresia.interface';
+import { MembresiaService } from '../../../services/membresia-service';
 @Component({
   selector: 'app-create-update-clientes',
   templateUrl: './create-update-clientes.component.html',
@@ -28,6 +30,7 @@ import { UserService } from '../../../services/user.service';
 export class CreateUpdateClientesComponent implements OnInit {
   private fb = inject(FormBuilder);
   private alert = inject(AlertService);
+  private readonly membresiaService = inject(MembresiaService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
@@ -35,19 +38,23 @@ export class CreateUpdateClientesComponent implements OnInit {
 
   public usuarioId: number | undefined;
   public usuario: GetUser | undefined;
-  public roles: Role[] = ROLES;
+  public membresias: Membresia[] | undefined;
 
   usuarioForm = this.fb.group({
     fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     documento: ['', Validators.required],
-    roles: this.fb.control<Role[]>([], Validators.required),
+    membresia: this.fb.control<number | null>(null),
   });
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       this.usuarioId = params['id'];
       takeUntil(this.ngUnsubscribe);
+
+      this.membresiaService.findAll().subscribe((res) => {
+        this.membresias = res;
+      });
 
       if (this.usuarioId && this.usuarioId > 0) {
         this.userService.findById(this.usuarioId).subscribe((res) => {
@@ -56,7 +63,7 @@ export class CreateUpdateClientesComponent implements OnInit {
             fullName: res.fullName,
             email: res.email,
             documento: res.documento,
-            roles: (res.roles as Role[]) ?? [],
+            membresia: res.id ?? undefined,
           });
         });
       }
@@ -65,13 +72,14 @@ export class CreateUpdateClientesComponent implements OnInit {
 
   onSubmit(): void {
     if (this.usuarioForm.invalid) return;
+    const rol: Role = 'CLIENTE';
 
     const formValue = this.usuarioForm.value;
     const dto = {
       fullName: formValue.fullName ?? '',
       email: formValue.email ?? '',
       documento: formValue.documento ?? '',
-      roles: formValue.roles ?? [],
+      roles: [rol],
     };
 
     const action = this.usuarioId
