@@ -35,12 +35,3 @@ export interface UsuarioMinDto {
   documento: string;
   fullName: string;
 }
-
-export interface UsuarioConMembresia {
-  id: number;
-  deleted: boolean;
-  documento: string;
-  email: string;
-  fullName: string;
-  membresiaActiva: MembresiaUsuario;
-}

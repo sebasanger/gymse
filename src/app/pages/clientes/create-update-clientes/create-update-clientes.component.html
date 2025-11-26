@@ -30,6 +30,8 @@
             <input matInput placeholder="Email" type="email" formControlName="email" />
             @if (usuarioForm.controls['email'].hasError('required')) {
             <mat-error>Email es <strong>requerido</strong></mat-error>
+            } @if (usuarioForm.controls['email'].hasError('email')) {
+            <mat-error>Email debe tener un formato valido</mat-error>
             }
           </mat-form-field>
         </div>
@@ -40,7 +42,7 @@
           <mat-form-field class="full-width">
             <mat-select placeholder="Membresia" formControlName="membresia">
               @for (membresia of membresias; track membresia) {
-              <mat-option [value]="membresia"
+              <mat-option [value]="membresia.id"
                 >{{ membresia.nombre }} - ${{ membresia.precio }} -
                 {{ membresia.descripcion }}</mat-option
               >

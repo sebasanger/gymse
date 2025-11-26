@@ -14,6 +14,8 @@ import { AlertService } from '../../../services/alert-service';
 import { UserService } from '../../../services/user.service';
 import { Membresia } from '../../../interfaces/membresia/membresia.interface';
 import { MembresiaService } from '../../../services/membresia-service';
+import { ClienteService } from '../../../services/cliente.service';
+import { CreateClienteDto } from '../../../interfaces/clientes/cliente.interface';
 @Component({
   selector: 'app-create-update-clientes',
   templateUrl: './create-update-clientes.component.html',
@@ -31,9 +33,10 @@ export class CreateUpdateClientesComponent implements OnInit {
   private fb = inject(FormBuilder);
   private alert = inject(AlertService);
   private readonly membresiaService = inject(MembresiaService);
+  private readonly userService = inject(UserService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly userService = inject(UserService);
+  private readonly clienteService = inject(ClienteService);
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   public usuarioId: number | undefined;
@@ -75,24 +78,24 @@ export class CreateUpdateClientesComponent implements OnInit {
     const rol: Role = 'CLIENTE';
 
     const formValue = this.usuarioForm.value;
-    const dto = {
+    const dto: CreateClienteDto = {
       fullName: formValue.fullName ?? '',
       email: formValue.email ?? '',
       documento: formValue.documento ?? '',
-      roles: [rol],
+      membresiaId: formValue.membresia ?? null,
     };
 
     const action = this.usuarioId
-      ? this.userService.updateSpecific({
+      ? this.clienteService.updateCliente({
           id: this.usuarioId,
           ...dto,
         })
-      : this.userService.saveSpecific(dto);
+      : this.clienteService.saveCliente(dto);
 
     action.subscribe({
       next: () => {
         this.alert.success(this.usuarioId ? 'Usuario actualizado' : 'Usuario guardado');
-        this.router.navigateByUrl('pages/usuarios');
+        this.router.navigateByUrl('pages/clientes');
       },
       error: (err) => {
         this.alert.errorResponse(err, this.usuarioId ? 'Error al actualizar' : 'Error al guardar');

@@ -19,10 +19,10 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { UsuarioConMembresia } from '../../interfaces/user/usuario.interface';
 import { AlertService } from '../../services/alert-service';
 import { ClienteService } from '../../services/cliente.service';
 import { UserService } from '../../services/user.service';
+import { UsuarioConMembresia } from '../../interfaces/clientes/cliente.interface';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',

@@ -28,10 +28,22 @@ export class AlertService {
   }
 
   errorResponse(err: any, fallbackTitle = 'Error') {
-    const message =
+    const mainMessage =
       err?.error?.message || err?.message || 'Ocurrió un error inesperado. Intenta nuevamente.';
 
-    return this.error(fallbackTitle, message);
+    const validationErrors = err?.error?.errors;
+
+    let fullMessage = mainMessage;
+
+    if (validationErrors && typeof validationErrors === 'object') {
+      const details = Object.entries(validationErrors)
+        .map(([field, msg]) => `• ${field}: ${msg}`)
+        .join('\n');
+
+      fullMessage += '\n\n' + details;
+    }
+
+    return this.error(fallbackTitle, fullMessage);
   }
 
   warning(title: string, text?: string) {
