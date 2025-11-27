@@ -23,3 +23,14 @@ export interface MembresiaActualUsuario {
   deleted: boolean;
   pagos?: any;
 }
+
+export interface MembresiaUsuarioMin {
+  id: number;
+  membresiaUsuarioId: number;
+  nombre: String;
+  fechaInscripcion: Date;
+  fechaVencimiento: Date;
+  fechaUltimoPago: Date;
+  enabled?: boolean;
+  deleted?: boolean;
+}

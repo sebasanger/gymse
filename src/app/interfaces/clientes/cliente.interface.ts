@@ -1,4 +1,4 @@
-import { MembresiaUsuario } from '../membresiaUsuario/membresia-usuario.interface';
+import { MembresiaUsuarioMin } from '../membresiaUsuario/membresia-usuario.interface';
 
 export interface UsuarioConMembresia {
   id: number;
@@ -6,7 +6,7 @@ export interface UsuarioConMembresia {
   documento: string;
   email: string;
   fullName: string;
-  membresiaActiva: MembresiaUsuario;
+  membresiaActiva: MembresiaUsuarioMin;
 }
 
 export interface CreateClienteDto {

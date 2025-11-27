@@ -8,14 +8,15 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Role, ROLES } from '../../../interfaces/roles/roles.enum';
-import { GetUser } from '../../../interfaces/user/get-user.interface';
-import { AlertService } from '../../../services/alert-service';
-import { UserService } from '../../../services/user.service';
+import {
+  CreateClienteDto,
+  UsuarioConMembresia,
+} from '../../../interfaces/clientes/cliente.interface';
 import { Membresia } from '../../../interfaces/membresia/membresia.interface';
-import { MembresiaService } from '../../../services/membresia-service';
+import { Role } from '../../../interfaces/roles/roles.enum';
+import { AlertService } from '../../../services/alert-service';
 import { ClienteService } from '../../../services/cliente.service';
-import { CreateClienteDto } from '../../../interfaces/clientes/cliente.interface';
+import { MembresiaService } from '../../../services/membresia-service';
 @Component({
   selector: 'app-create-update-clientes',
   templateUrl: './create-update-clientes.component.html',
@@ -33,14 +34,13 @@ export class CreateUpdateClientesComponent implements OnInit {
   private fb = inject(FormBuilder);
   private alert = inject(AlertService);
   private readonly membresiaService = inject(MembresiaService);
-  private readonly userService = inject(UserService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly clienteService = inject(ClienteService);
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   public usuarioId: number | undefined;
-  public usuario: GetUser | undefined;
+  public usuario: UsuarioConMembresia | undefined;
   public membresias: Membresia[] | undefined;
 
   usuarioForm = this.fb.group({
@@ -60,13 +60,13 @@ export class CreateUpdateClientesComponent implements OnInit {
       });
 
       if (this.usuarioId && this.usuarioId > 0) {
-        this.userService.findById(this.usuarioId).subscribe((res) => {
+        this.clienteService.findById(this.usuarioId).subscribe((res) => {
           this.usuario = res;
           this.usuarioForm.patchValue({
             fullName: res.fullName,
             email: res.email,
             documento: res.documento,
-            membresia: res.id ?? undefined,
+            membresia: res.membresiaActiva?.id ?? undefined,
           });
         });
       }

@@ -18,6 +18,10 @@ export class ClienteService {
 
   protected readonly http = inject(HttpClient);
 
+  findById(id: number): Observable<UsuarioConMembresia> {
+    return this.http.get<UsuarioConMembresia>(`${base_url}/${this.endpoint}/${id}`);
+  }
+
   findAllClientes(includedDeleted: boolean): Observable<UsuarioConMembresia[]> {
     return this.http.get<UsuarioConMembresia[]>(
       `${base_url}/${this.endpoint}?includeDeleted=${includedDeleted}`
