@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   MembresiaActualUsuario,
   MembresiaUsuario,
+  MembresiaUsuarioPair,
 } from '../interfaces/membresiaUsuario/membresia-usuario.interface';
 import { BaseService } from './base-service';
 import { environment } from '../../environments/environment';
@@ -18,5 +19,9 @@ export class MembresiaUsuarioService extends BaseService<MembresiaUsuario> {
     return this.http.get<MembresiaActualUsuario>(
       `${base_url}/${this.endpoint}/getByDocumento/${documento}`
     );
+  }
+
+  getMembresiasByCurrentUser(): Observable<MembresiaUsuarioPair[]> {
+    return this.http.get<MembresiaUsuarioPair[]>(`${base_url}/${this.endpoint}/getAllByClient`);
   }
 }

@@ -34,3 +34,8 @@ export interface MembresiaUsuarioMin {
   enabled?: boolean;
   deleted?: boolean;
 }
+
+export interface MembresiaUsuarioPair {
+  membresia: Membresia;
+  membresiaUsuario?: MembresiaUsuario;
+}

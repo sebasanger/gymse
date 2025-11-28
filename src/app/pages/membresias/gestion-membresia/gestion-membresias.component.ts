@@ -22,6 +22,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { Membresia } from '../../../interfaces/membresia/membresia.interface';
 import { AlertService } from '../../../services/alert-service';
 import { MembresiaService } from '../../../services/membresia-service';
+import { MembresiaUsuarioPair } from '../../../interfaces/membresiaUsuario/membresia-usuario.interface';
+import { MembresiaUsuarioService } from '../../../services/membresia-usuario-service';
 @Component({
   selector: 'app-gestion-membresias',
   templateUrl: './gestion-membresias.component.html',
@@ -43,19 +45,28 @@ import { MembresiaService } from '../../../services/membresia-service';
 export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatTable) table!: MatTable<Membresia>;
-  dataSource = new MatTableDataSource<Membresia>();
-  membresias: Membresia[] = [];
+  @ViewChild(MatTable) table!: MatTable<MembresiaUsuarioPair>;
+  dataSource = new MatTableDataSource<MembresiaUsuarioPair>();
+  membresiaUsuarioPair: MembresiaUsuarioPair[] = [];
   private readonly alert = inject(AlertService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
-  private readonly membresiaService = inject(MembresiaService);
+  private readonly membresiaUsuarioService = inject(MembresiaUsuarioService);
   public includedDeleted: boolean = true;
-  expandedMembresia: Membresia | null | undefined;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'precio', 'cantidadClases', 'edit', 'delete'];
+  columnsToDisplay = [
+    'id',
+    'nombre',
+    'descripcion',
+    'precio',
+    'cantidadClases',
+    'fechaInscripcion',
+    'fechaVencimiento',
+    'fechaUltimoPago',
+    'action',
+  ];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -64,34 +75,20 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
   }
 
   load() {
-    this.membresiaService
-      .findAllIncludingDeleted()
+    this.membresiaUsuarioService
+      .getMembresiasByCurrentUser()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((membresias) => {
-        this.membresias = membresias;
+      .subscribe((membresiaUsuarioPair) => {
+        this.membresiaUsuarioPair = membresiaUsuarioPair;
+        this.dataSource.data = membresiaUsuarioPair;
 
-        this.dataSource.data = membresias;
         this.table.dataSource = this.dataSource;
         this.customFilters();
         this.cdr.detectChanges();
       });
   }
 
-  customFilters() {
-    this.dataSource.filterPredicate = (data: Membresia, filter: string) => {
-      const normalizedFilter = filter.trim().toLowerCase();
-
-      const precio = data.precio ?? '';
-      const nombre = data.nombre?.toLowerCase() ?? '';
-      const id = String(data.id ?? '').toLowerCase();
-
-      return (
-        nombre.includes(normalizedFilter) ||
-        id.includes(normalizedFilter) ||
-        precio.toString().includes(normalizedFilter)
-      );
-    };
-  }
+  customFilters() {}
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -102,74 +99,8 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  toggleIncludeDeleted(): void {
-    if (this.includedDeleted) {
-      this.dataSource.data = this.membresias;
-    } else {
-      this.dataSource.data = this.membresias.filter((e) => !e.deleted);
-    }
-    this.cdr.detectChanges();
-  }
-
-  applyFilterByCategory(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-  add() {
-    this.router.navigateByUrl('pages/membresias/create');
-  }
-
-  edit(userid: number) {
-    this.router.navigateByUrl('pages/membresias/update/' + userid);
-  }
-
-  delete(id: number) {
-    this.alert.confirmDelete('Deshabilitar membresia?').then((result) => {
-      if (result.isConfirmed) {
-        this.membresiaService.deleteById(id).subscribe({
-          next: () => {
-            this.alert.success(
-              'Membresia deshabilitada',
-              'La membresia fue deshabilitada correctamente.'
-            );
-            this.load();
-          },
-          error: (err) => {
-            console.error(err);
-            this.alert.errorResponse('Error', 'No se pudo deshabilitar la membresia.');
-          },
-        });
-      } else {
-        this.alert.warning('Cancelado', 'No se deshabilito.');
-      }
-    });
-  }
-
-  recover(id: number) {
-    this.alert.confirmRecover('Habilitar membresia?').then((result) => {
-      if (result.isConfirmed) {
-        this.membresiaService.recoverById(id).subscribe({
-          next: () => {
-            this.alert.success(
-              'Membresia habilitada',
-              'La membresia fue habilitada correctamente.'
-            );
-            this.load();
-          },
-          error: (err) => {
-            console.error(err);
-            this.alert.errorResponse('Error', 'No se pudo habilitar la membresia.');
-          },
-        });
-      } else {
-        this.alert.warning('Cancelado', 'No se habilito.');
-      }
-    });
-  }
+  suscribir(id: number) {}
+  desuscribir(id: number) {}
 
   ngOnDestroy(): void {
     this.destroy$.next();
