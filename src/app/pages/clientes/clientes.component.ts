@@ -113,23 +113,18 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   }
 
   applyFilterToggle(): void {
-    let filtered = this.usuarios;
-    if (!this.includedDeleted) {
-      filtered = this.usuarios.filter((e) => !e.deleted);
-    }
-    if (!this.includedInvalid) {
-      filtered = this.usuarios.filter((e) => this.isMembresiaValida(e));
-    }
-    if (!this.includedDissabled) {
-      filtered = this.usuarios.filter((e) => !e.enabled);
-    }
-    if (!this.includedValid) {
-      filtered = this.usuarios.filter((e) => !this.isMembresiaValida(e));
-    }
+    this.dataSource.data = this.usuarios.filter((u) => {
+      if (!this.includedDeleted && u.deleted) return false;
 
-    console.log(this.includedDissabled);
+      if (!this.includedInvalid && !this.isMembresiaValida(u)) return false;
 
-    this.dataSource.data = filtered;
+      if (!this.includedDissabled && !u.enabled) return false;
+
+      if (!this.includedValid && this.isMembresiaValida(u)) return false;
+
+      return true;
+    });
+
     this.cdr.detectChanges();
   }
 
