@@ -89,6 +89,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Progreso Rutina',
       visible: false,
     },
+    {
+      id: 'gestion_membresias',
+      icon: 'currency_exchange',
+      redirection: '/pages/gestion/membresias',
+      tittle: 'Gestion Membresias',
+      visible: false,
+    },
 
     // Admin
     {
@@ -151,6 +158,7 @@ export class NavigationComponent implements OnInit {
   }
 
   activateClientMenu() {
+    this.setVisible(['gestion_membresias'], true);
     this.progresoRutinaService
       .getCurrentRoutine()
       .asObservable()
