@@ -64,6 +64,7 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
     'membresia',
     'vencimiento',
     'ultimoPago',
+    'validado',
     'edit',
     'delete',
   ];
