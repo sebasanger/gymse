@@ -55,6 +55,9 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   private readonly clienteService = inject(ClienteService);
   public membresias: Map<number, string> = new Map();
   public includedDeleted: boolean = true;
+  public includedInvalid: boolean = true;
+  public includedDissabled: boolean = true;
+  public includedValid: boolean = true;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = [
@@ -109,12 +112,24 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  toggleIncludeDeleted(): void {
-    if (this.includedDeleted) {
-      this.dataSource.data = this.usuarios;
-    } else {
-      this.dataSource.data = this.usuarios.filter((e) => !e.deleted);
+  applyFilterToggle(): void {
+    let filtered = this.usuarios;
+    if (!this.includedDeleted) {
+      filtered = this.usuarios.filter((e) => !e.deleted);
     }
+    if (!this.includedInvalid) {
+      filtered = this.usuarios.filter((e) => this.isMembresiaValida(e));
+    }
+    if (!this.includedDissabled) {
+      filtered = this.usuarios.filter((e) => !e.enabled);
+    }
+    if (!this.includedValid) {
+      filtered = this.usuarios.filter((e) => !this.isMembresiaValida(e));
+    }
+
+    console.log(this.includedDissabled);
+
+    this.dataSource.data = filtered;
     this.cdr.detectChanges();
   }
 
@@ -175,7 +190,7 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
     });
   }
 
-  isMembresiaValida(row: any): boolean {
+  isMembresiaValida(row: UsuarioConMembresia): boolean {
     if (!row.membresiaActiva) return false;
     const hoy = new Date();
     const fechaVencimiento = new Date(row.membresiaActiva.fechaVencimiento);

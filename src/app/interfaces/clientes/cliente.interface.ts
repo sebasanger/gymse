@@ -3,6 +3,7 @@ import { MembresiaUsuarioMin } from '../membresiaUsuario/membresia-usuario.inter
 export interface UsuarioConMembresia {
   id: number;
   deleted: boolean;
+  enabled: boolean;
   documento: string;
   email: string;
   fullName: string;

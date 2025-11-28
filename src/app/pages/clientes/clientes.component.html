@@ -1,7 +1,37 @@
 <div class="table-top">
-  <mat-slide-toggle [(ngModel)]="includedDeleted" (click)="toggleIncludeDeleted()">
-    Mostrar desahilitados
-  </mat-slide-toggle>
+  <div class="status-toggles">
+    <mat-slide-toggle
+      class="legend-toggle deleted"
+      [(ngModel)]="includedDeleted"
+      (click)="applyFilterToggle()"
+    >
+      Usuario eliminado
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="legend-toggle invalid"
+      [(ngModel)]="includedInvalid"
+      (click)="applyFilterToggle()"
+    >
+      Membresía no válida
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="legend-toggle disabled-user"
+      [(ngModel)]="includedDissabled"
+      (click)="applyFilterToggle()"
+    >
+      Usuario no habilitado
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="legend-toggle valid"
+      [(ngModel)]="includedValid"
+      (click)="applyFilterToggle()"
+    >
+      Usuario válido
+    </mat-slide-toggle>
+  </div>
 
   <mat-form-field>
     <mat-label>Filtro</mat-label>
