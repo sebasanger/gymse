@@ -5,7 +5,7 @@
       [(ngModel)]="includedDeleted"
       (click)="applyFilterToggle()"
     >
-      Usuario eliminado
+      Usuarios eliminados
     </mat-slide-toggle>
 
     <mat-slide-toggle
@@ -13,7 +13,7 @@
       [(ngModel)]="includedInvalid"
       (click)="applyFilterToggle()"
     >
-      Membresía no válida
+      Membresías no válidas
     </mat-slide-toggle>
 
     <mat-slide-toggle
@@ -21,7 +21,7 @@
       [(ngModel)]="includedDissabled"
       (click)="applyFilterToggle()"
     >
-      Usuario no habilitado
+      Usuarios no validados
     </mat-slide-toggle>
 
     <mat-slide-toggle
@@ -29,7 +29,7 @@
       [(ngModel)]="includedValid"
       (click)="applyFilterToggle()"
     >
-      Usuario válido
+      Usuarios válidos
     </mat-slide-toggle>
   </div>
 
@@ -91,7 +91,7 @@
     </ng-container>
 
     <ng-container matColumnDef="validado">
-      <th mat-header-cell *matHeaderCellDef>Habilitado</th>
+      <th mat-header-cell *matHeaderCellDef>Validado</th>
       <td mat-cell *matCellDef="let row">
         @if (row.enabled) {
         <mat-icon>check</mat-icon>
