@@ -106,6 +106,7 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.applyFilterToggle();
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -126,14 +127,6 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
     });
 
     this.cdr.detectChanges();
-  }
-
-  applyFilterByRol(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   create() {
