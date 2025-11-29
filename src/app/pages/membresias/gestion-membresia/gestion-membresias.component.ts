@@ -27,6 +27,8 @@ import {
   MembresiaUsuarioPair,
 } from '../../../interfaces/membresiaUsuario/membresia-usuario.interface';
 import { MembresiaUsuarioService } from '../../../services/membresia-usuario-service';
+import { MatDialog } from '@angular/material/dialog';
+import { DetallesMembresiaDialogComponent } from './detalles-membresia-dialog/detalles-membresia-dialog';
 @Component({
   selector: 'app-gestion-membresias',
   templateUrl: './gestion-membresias.component.html',
@@ -56,6 +58,7 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
   private readonly membresiaUsuarioService = inject(MembresiaUsuarioService);
+  private readonly dialog = inject(MatDialog);
   public includedDeleted: boolean = true;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -108,6 +111,10 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
     if (!membresiaUsuario) {
       return;
     }
+    this.dialog.open(DetallesMembresiaDialogComponent, {
+      width: '500px',
+      data: membresiaUsuario,
+    });
     console.log(membresiaUsuario);
   }
 

@@ -1,5 +1,6 @@
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { BehaviorSubject, interval, Observable, startWith, switchMap, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, interval, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
   GuardarRutinaEntrenamiento,
@@ -7,7 +8,6 @@ import {
   ProgresoRutinaConProgreso,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 const base_url = environment.base_url;
 
 @Injectable({
