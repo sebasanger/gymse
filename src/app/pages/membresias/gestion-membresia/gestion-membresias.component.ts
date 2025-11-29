@@ -22,7 +22,10 @@ import { Subject, takeUntil } from 'rxjs';
 import { Membresia } from '../../../interfaces/membresia/membresia.interface';
 import { AlertService } from '../../../services/alert-service';
 import { MembresiaService } from '../../../services/membresia-service';
-import { MembresiaUsuarioPair } from '../../../interfaces/membresiaUsuario/membresia-usuario.interface';
+import {
+  MembresiaUsuario,
+  MembresiaUsuarioPair,
+} from '../../../interfaces/membresiaUsuario/membresia-usuario.interface';
 import { MembresiaUsuarioService } from '../../../services/membresia-usuario-service';
 @Component({
   selector: 'app-gestion-membresias',
@@ -101,6 +104,12 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
 
   suscribir(id: number) {}
   desuscribir(id: number) {}
+  verDetalles(membresiaUsuario: MembresiaUsuario | null) {
+    if (!membresiaUsuario) {
+      return;
+    }
+    console.log(membresiaUsuario);
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

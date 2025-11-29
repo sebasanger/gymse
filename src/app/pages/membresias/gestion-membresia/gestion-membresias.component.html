@@ -69,6 +69,7 @@
     <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr
       mat-row
+      (click)="verDetalles(row.membresiaUsuario)"
       *matRowDef="let row; columns: columnsToDisplay"
       [class.deleted-row]="row.deleted"
       [class.suscribed]="row.membresiaUsuario?.enabled"
