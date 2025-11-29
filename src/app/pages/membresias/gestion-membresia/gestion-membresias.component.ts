@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -19,15 +20,12 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { Membresia } from '../../../interfaces/membresia/membresia.interface';
-import { AlertService } from '../../../services/alert-service';
-import { MembresiaService } from '../../../services/membresia-service';
 import {
   MembresiaUsuario,
   MembresiaUsuarioPair,
 } from '../../../interfaces/membresiaUsuario/membresia-usuario.interface';
+import { AlertService } from '../../../services/alert-service';
 import { MembresiaUsuarioService } from '../../../services/membresia-usuario-service';
-import { MatDialog } from '@angular/material/dialog';
 import { DetallesMembresiaDialogComponent } from './detalles-membresia-dialog/detalles-membresia-dialog';
 @Component({
   selector: 'app-gestion-membresias',
@@ -112,7 +110,9 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
       return;
     }
     this.dialog.open(DetallesMembresiaDialogComponent, {
-      width: '500px',
+      width: '75vw',
+      maxWidth: '900px',
+      panelClass: 'membresia-detalle-dialog',
       data: membresiaUsuario,
     });
     console.log(membresiaUsuario);

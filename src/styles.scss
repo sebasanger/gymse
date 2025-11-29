@@ -125,3 +125,13 @@ tr:not(.deleted-row) {
 .col:last-child {
   margin-right: 0;
 }
+
+.membresia-detalle-dialog {
+  width: 75vw !important;
+}
+
+@media (max-width: 768px) {
+  .membresia-detalle-dialog {
+    width: 95vw !important;
+  }
+}

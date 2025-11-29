@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -16,13 +17,11 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subject, takeUntil } from 'rxjs';
-import { RutinaService } from '../../../services/rutina-service';
 import {
   ProgresoRutina,
   ProgresoRutinaConProgreso,
 } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
-import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-progresos-rutinas',
