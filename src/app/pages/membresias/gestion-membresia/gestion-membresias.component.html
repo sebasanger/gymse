@@ -4,6 +4,13 @@
     <input matInput (keyup)="applyFilter($event)" #input />
   </mat-form-field>
 </div>
+<div class="status-legend">
+  <div class="legend-item legend-suscribed"></div>
+  <span class="text-legend">Membresia Activa</span>
+
+  <div class="legend-item legend-old-suscribed"></div>
+  <span class="text-legend">Membresía que se suscribio en algun momento</span>
+</div>
 <div class="mat-elevation-z2">
   <table mat-table class="full-width-table" matSort aria-label="Elements">
     <ng-container matColumnDef="id">
@@ -64,6 +71,8 @@
       mat-row
       *matRowDef="let row; columns: columnsToDisplay"
       [class.deleted-row]="row.deleted"
+      [class.suscribed]="row.membresiaUsuario?.enabled"
+      [class.old-suscribed]="row.membresiaUsuario && !row.membresiaUsuario?.enabled"
     ></tr>
   </table>
 
