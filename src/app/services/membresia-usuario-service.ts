@@ -24,4 +24,17 @@ export class MembresiaUsuarioService extends BaseService<MembresiaUsuario> {
   getMembresiasByCurrentUser(): Observable<MembresiaUsuarioPair[]> {
     return this.http.get<MembresiaUsuarioPair[]>(`${base_url}/${this.endpoint}/getAllByClient`);
   }
+
+  suscribe(membresiaId: number): Observable<MembresiaUsuario> {
+    return this.http.post<MembresiaUsuario>(
+      `${base_url}/${this.endpoint}/suscribe/${membresiaId}`,
+      null
+    );
+  }
+
+  unsuscribe(membresiaUsuarioId: number): Observable<MembresiaUsuario> {
+    return this.http.delete<MembresiaUsuario>(
+      `${base_url}/${this.endpoint}/unsuscribe/${membresiaUsuarioId}`
+    );
+  }
 }

@@ -63,11 +63,21 @@
       <th mat-header-cell *matHeaderCellDef>Suscribirse/Desuscribirse</th>
       <td mat-cell *matCellDef="let row">
         @if (row?.membresiaUsuario?.enabled) {
-        <button mat-button class="delete-button" (click)="desuscribir(row.id)">
+        <button
+          mat-button
+          class="delete-button"
+          (click)="desuscribir(row.membresiaUsuario); $event.stopPropagation()"
+        >
           Desuscribirse
         </button>
         } @else {
-        <button mat-button class="recover-button" (click)="suscribir(row.id)">Suscribirse</button>
+        <button
+          mat-button
+          class="recover-button"
+          (click)="suscribir(row.membresia.id); $event.stopPropagation()"
+        >
+          Suscribirse
+        </button>
         }
       </td>
     </ng-container>

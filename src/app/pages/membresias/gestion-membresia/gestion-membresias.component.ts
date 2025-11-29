@@ -87,12 +87,9 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
         this.dataSource.data = membresiaUsuarioPair;
 
         this.table.dataSource = this.dataSource;
-        this.customFilters();
         this.cdr.detectChanges();
       });
   }
-
-  customFilters() {}
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -103,8 +100,53 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  suscribir(id: number) {}
-  desuscribir(id: number) {}
+  suscribir(membresiaId: number) {
+    this.alert
+      .confirm(
+        '¿Confirmar suscripción?',
+        'La membresía seleccionada se activará como tu membresía actual y se desactivara si tienes una membresia actual. ' +
+          'Tu historial anterior —incluyendo pagos y registros— se conservará para futuras suscripciones.',
+        'Sí, suscribirme'
+      )
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.membresiaUsuarioService.suscribe(membresiaId).subscribe({
+            next: () => {
+              this.alert.success('Suscripción exitosa', 'La membresía fue activada correctamente.');
+              this.load();
+            },
+            error: (err) => this.alert.errorResponse(err),
+          });
+        }
+      });
+  }
+
+  desuscribir(membresiaUsuario: MembresiaUsuario | null) {
+    if (!membresiaUsuario) return;
+
+    this.alert
+      .confirm(
+        '¿Confirmar desuscripción?',
+        'Se cancelará la membresía activa seleccionada. ' +
+          'Tu información y los pagos realizados permanecerán guardados, por lo que podrás volver a suscribirte más adelante sin perder el historial.',
+        'Sí, desuscribirme'
+      )
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.membresiaUsuarioService.unsuscribe(membresiaUsuario.id).subscribe({
+            next: () => {
+              this.alert.success(
+                'Desuscripción exitosa',
+                'La membresía fue cancelada correctamente.'
+              );
+              this.load();
+            },
+            error: (err) => this.alert.errorResponse(err),
+          });
+        }
+      });
+  }
+
   verDetalles(membresiaUsuario: MembresiaUsuario | null) {
     if (!membresiaUsuario) {
       return;
@@ -115,7 +157,6 @@ export class GestionMembresiasComponent implements OnDestroy, AfterViewInit {
       panelClass: 'membresia-detalle-dialog',
       data: membresiaUsuario,
     });
-    console.log(membresiaUsuario);
   }
 
   ngOnDestroy(): void {
