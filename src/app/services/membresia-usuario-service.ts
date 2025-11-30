@@ -21,6 +21,10 @@ export class MembresiaUsuarioService extends BaseService<MembresiaUsuario> {
     );
   }
 
+  getByCurrentUser(): Observable<MembresiaUsuario> {
+    return this.http.get<MembresiaUsuario>(`${base_url}/${this.endpoint}/getByCurrentUser`);
+  }
+
   getMembresiasByCurrentUser(): Observable<MembresiaUsuarioPair[]> {
     return this.http.get<MembresiaUsuarioPair[]>(`${base_url}/${this.endpoint}/getAllByClient`);
   }

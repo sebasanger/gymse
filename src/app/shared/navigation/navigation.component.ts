@@ -96,6 +96,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Gestion Membresias',
       visible: false,
     },
+    {
+      id: 'pago_membresia',
+      icon: 'payment_arrow_down',
+      redirection: '/pages/pago/membresia',
+      tittle: 'Pagar Membresia',
+      visible: false,
+    },
 
     // Admin
     {
@@ -159,6 +166,7 @@ export class NavigationComponent implements OnInit {
 
   activateClientMenu() {
     this.setVisible(['gestion_membresias'], true);
+    this.setVisible(['pago_membresia'], true);
     this.progresoRutinaService
       .getCurrentRoutine()
       .asObservable()

@@ -18,6 +18,7 @@ import { CreateUpdateMembresiasComponent } from './membresias/create-update-memb
 import { CreateUpdateClientesComponent } from './clientes/create-update-clientes/create-update-clientes.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { GestionMembresiasComponent } from './membresias/gestion-membresia/gestion-membresias.component';
+import { PagoMembresiaComponent } from './pago/pago-membresia/pago-membresia';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -98,6 +99,12 @@ export const PAGES_ROUTES: Routes = [
       {
         path: 'gestion/membresias',
         component: GestionMembresiasComponent,
+      },
+
+      //pagos
+      {
+        path: 'pago/membresia',
+        component: PagoMembresiaComponent,
       },
 
       //check in

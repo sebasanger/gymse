@@ -1,0 +1,58 @@
+<div class="container">
+  <!-- Si NO hay membresía activa -->
+  <ng-container *ngIf="!membresiaUsuario; else tieneMembresia">
+    <mat-card class="membresia-card empty-state">
+      <mat-card-content>
+        <h2>No tenés una membresía activa</h2>
+        <p>Puedes suscribirte a una membresía desde la sección de membresías.</p>
+      </mat-card-content>
+      <mat-card-actions class="actions-content">
+        <button mat-raised-button color="primary" (click)="redirectSuscription()">
+          Ir a gestion de membresias
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+
+  <!-- Si HAY membresía activa -->
+  <ng-template #tieneMembresia>
+    <mat-card class="membresia-card">
+      <mat-card-header>
+        <mat-card-title>{{ membresiaUsuario?.membresia?.nombre }}</mat-card-title>
+        <mat-card-subtitle>Membresía ID: {{ membresiaUsuario?.membresia?.id }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <section class="section">
+          <h3>Información de la membresía</h3>
+          <p><b>Descripción:</b> {{ membresiaUsuario?.membresia?.descripcion }}</p>
+          <p><b>Cantidad de clases:</b> {{ membresiaUsuario?.membresia?.cantidadClases }}</p>
+          <p><b>Precio:</b> ${{ membresiaUsuario?.membresia?.precio }}</p>
+        </section>
+
+        <section class="section">
+          <h3>Estado</h3>
+          <p>
+            <b>Fecha inscripción:</b>
+            {{ membresiaUsuario?.fechaInscripcion | date : 'dd/MM/yyyy' }}
+          </p>
+          <p><b>Vencimiento:</b> {{ membresiaUsuario?.fechaVencimiento | date : 'dd/MM/yyyy' }}</p>
+          <p>
+            <b>Último pago:</b>
+            {{
+              membresiaUsuario?.fechaUltimoPago
+                ? (membresiaUsuario?.fechaUltimoPago | date : 'dd/MM/yyyy')
+                : 'Sin pagos aún'
+            }}
+          </p>
+        </section>
+      </mat-card-content>
+
+      <mat-card-actions class="actions-content">
+        <button mat-raised-button color="primary" (click)="pagarMembresia()">
+          Pagar membresía
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+</div>
