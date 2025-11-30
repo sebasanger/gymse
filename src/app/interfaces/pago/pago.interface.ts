@@ -6,3 +6,8 @@ export interface Pago {
   aceptada: boolean;
   descripcion: string;
 }
+
+export interface AddPagoDto {
+  membresiaUsuarioId: number;
+  transaction: string;
+}
