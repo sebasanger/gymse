@@ -140,6 +140,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Membresias',
       visible: false,
     },
+    {
+      id: 'pagos',
+      icon: 'payments',
+      redirection: '/pages/pagos',
+      tittle: 'Pagos',
+      visible: false,
+    },
   ];
 
   constructor() {}
@@ -197,7 +204,7 @@ export class NavigationComponent implements OnInit {
   }
 
   activateAdminMenu() {
-    this.setVisible(['usuarios', 'ejercicios', 'rutinas', 'membresias', 'clientes'], true);
+    this.setVisible(['usuarios', 'ejercicios', 'rutinas', 'membresias', 'clientes', 'pagos'], true);
   }
 
   setVisible(ids: string[], value: boolean) {

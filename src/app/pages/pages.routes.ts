@@ -19,6 +19,7 @@ import { CreateUpdateClientesComponent } from './clientes/create-update-clientes
 import { ClientesComponent } from './clientes/clientes.component';
 import { GestionMembresiasComponent } from './membresias/gestion-membresia/gestion-membresias.component';
 import { PagoMembresiaComponent } from './pago/pago-membresia/pago-membresia';
+import { PagosComponent } from './pago/pagos.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -105,6 +106,10 @@ export const PAGES_ROUTES: Routes = [
       {
         path: 'pago/membresia',
         component: PagoMembresiaComponent,
+      },
+      {
+        path: 'pagos',
+        component: PagosComponent,
       },
 
       //check in
