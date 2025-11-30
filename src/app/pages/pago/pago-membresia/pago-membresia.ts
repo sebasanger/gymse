@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Angular Material
@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 })
 export class PagoMembresiaComponent implements OnInit {
   public membresiaUsuario: MembresiaUsuario | undefined;
+  private readonly cdr = inject(ChangeDetectorRef);
 
   constructor(
     private alert: AlertService,
@@ -27,11 +28,8 @@ export class PagoMembresiaComponent implements OnInit {
 
   ngOnInit(): void {
     this.membresiaUsuarioService.getByCurrentUser().subscribe((res) => {
-      console.log('ACA');
-
       this.membresiaUsuario = res;
-
-      console.log(this.membresiaUsuario);
+      this.cdr.detectChanges();
     });
   }
 
