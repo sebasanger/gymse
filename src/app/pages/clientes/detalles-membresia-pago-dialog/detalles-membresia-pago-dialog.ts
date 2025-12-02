@@ -86,7 +86,6 @@ export class DetallesMembresiaPagoDialogComponent implements OnDestroy, AfterVie
 
   pay() {
     const usuarioConMembresia: UsuarioConMembresia = this.data;
-    console.log(usuarioConMembresia);
     if (!usuarioConMembresia.membresiaActiva) {
       return;
     }

@@ -119,7 +119,7 @@
     <ng-container matColumnDef="pagar">
       <th mat-header-cell *matHeaderCellDef>Realizar pago</th>
       <td mat-cell *matCellDef="let row">
-        @if (row.membresiaActiva) {
+        @if (row.membresiaActiva && !row.deleted) {
         <button
           matTooltip="Realizar el pago del cliente"
           mat-icon-button
