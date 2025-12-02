@@ -11,7 +11,7 @@ import { LoginRequestPayload } from '../../interfaces/auth/login-request.payload
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -21,10 +21,10 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './register.html',
+  styleUrl: './register.scss',
 })
-export class Login {
+export class Register {
   loginForm: FormGroup;
 
   constructor(private fb: FormBuilder, private AuthService: AuthService, private router: Router) {
@@ -61,7 +61,7 @@ export class Login {
     }
   }
 
-  goRegisterPage() {
-    this.router.navigateByUrl('/auth/register');
+  goLoginPage() {
+    this.router.navigateByUrl('/auth/login');
   }
 }

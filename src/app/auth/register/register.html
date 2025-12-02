@@ -1,6 +1,6 @@
 <div class="login-container">
   <mat-card class="login-card">
-    <h2>Iniciar sesión</h2>
+    <h2>Registrarse</h2>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width">
@@ -26,8 +26,8 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary full-width" (click)="goRegisterPage()">
-        Registrarse
+      <button mat-raised-button color="primary full-width" (click)="goLoginPage()">
+        Volver al Login
       </button>
       <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
         {{ isLoading() ? 'Cargando...' : 'Ingresar' }}
