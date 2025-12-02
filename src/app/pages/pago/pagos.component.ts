@@ -122,7 +122,7 @@ export class PagosComponent implements OnDestroy, AfterViewInit {
   delete(id: number) {
     this.alert.confirmDelete('Eliminar pago?').then((result) => {
       if (result.isConfirmed) {
-        this.pagoService.deleteById(id).subscribe({
+        this.pagoService.deletePago(id).subscribe({
           next: () => {
             this.alert.success('Pago eliminado', 'El pago fue eliminado correctamente.');
             this.load();
