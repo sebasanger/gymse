@@ -4,6 +4,7 @@ import { UsuarioMinDto } from '../user/usuario.interface';
 export interface MembresiaUsuario {
   id: number;
   usuario: UsuarioMinDto;
+  membresia: Membresia;
   fechaInscripcion: Date;
   fechaVencimiento: Date;
   fechaUltimoPago: Date;
@@ -29,6 +30,8 @@ export interface MembresiaUsuarioMin {
   id: number;
   membresiaUsuarioId: number;
   nombre: String;
+  descripcion: String;
+  precio: number;
   fechaInscripcion: Date;
   fechaVencimiento: Date;
   fechaUltimoPago: Date;

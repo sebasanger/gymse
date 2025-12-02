@@ -110,14 +110,6 @@ export class PagosComponent implements OnDestroy, AfterViewInit {
     }
   }
 
-  add() {
-    this.router.navigateByUrl('pages/membresias/create');
-  }
-
-  edit(userid: number) {
-    this.router.navigateByUrl('pages/membresias/update/' + userid);
-  }
-
   delete(id: number) {
     this.alert
       .confirm(

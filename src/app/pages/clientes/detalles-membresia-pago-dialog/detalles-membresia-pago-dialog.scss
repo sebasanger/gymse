@@ -1,0 +1,60 @@
+.detalle-card {
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  margin-bottom: 20px;
+}
+
+.detalle-card p {
+  font-size: 1rem;
+  margin: 8px 0;
+}
+.tittle-card-detail {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+
+  color: inherit;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.mat-header-cell {
+  font-weight: 600 !important;
+  font-size: 0.9rem;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.mat-row {
+  transition: background-color 0.15s;
+}
+
+.mat-row:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.mat-cell mat-icon {
+  vertical-align: middle;
+}
+
+.mat-paginator {
+  margin-top: 10px;
+}
+
+.no-pagos {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+  padding-top: 8px;
+}
+
+.membresia-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+}

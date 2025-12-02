@@ -7,7 +7,7 @@ export interface UsuarioConMembresia {
   documento: string;
   email: string;
   fullName: string;
-  membresiaActiva: MembresiaUsuarioMin;
+  membresiaActiva?: MembresiaUsuarioMin;
 }
 
 export interface CreateClienteDto {

@@ -1,0 +1,91 @@
+<!-- DATOS PRINCIPALES -->
+<h3 class="tittle-card-detail">Membresía</h3>
+<div class="section membresia-text">
+  <p><strong>Nombre:</strong> {{ data.membresiaActiva?.nombre }}</p>
+  <p><strong>Descripción:</strong> {{ data.membresiaActiva?.descripcion }}</p>
+  <p><strong>Precio:</strong> {{ data.membresiaActiva?.precio | currency : 'ARS' : 'symbol' }}</p>
+
+  <p>
+    <strong>Fecha de Inscripción:</strong>
+    {{
+      data.membresiaActiva?.fechaInscripcion ?? data.membresiaActiva?.fechaInscripcion
+        | date : 'short' : ''
+    }}
+  </p>
+  <p>
+    <strong>Fecha de Vencimiento:</strong>
+    {{
+      data.membresiaActiva?.fechaVencimiento ?? data.membresiaActiva?.fechaVencimiento
+        | date : 'short' : ''
+    }}
+  </p>
+
+  <button mat-button matButton="filled" style="font-size: 1.6rem" (click)="pay()">
+    Realizar pago
+  </button>
+</div>
+
+<!-- PAGOS -->
+<h3 class="tittle-card-detail">Pagos</h3>
+
+<div class="mat-elevation-z2" style="margin-top: 10px">
+  <table mat-table matSort class="full-width-table">
+    <!-- Fecha -->
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+      <td mat-cell *matCellDef="let p">
+        {{ p.fecha | date : 'dd/MM/yyyy HH:mm' }}
+      </td>
+    </ng-container>
+
+    <!-- Monto -->
+    <ng-container matColumnDef="monto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
+      <td mat-cell *matCellDef="let p">
+        {{ p.monto | currency : 'ARS' : 'symbol' }}
+      </td>
+    </ng-container>
+
+    <!-- Transaction -->
+    <ng-container matColumnDef="transaction">
+      <th mat-header-cell *matHeaderCellDef>Transacción</th>
+      <td mat-cell *matCellDef="let p">{{ p.transaction }}</td>
+    </ng-container>
+
+    <!-- Aceptada -->
+    <ng-container matColumnDef="aceptada">
+      <th mat-header-cell *matHeaderCellDef>Aceptada</th>
+      <td mat-cell *matCellDef="let p">
+        <mat-icon [color]="p.aceptada ? 'primary' : 'warn'">
+          {{ p.aceptada ? 'check_circle' : 'cancel' }}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <!-- Descripción -->
+    <ng-container matColumnDef="descripcion">
+      <th mat-header-cell *matHeaderCellDef>Descripción</th>
+      <td mat-cell *matCellDef="let p">{{ p.descripcion }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsPagos"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsPagos"></tr>
+  </table>
+
+  <mat-paginator
+    #paginator
+    [length]="dataSource.data.length"
+    [pageIndex]="0"
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 20]"
+  >
+  </mat-paginator>
+</div>
+
+<ng-template #noPagos>
+  <p>No tiene pagos registrados.</p>
+</ng-template>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cerrar</button>
+</mat-dialog-actions>

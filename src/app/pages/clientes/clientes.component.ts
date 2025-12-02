@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -17,12 +18,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { UsuarioConMembresia } from '../../interfaces/clientes/cliente.interface';
 import { AlertService } from '../../services/alert-service';
 import { ClienteService } from '../../services/cliente.service';
+import { PagoService } from '../../services/pago-service';
 import { UserService } from '../../services/user.service';
-import { UsuarioConMembresia } from '../../interfaces/clientes/cliente.interface';
+import { DetallesMembresiaPagoDialogComponent } from './detalles-membresia-pago-dialog/detalles-membresia-pago-dialog';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -39,6 +43,7 @@ import { UsuarioConMembresia } from '../../interfaces/clientes/cliente.interface
     MatSelectModule,
     MatSlideToggleModule,
     FormsModule,
+    MatTooltipModule,
   ],
 })
 export class ClientesComponent implements OnDestroy, AfterViewInit {
@@ -49,6 +54,7 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   usuarios: UsuarioConMembresia[] = [];
   private readonly alert = inject(AlertService);
   private readonly userService = inject(UserService);
+  private readonly pagoService = inject(PagoService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
@@ -59,6 +65,8 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   public includedDissabled: boolean = true;
   public includedValid: boolean = true;
 
+  private readonly dialog = inject(MatDialog);
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = [
     'id',
@@ -68,6 +76,7 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
     'vencimiento',
     'ultimoPago',
     'validado',
+    'pagar',
     'edit',
     'delete',
   ];
@@ -188,5 +197,17 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  openPay(membresiaUsuario: UsuarioConMembresia) {
+    if (!membresiaUsuario) {
+      return;
+    }
+    this.dialog.open(DetallesMembresiaPagoDialogComponent, {
+      width: '75vw',
+      maxWidth: '900px',
+      panelClass: 'membresia-detalle-dialog',
+      data: membresiaUsuario,
+    });
   }
 }
