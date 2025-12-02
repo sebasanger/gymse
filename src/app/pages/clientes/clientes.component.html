@@ -119,6 +119,7 @@
     <ng-container matColumnDef="pagar">
       <th mat-header-cell *matHeaderCellDef>Realizar pago</th>
       <td mat-cell *matCellDef="let row">
+        @if (row.membresiaActiva) {
         <button
           matTooltip="Realizar el pago del cliente"
           mat-icon-button
@@ -127,6 +128,16 @@
         >
           <mat-icon style="color: green">attach_money</mat-icon>
         </button>
+        }@else {
+
+        <button
+          matTooltip="No se puede realizar el pago porque el cliente no tiene una membresia activa"
+          mat-icon-button
+        >
+          <mat-icon style="color: red">block</mat-icon>
+        </button>
+
+        }
       </td>
     </ng-container>
 
