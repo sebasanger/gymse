@@ -35,3 +35,9 @@ export interface UsuarioMinDto {
   documento: string;
   fullName: string;
 }
+
+export interface CreateUsuarioClienteDto {
+  email: string;
+  documento: string;
+  fullName: string;
+}

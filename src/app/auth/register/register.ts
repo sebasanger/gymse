@@ -6,9 +6,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AuthService } from '../../services/auth.service';
-import { LoginRequestPayload } from '../../interfaces/auth/login-request.payload';
 import { Router } from '@angular/router';
+import { CreateUsuarioClienteDto } from '../../interfaces/user/usuario.interface';
+import { UserService } from '../../services/user.service';
+import { AlertService } from '../../services/alert-service';
 
 @Component({
   selector: 'app-register',
@@ -27,33 +28,38 @@ import { Router } from '@angular/router';
 export class Register {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private AuthService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private router: Router,
+    private alert: AlertService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      fullName: ['', [Validators.required]],
+      documento: ['', [Validators.required]],
     });
   }
-  isLoading = signal(false);
-  loginError = signal<string | null>(null);
-  hidePassword = signal(true);
+  registerError = signal<string | null>(null);
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      const loginRequestPayload: LoginRequestPayload = { email, password };
+      const { email, documento, fullName } = this.loginForm.value;
+      const registerRequestPayload: CreateUsuarioClienteDto = { email, documento, fullName };
 
-      this.isLoading.set(true);
-      this.loginError.set(null);
+      this.registerError.set(null);
 
-      this.AuthService.login(loginRequestPayload).subscribe({
+      this.userService.saveCliente(registerRequestPayload).subscribe({
         next: () => {
-          this.isLoading.set(false);
-          this.router.navigateByUrl('/pages');
+          this.alert.success(
+            'Se registro correctamente',
+            'Se envio un mail al correo que registro para poder poner su contraseña y habilitar su usario, revise su bandeja de entrada.'
+          );
+
+          this.router.navigateByUrl('/auth/login');
         },
         error: (err) => {
-          this.isLoading.set(false);
-          this.loginError.set('Credenciales inválidas.');
-          console.error('Error en login', err);
+          this.alert.errorResponse(err, 'Error al registrarse');
         },
       });
     } else {

@@ -4,6 +4,22 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre completo</mat-label>
+        <input matInput formControlName="fullName" type="text" />
+        <mat-error *ngIf="loginForm.get('fullName')?.hasError('required')">
+          El nombre es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Documento</mat-label>
+        <input matInput formControlName="documento" type="text" />
+        <mat-error *ngIf="loginForm.get('documento')?.hasError('required')">
+          El documento es obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email" placeholder="usuario@correo.com" />
         <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
@@ -12,28 +28,12 @@
         <mat-error *ngIf="loginForm.get('email')?.hasError('email')"> Email no válido </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Contraseña</mat-label>
-        <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
-        <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
-          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-          La contraseña es obligatoria
-        </mat-error>
-        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
-          Mínimo 6 caracteres
-        </mat-error>
-      </mat-form-field>
-
       <button mat-raised-button color="primary full-width" (click)="goLoginPage()">
         Volver al Login
       </button>
-      <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
-        {{ isLoading() ? 'Cargando...' : 'Ingresar' }}
-      </button>
+      <button mat-raised-button color="primary full-width">Registrase</button>
 
-      <p *ngIf="loginError()" class="error">{{ loginError() }}</p>
+      <p *ngIf="registerError()" class="error">{{ registerError() }}</p>
     </form>
   </mat-card>
 </div>
