@@ -55,7 +55,16 @@ export class MembresiasComponent implements OnDestroy, AfterViewInit {
   expandedMembresia: Membresia | null | undefined;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'precio', 'cantidadClases', 'edit', 'delete'];
+  columnsToDisplay = [
+    'id',
+    'nombre',
+    'descripcion',
+    'precio',
+    'cantidadDias',
+    'cantidadClases',
+    'edit',
+    'delete',
+  ];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

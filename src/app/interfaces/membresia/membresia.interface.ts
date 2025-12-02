@@ -5,4 +5,5 @@ export interface Membresia {
   deleted?: boolean;
   descripcion: string;
   cantidadClases: number;
+  cantidadDias: number;
 }

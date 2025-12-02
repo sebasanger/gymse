@@ -19,10 +19,9 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import { AlertService } from '../../services/alert-service';
-import { MembresiaService } from '../../services/membresia-service';
 import { Membresia } from '../../interfaces/membresia/membresia.interface';
 import { Pago } from '../../interfaces/pago/pago.interface';
+import { AlertService } from '../../services/alert-service';
 import { PagoService } from '../../services/pago-service';
 @Component({
   selector: 'app-pagos',
@@ -120,22 +119,27 @@ export class PagosComponent implements OnDestroy, AfterViewInit {
   }
 
   delete(id: number) {
-    this.alert.confirmDelete('Eliminar pago?').then((result) => {
-      if (result.isConfirmed) {
-        this.pagoService.deletePago(id).subscribe({
-          next: () => {
-            this.alert.success('Pago eliminado', 'El pago fue eliminado correctamente.');
-            this.load();
-          },
-          error: (err) => {
-            console.error(err);
-            this.alert.errorResponse('Error', 'No se pudo eliminar el pago.');
-          },
-        });
-      } else {
-        this.alert.warning('Cancelado', 'No se elimino.');
-      }
-    });
+    this.alert
+      .confirm(
+        '¿Confirmar eliminacion de pago?',
+        'Esta accion no se puede revertir, y se quitaran los dias agregados por el pago a la membresia respectiva'
+      )
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.pagoService.deletePago(id).subscribe({
+            next: () => {
+              this.alert.success('Pago eliminado', 'El pago fue eliminado correctamente.');
+              this.load();
+            },
+            error: (err) => {
+              console.error(err);
+              this.alert.errorResponse('Error', 'No se pudo eliminar el pago.');
+            },
+          });
+        } else {
+          this.alert.warning('Cancelado', 'No se elimino.');
+        }
+      });
   }
 
   ngOnDestroy(): void {

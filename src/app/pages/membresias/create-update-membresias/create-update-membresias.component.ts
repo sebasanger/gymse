@@ -43,6 +43,7 @@ export class CreateUpdateMembresiasComponent implements OnInit {
     descripcion: ['', [Validators.required]],
     precio: this.fb.control<number | null>(null, Validators.required),
     cantidadClases: this.fb.control<number | null>(null),
+    cantidadDias: this.fb.control<number | null>(30),
   });
 
   ngOnInit(): void {
@@ -74,6 +75,7 @@ export class CreateUpdateMembresiasComponent implements OnInit {
       descripcion: formValue.descripcion ?? '',
       precio: formValue.precio ?? 0,
       cantidadClases: formValue.cantidadClases ?? 0,
+      cantidadDias: formValue.cantidadDias ?? 30,
     };
 
     const action = this.membresiaId

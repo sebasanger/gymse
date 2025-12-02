@@ -1,13 +1,13 @@
 import { Membresia } from '../membresia/membresia.interface';
-import { Usuario, UsuarioMinDto } from '../user/usuario.interface';
+import { UsuarioMinDto } from '../user/usuario.interface';
 
 export interface MembresiaUsuario {
   id: number;
   usuario: UsuarioMinDto;
-  membresia: Membresia;
   fechaInscripcion: Date;
   fechaVencimiento: Date;
   fechaUltimoPago: Date;
+  cantidadDias: number;
   enabled: boolean;
   deleted: boolean;
   pagos?: any;
