@@ -1,4 +1,5 @@
 export interface UpdateAcountPayload {
-  id: number;
   email: string;
+  fullName: string;
+  documento: string;
 }

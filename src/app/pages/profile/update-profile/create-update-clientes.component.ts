@@ -8,15 +8,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-import {
-  CreateClienteDto,
-  UsuarioConMembresia,
-} from '../../../interfaces/clientes/cliente.interface';
-import { Membresia } from '../../../interfaces/membresia/membresia.interface';
-import { Role } from '../../../interfaces/roles/roles.enum';
+import { UpdateAcountPayload } from '../../../interfaces/user/form-update-acount-payload';
+import { User } from '../../../models/user.model';
 import { AlertService } from '../../../services/alert-service';
-import { ClienteService } from '../../../services/cliente.service';
-import { MembresiaService } from '../../../services/membresia-service';
+import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-update-profile',
   templateUrl: './update-profile.component.html',
@@ -33,15 +28,13 @@ import { MembresiaService } from '../../../services/membresia-service';
 export class UpdateProfileComponent implements OnInit {
   private fb = inject(FormBuilder);
   private alert = inject(AlertService);
-  private readonly membresiaService = inject(MembresiaService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly clienteService = inject(ClienteService);
+  private readonly authService = inject(AuthService);
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   public usuarioId: number | undefined;
-  public usuario: UsuarioConMembresia | undefined;
-  public membresias: Membresia[] | undefined;
+  public usuario: User | undefined;
 
   usuarioForm = this.fb.group({
     fullName: ['', Validators.required],
@@ -51,54 +44,38 @@ export class UpdateProfileComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.usuarioId = params['id'];
-      takeUntil(this.ngUnsubscribe);
-
-      this.membresiaService.findAll().subscribe((res) => {
-        this.membresias = res;
-      });
-
-      if (this.usuarioId && this.usuarioId > 0) {
-        this.clienteService.findById(this.usuarioId).subscribe((res) => {
-          this.usuario = res;
-          this.usuarioForm.patchValue({
-            fullName: res.fullName,
-            email: res.email,
-            documento: res.documento,
-            membresia: res.membresiaActiva?.id ?? undefined,
-          });
+    this.authService.getCurrentUser().subscribe((user) => {
+      if (user) {
+        this.usuario = user;
+        this.usuarioForm.patchValue({
+          fullName: user.fullName,
+          email: user.email,
+          documento: user.documento,
         });
+      } else {
+        this.alert.error('Error al obtener los datos del usuario', 'Intentelo nuevamente');
       }
+      takeUntil(this.ngUnsubscribe);
     });
   }
 
   onSubmit(): void {
     if (this.usuarioForm.invalid) return;
-    const rol: Role = 'CLIENTE';
 
     const formValue = this.usuarioForm.value;
-    const dto: CreateClienteDto = {
+    const updateAcountPayload: UpdateAcountPayload = {
       fullName: formValue.fullName ?? '',
       email: formValue.email ?? '',
       documento: formValue.documento ?? '',
-      membresiaId: formValue.membresia ?? null,
     };
 
-    const action = this.usuarioId
-      ? this.clienteService.updateCliente({
-          id: this.usuarioId,
-          ...dto,
-        })
-      : this.clienteService.saveCliente(dto);
-
-    action.subscribe({
+    this.authService.updateAcount(updateAcountPayload).subscribe({
       next: () => {
-        this.alert.success(this.usuarioId ? 'Usuario actualizado' : 'Usuario guardado');
-        this.router.navigateByUrl('pages/clientes');
+        this.alert.success('Datos actualizados');
+        this.router.navigateByUrl('pages');
       },
       error: (err) => {
-        this.alert.errorResponse(err, this.usuarioId ? 'Error al actualizar' : 'Error al guardar');
+        this.alert.errorResponse(err, 'Error al actualizar');
         console.error(err);
       },
     });

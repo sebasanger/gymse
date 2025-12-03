@@ -4,6 +4,7 @@ export class User {
     public fullName: string,
     public roles: string[],
     public id: number,
+    public documento: string,
     public avatar?: string,
     public createdAt?: Date,
     public lastPasswordChangeAt?: Date,

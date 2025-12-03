@@ -1,7 +1,7 @@
 <form [formGroup]="usuarioForm" novalidate (ngSubmit)="onSubmit()">
   <mat-card class="base-form-card">
     <mat-card-header>
-      <mat-card-title>Cliente</mat-card-title>
+      <mat-card-title>Actualizar datos personales</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <div class="row">
@@ -33,21 +33,6 @@
             } @if (usuarioForm.controls['email'].hasError('email')) {
             <mat-error>Email debe tener un formato valido</mat-error>
             }
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <mat-select placeholder="Membresia" formControlName="membresia">
-              @for (membresia of membresias; track membresia) {
-              <mat-option [value]="membresia.id"
-                >{{ membresia.nombre }} - ${{ membresia.precio }} -
-                {{ membresia.descripcion }}</mat-option
-              >
-              }
-            </mat-select>
           </mat-form-field>
         </div>
       </div>
