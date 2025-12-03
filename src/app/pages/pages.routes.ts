@@ -20,6 +20,7 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { GestionMembresiasComponent } from './membresias/gestion-membresia/gestion-membresias.component';
 import { PagoMembresiaComponent } from './pago/pago-membresia/pago-membresia';
 import { PagosComponent } from './pago/pagos.component';
+import { UpdateProfileComponent } from './profile/update-profile/create-update-clientes.component';
 
 export const PAGES_ROUTES: Routes = [
   {
@@ -114,6 +115,9 @@ export const PAGES_ROUTES: Routes = [
 
       //check in
       { path: 'checkInOut', component: CheckInOutComponent },
+
+      //Porfile
+      { path: 'profile/update', component: UpdateProfileComponent },
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],

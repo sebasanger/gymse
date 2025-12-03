@@ -3,8 +3,8 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { AuthService } from '../../services/auth.service'; // ajustá el path según tu estructura
-
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-user-info',
   imports: [CommonModule, MatIconModule, MatMenuModule, MatButtonModule],
@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service'; // ajustá el path se
 })
 export class UserInfo {
   public readonly authService = inject(AuthService);
+  public readonly router = inject(Router);
   user = this.authService.getUser();
 
   logout(): void {
@@ -20,8 +21,6 @@ export class UserInfo {
   }
 
   goToProfile(): void {
-    // según tu routing, por ejemplo:
-    // this.router.navigate(['/perfil']);
-    console.log('Ir al perfil');
+    this.router.navigate(['/pages/profile/update']);
   }
 }

@@ -1,0 +1,61 @@
+<form [formGroup]="usuarioForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="base-form-card">
+    <mat-card-header>
+      <mat-card-title>Cliente</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre completo" formControlName="fullName" />
+            @if (usuarioForm.controls['fullName'].hasError('required')) {
+            <mat-error>Nombre es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="documento" formControlName="documento" />
+            @if (usuarioForm.controls['documento'].hasError('required')) {
+            <mat-error>Documento es <strong>requerido</strong></mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Email" type="email" formControlName="email" />
+            @if (usuarioForm.controls['email'].hasError('required')) {
+            <mat-error>Email es <strong>requerido</strong></mat-error>
+            } @if (usuarioForm.controls['email'].hasError('email')) {
+            <mat-error>Email debe tener un formato valido</mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-select placeholder="Membresia" formControlName="membresia">
+              @for (membresia of membresias; track membresia) {
+              <mat-option [value]="membresia.id"
+                >{{ membresia.nombre }} - ${{ membresia.precio }} -
+                {{ membresia.descripcion }}</mat-option
+              >
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button matButton="elevated" color="primary" type="submit" [disabled]="usuarioForm.invalid">
+        Guardar
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -1,0 +1,106 @@
+import { Component, inject, OnInit } from '@angular/core';
+
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import {
+  CreateClienteDto,
+  UsuarioConMembresia,
+} from '../../../interfaces/clientes/cliente.interface';
+import { Membresia } from '../../../interfaces/membresia/membresia.interface';
+import { Role } from '../../../interfaces/roles/roles.enum';
+import { AlertService } from '../../../services/alert-service';
+import { ClienteService } from '../../../services/cliente.service';
+import { MembresiaService } from '../../../services/membresia-service';
+@Component({
+  selector: 'app-update-profile',
+  templateUrl: './update-profile.component.html',
+  styleUrl: './update-profile.component.scss',
+  imports: [
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatCardModule,
+    ReactiveFormsModule,
+  ],
+})
+export class UpdateProfileComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private alert = inject(AlertService);
+  private readonly membresiaService = inject(MembresiaService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly clienteService = inject(ClienteService);
+  private ngUnsubscribe: Subject<boolean> = new Subject();
+
+  public usuarioId: number | undefined;
+  public usuario: UsuarioConMembresia | undefined;
+  public membresias: Membresia[] | undefined;
+
+  usuarioForm = this.fb.group({
+    fullName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    documento: ['', Validators.required],
+    membresia: this.fb.control<number | null>(null),
+  });
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.usuarioId = params['id'];
+      takeUntil(this.ngUnsubscribe);
+
+      this.membresiaService.findAll().subscribe((res) => {
+        this.membresias = res;
+      });
+
+      if (this.usuarioId && this.usuarioId > 0) {
+        this.clienteService.findById(this.usuarioId).subscribe((res) => {
+          this.usuario = res;
+          this.usuarioForm.patchValue({
+            fullName: res.fullName,
+            email: res.email,
+            documento: res.documento,
+            membresia: res.membresiaActiva?.id ?? undefined,
+          });
+        });
+      }
+    });
+  }
+
+  onSubmit(): void {
+    if (this.usuarioForm.invalid) return;
+    const rol: Role = 'CLIENTE';
+
+    const formValue = this.usuarioForm.value;
+    const dto: CreateClienteDto = {
+      fullName: formValue.fullName ?? '',
+      email: formValue.email ?? '',
+      documento: formValue.documento ?? '',
+      membresiaId: formValue.membresia ?? null,
+    };
+
+    const action = this.usuarioId
+      ? this.clienteService.updateCliente({
+          id: this.usuarioId,
+          ...dto,
+        })
+      : this.clienteService.saveCliente(dto);
+
+    action.subscribe({
+      next: () => {
+        this.alert.success(this.usuarioId ? 'Usuario actualizado' : 'Usuario guardado');
+        this.router.navigateByUrl('pages/clientes');
+      },
+      error: (err) => {
+        this.alert.errorResponse(err, this.usuarioId ? 'Error al actualizar' : 'Error al guardar');
+        console.error(err);
+      },
+    });
+  }
+}
