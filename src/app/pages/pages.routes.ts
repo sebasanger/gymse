@@ -20,8 +20,8 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { GestionMembresiasComponent } from './membresias/gestion-membresia/gestion-membresias.component';
 import { PagoMembresiaComponent } from './pago/pago-membresia/pago-membresia';
 import { PagosComponent } from './pago/pagos.component';
-import { UpdateProfileComponent } from './profile/update-profile/create-update-clientes.component';
-
+import { UpdateProfileComponent } from './profile/update-profile/update-clientes.component';
+import { UpdatePasswordComponent } from './profile/update-password/update-password.component';
 export const PAGES_ROUTES: Routes = [
   {
     path: '',
@@ -118,6 +118,8 @@ export const PAGES_ROUTES: Routes = [
 
       //Porfile
       { path: 'profile/update', component: UpdateProfileComponent },
+      //password
+      { path: 'password/update', component: UpdatePasswordComponent },
 
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],

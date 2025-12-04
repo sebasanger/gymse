@@ -21,6 +21,7 @@ import { GetUser } from '../interfaces/user/get-user.interface';
 import { User } from '../models/user.model';
 import { LOCAL_STORAGE } from '../providers/localstorage';
 import { RefreshTokenPayload } from '../interfaces/auth/refresh-token.payload';
+import { UpdatePasswordPayolad } from '../interfaces/user/update-password-payload';
 
 const base_url = environment.base_url;
 const client_url = environment.client_url;
@@ -133,6 +134,10 @@ export class AuthService {
 
   updateAcount(acountPayload: UpdateAcountPayload) {
     return this.httpClient.put<GetUser>(`${base_url}/user/update-acount`, acountPayload);
+  }
+
+  updatePassword(updatePasswordPayolad: UpdatePasswordPayolad) {
+    return this.httpClient.put<GetUser>(`${base_url}/user/changePassword`, updatePasswordPayolad);
   }
 
   checkUserHasRole(rol: Role): Observable<boolean> {

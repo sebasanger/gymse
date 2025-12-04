@@ -23,4 +23,8 @@ export class UserInfo {
   goToProfile(): void {
     this.router.navigate(['/pages/profile/update']);
   }
+
+  goToChangePassword(): void {
+    this.router.navigate(['/pages/password/update']);
+  }
 }

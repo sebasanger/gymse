@@ -40,7 +40,6 @@ export class UpdateProfileComponent implements OnInit {
     fullName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     documento: ['', Validators.required],
-    membresia: this.fb.control<number | null>(null),
   });
 
   ngOnInit(): void {

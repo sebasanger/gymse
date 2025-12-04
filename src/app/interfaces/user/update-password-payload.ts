@@ -1,5 +1,5 @@
 export interface UpdatePasswordPayolad {
-  id: number;
+  oldPassword: string;
   password: string;
   password2: string;
 }
