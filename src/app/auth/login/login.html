@@ -26,11 +26,11 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary full-width" (click)="goRegisterPage()">
-        Registrarse
-      </button>
       <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
         {{ isLoading() ? 'Cargando...' : 'Ingresar' }}
+      </button>
+      <button mat-raised-button color="primary full-width" (click)="goRegisterPage()">
+        Registrarse
       </button>
 
       <p *ngIf="loginError()" class="error">{{ loginError() }}</p>

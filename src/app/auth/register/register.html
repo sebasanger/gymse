@@ -28,11 +28,10 @@
         <mat-error *ngIf="loginForm.get('email')?.hasError('email')"> Email no válido </mat-error>
       </mat-form-field>
 
+      <button mat-raised-button color="primary full-width">Registrase</button>
       <button mat-raised-button color="primary full-width" (click)="goLoginPage()">
         Volver al Login
       </button>
-      <button mat-raised-button color="primary full-width">Registrase</button>
-
       <p *ngIf="registerError()" class="error">{{ registerError() }}</p>
     </form>
   </mat-card>
