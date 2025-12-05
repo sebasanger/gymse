@@ -22,6 +22,7 @@ import { User } from '../models/user.model';
 import { LOCAL_STORAGE } from '../providers/localstorage';
 import { RefreshTokenPayload } from '../interfaces/auth/refresh-token.payload';
 import { UpdatePasswordPayolad } from '../interfaces/user/update-password-payload';
+import { RecoverPasswordPayolad } from '../interfaces/auth/recover-password-payload';
 
 const base_url = environment.base_url;
 const client_url = environment.client_url;
@@ -138,6 +139,10 @@ export class AuthService {
 
   updatePassword(updatePasswordPayolad: UpdatePasswordPayolad) {
     return this.httpClient.put<GetUser>(`${base_url}/user/changePassword`, updatePasswordPayolad);
+  }
+
+  resetPassword(resetPasswordPayolad: RecoverPasswordPayolad) {
+    return this.httpClient.post<GetUser>(`${base_url}/reset-password`, resetPasswordPayolad);
   }
 
   checkUserHasRole(rol: Role): Observable<boolean> {

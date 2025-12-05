@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,12 +7,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../services/alert-service';
 import { RecoverPasswordPayolad } from '../../interfaces/auth/recover-password-payload';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-recover-password',
+  selector: 'app-reset-password',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -22,12 +23,16 @@ import { RecoverPasswordPayolad } from '../../interfaces/auth/recover-password-p
     MatIconModule,
     MatFormFieldModule,
   ],
-  templateUrl: './recoverPasswordForm.html',
-  styleUrl: './recoverPasswordForm.scss',
+  templateUrl: './resetPasswordForm.html',
+  styleUrl: './resetPasswordForm.scss',
 })
-export class RecoverPassword {
+export class ResetPassword implements OnInit, OnDestroy {
   loginForm: FormGroup;
 
+  private readonly destroy$ = new Subject<void>();
+  private readonly route = inject(ActivatedRoute);
+
+  private ngUnsubscribe: Subject<boolean> = new Subject();
   constructor(
     private fb: FormBuilder,
     private AuthService: AuthService,
@@ -38,8 +43,16 @@ export class RecoverPassword {
       email: ['', [Validators.required, Validators.email]],
     });
   }
+  token: string = '';
   isLoading = signal(false);
   loginError = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      this.token = params['tokenuid'];
+      takeUntil(this.ngUnsubscribe);
+    });
+  }
 
   onSubmit() {
     if (this.loginForm.valid) {
@@ -66,5 +79,10 @@ export class RecoverPassword {
 
   goToLoginPage() {
     this.router.navigateByUrl('/auth/login');
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
