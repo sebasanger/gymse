@@ -23,6 +23,7 @@ import { LOCAL_STORAGE } from '../providers/localstorage';
 import { RefreshTokenPayload } from '../interfaces/auth/refresh-token.payload';
 import { UpdatePasswordPayolad } from '../interfaces/user/update-password-payload';
 import { RecoverPasswordPayolad } from '../interfaces/auth/recover-password-payload';
+import { ResetPasswordPayolad } from '../interfaces/auth/reset-password-payload';
 
 const base_url = environment.base_url;
 const client_url = environment.client_url;
@@ -141,8 +142,15 @@ export class AuthService {
     return this.httpClient.put<GetUser>(`${base_url}/user/changePassword`, updatePasswordPayolad);
   }
 
-  resetPassword(resetPasswordPayolad: RecoverPasswordPayolad) {
-    return this.httpClient.post<GetUser>(`${base_url}/reset-password`, resetPasswordPayolad);
+  recoverPassword(recoverPasswordPayolad: RecoverPasswordPayolad) {
+    return this.httpClient.post<GetUser>(`${base_url}/reset-password`, recoverPasswordPayolad);
+  }
+
+  resetPassword(resetPasswordPayolad: ResetPasswordPayolad) {
+    return this.httpClient.post<GetUser>(
+      `${base_url}/reset-password/change-password`,
+      resetPasswordPayolad
+    );
   }
 
   checkUserHasRole(rol: Role): Observable<boolean> {

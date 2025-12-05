@@ -42,7 +42,7 @@ export class UpdatePasswordComponent {
   passwordForm = this.fb.group(
     {
       oldPassword: ['', Validators.required],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       password2: ['', Validators.required],
     },
     {

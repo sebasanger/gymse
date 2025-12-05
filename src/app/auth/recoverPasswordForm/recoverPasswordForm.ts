@@ -26,7 +26,7 @@ import { RecoverPasswordPayolad } from '../../interfaces/auth/recover-password-p
   styleUrl: './recoverPasswordForm.scss',
 })
 export class RecoverPassword {
-  loginForm: FormGroup;
+  recoverPasswordForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +34,7 @@ export class RecoverPassword {
     private router: Router,
     private alert: AlertService
   ) {
-    this.loginForm = this.fb.group({
+    this.recoverPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
@@ -42,15 +42,18 @@ export class RecoverPassword {
   loginError = signal<string | null>(null);
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email } = this.loginForm.value;
+    if (this.recoverPasswordForm.valid) {
+      const { email } = this.recoverPasswordForm.value;
       const resetPasswordPayload: RecoverPasswordPayolad = { email };
 
       this.isLoading.set(true);
 
-      this.AuthService.resetPassword(resetPasswordPayload).subscribe({
+      this.AuthService.recoverPassword(resetPasswordPayload).subscribe({
         next: () => {
-          this.alert.success('Mail enviado para recuperar su contraseña, revise su correo');
+          this.alert.success(
+            'Mail enviado',
+            'Para recuperar su contraseña, revise su correo y siga las instrucciones'
+          );
           this.isLoading.set(false);
         },
         error: (err) => {
@@ -60,7 +63,7 @@ export class RecoverPassword {
         },
       });
     } else {
-      this.loginForm.markAllAsTouched();
+      this.recoverPasswordForm.markAllAsTouched();
     }
   }
 

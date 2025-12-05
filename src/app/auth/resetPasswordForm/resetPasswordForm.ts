@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  MinLengthValidator,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,6 +17,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from '../../services/alert-service';
 import { RecoverPasswordPayolad } from '../../interfaces/auth/recover-password-payload';
 import { Subject, takeUntil } from 'rxjs';
+import { passwordMatchValidator } from '../../pages/profile/update-password/update-password.component';
+import { ResetPasswordPayolad } from '../../interfaces/auth/reset-password-payload';
 
 @Component({
   selector: 'app-reset-password',
@@ -27,7 +35,7 @@ import { Subject, takeUntil } from 'rxjs';
   styleUrl: './resetPasswordForm.scss',
 })
 export class ResetPassword implements OnInit, OnDestroy {
-  loginForm: FormGroup;
+  resetPasswordForm: FormGroup;
 
   private readonly destroy$ = new Subject<void>();
   private readonly route = inject(ActivatedRoute);
@@ -39,9 +47,15 @@ export class ResetPassword implements OnInit, OnDestroy {
     private router: Router,
     private alert: AlertService
   ) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-    });
+    this.resetPasswordForm = this.fb.group(
+      {
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        password2: ['', [Validators.required]],
+      },
+      {
+        validators: passwordMatchValidator,
+      }
+    );
   }
   token: string = '';
   isLoading = signal(false);
@@ -55,15 +69,16 @@ export class ResetPassword implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email } = this.loginForm.value;
-      const resetPasswordPayload: RecoverPasswordPayolad = { email };
+    if (this.resetPasswordForm.valid) {
+      const { password, password2 } = this.resetPasswordForm.value;
+      const resetPasswordPayolad: ResetPasswordPayolad = { password, password2, token: this.token };
 
       this.isLoading.set(true);
 
-      this.AuthService.resetPassword(resetPasswordPayload).subscribe({
+      this.AuthService.resetPassword(resetPasswordPayolad).subscribe({
         next: () => {
-          this.alert.success('Mail enviado para recuperar su contraseña, revise su correo');
+          this.alert.success('Contraseña cambiada', 'Intente ingresar nuevamente');
+          this.goToLoginPage();
           this.isLoading.set(false);
         },
         error: (err) => {
@@ -73,7 +88,7 @@ export class ResetPassword implements OnInit, OnDestroy {
         },
       });
     } else {
-      this.loginForm.markAllAsTouched();
+      this.resetPasswordForm.markAllAsTouched();
     }
   }
 
