@@ -1,0 +1,38 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <h2>Activar cuenta</h2>
+
+    <form [formGroup]="validateAcountForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <input placeholder="Contraseña" matInput formControlName="password" type="password" />
+        <mat-error *ngIf="validateAcountForm.get('password')?.hasError('required')">
+          La contraseña es obligatoria
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <input
+          placeholder="Repetir contraseña"
+          matInput
+          formControlName="password2"
+          type="password"
+        />
+
+        @if (validateAcountForm.controls['password2'].hasError('required')) {
+        <mat-error>La contraseña nueva es <strong>requerida</strong></mat-error>
+        }@if (validateAcountForm.hasError('passwordsMismatch') &&
+        validateAcountForm.get('password2')?.touched) {
+
+        <mat-error>La contraseñas no coinciden</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
+        {{ isLoading() ? 'Cargando...' : 'Enviar' }}
+      </button>
+      <button mat-raised-button color="primary full-width" (click)="goToLoginPage()">
+        Ir al login
+      </button>
+    </form>
+  </mat-card>
+</div>

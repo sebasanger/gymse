@@ -4,6 +4,7 @@ import { RecoverPassword } from './auth/recoverPasswordForm/recoverPasswordForm'
 import { Register } from './auth/register/register';
 import { authGuard } from './guards/auth-guard';
 import { ResetPassword } from './auth/resetPasswordForm/resetPasswordForm';
+import { ValidateAcount } from './auth/validateAcount/validateAcount';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,10 @@ export const routes: Routes = [
   {
     path: 'auth/reset-password/:tokenuid',
     component: ResetPassword,
+  },
+  {
+    path: 'auth/activate-acount/:tokenuid',
+    component: ValidateAcount,
   },
   {
     path: 'pages',

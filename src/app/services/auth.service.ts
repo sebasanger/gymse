@@ -24,6 +24,7 @@ import { RefreshTokenPayload } from '../interfaces/auth/refresh-token.payload';
 import { UpdatePasswordPayolad } from '../interfaces/user/update-password-payload';
 import { RecoverPasswordPayolad } from '../interfaces/auth/recover-password-payload';
 import { ResetPasswordPayolad } from '../interfaces/auth/reset-password-payload';
+import { ValidateAcountPayload } from '../interfaces/auth/validate-acount-payload';
 
 const base_url = environment.base_url;
 const client_url = environment.client_url;
@@ -147,10 +148,14 @@ export class AuthService {
   }
 
   resetPassword(resetPasswordPayolad: ResetPasswordPayolad) {
-    return this.httpClient.post<GetUser>(
+    return this.httpClient.post<void>(
       `${base_url}/reset-password/change-password`,
       resetPasswordPayolad
     );
+  }
+
+  validateAcount(validateAcountPayload: ValidateAcountPayload) {
+    return this.httpClient.post<void>(`${base_url}/auth/validate-acount`, validateAcountPayload);
   }
 
   checkUserHasRole(rol: Role): Observable<boolean> {
