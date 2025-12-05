@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import { Login } from './auth/login/login';
-import { authGuard } from './guards/auth-guard';
+import { RecoverPassword } from './auth/recoverPasswordForm/recoverPasswordForm';
 import { Register } from './auth/register/register';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,10 @@ export const routes: Routes = [
   {
     path: 'auth/register',
     component: Register,
+  },
+  {
+    path: 'auth/recoverPassword',
+    component: RecoverPassword,
   },
   {
     path: 'pages',

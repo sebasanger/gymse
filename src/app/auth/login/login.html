@@ -25,7 +25,9 @@
           Mínimo 6 caracteres
         </mat-error>
       </mat-form-field>
-
+      <div class="recoverPasswordContainer">
+        <a (click)="goToRecoverPassword()">Recuperar contraseña</a>
+      </div>
       <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
         {{ isLoading() ? 'Cargando...' : 'Ingresar' }}
       </button>

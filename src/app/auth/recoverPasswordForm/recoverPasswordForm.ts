@@ -9,9 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequestPayload } from '../../interfaces/auth/login-request.payload';
 import { Router } from '@angular/router';
+import { AlertService } from '../../services/alert-service';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-recover-password',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -21,21 +22,24 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.scss',
+  templateUrl: './recoverPasswordForm.html',
+  styleUrl: './recoverPasswordForm.scss',
 })
-export class Login {
+export class RecoverPassword {
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private AuthService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private AuthService: AuthService,
+    private router: Router,
+    private alert: AlertService
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
   isLoading = signal(false);
   loginError = signal<string | null>(null);
-  hidePassword = signal(true);
 
   onSubmit() {
     if (this.loginForm.valid) {
@@ -43,17 +47,16 @@ export class Login {
       const loginRequestPayload: LoginRequestPayload = { email, password };
 
       this.isLoading.set(true);
-      this.loginError.set(null);
 
       this.AuthService.login(loginRequestPayload).subscribe({
         next: () => {
+          this.alert.success('Mail enviado para recuperar su contraseña, revise su correo');
           this.isLoading.set(false);
-          this.router.navigateByUrl('/pages');
         },
         error: (err) => {
+          this.alert.errorResponse(err);
           this.isLoading.set(false);
-          this.loginError.set('Credenciales inválidas.');
-          console.error('Error en login', err);
+          console.error('Error', err);
         },
       });
     } else {
@@ -61,11 +64,7 @@ export class Login {
     }
   }
 
-  goRegisterPage() {
-    this.router.navigateByUrl('/auth/register');
-  }
-
-  goToRecoverPassword() {
-    this.router.navigateByUrl('/auth/recoverPassword');
+  goToLoginPage() {
+    this.router.navigateByUrl('/auth/login');
   }
 }
