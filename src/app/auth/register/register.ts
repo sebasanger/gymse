@@ -26,7 +26,7 @@ import { AlertService } from '../../services/alert-service';
   styleUrl: './register.scss',
 })
 export class Register {
-  loginForm: FormGroup;
+  regiterForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +34,7 @@ export class Register {
     private router: Router,
     private alert: AlertService
   ) {
-    this.loginForm = this.fb.group({
+    this.regiterForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       fullName: ['', [Validators.required]],
       documento: ['', [Validators.required]],
@@ -43,8 +43,8 @@ export class Register {
   registerError = signal<string | null>(null);
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { email, documento, fullName } = this.loginForm.value;
+    if (this.regiterForm.valid) {
+      const { email, documento, fullName } = this.regiterForm.value;
       const registerRequestPayload: CreateUsuarioClienteDto = { email, documento, fullName };
 
       this.registerError.set(null);
@@ -63,7 +63,7 @@ export class Register {
         },
       });
     } else {
-      this.loginForm.markAllAsTouched();
+      this.regiterForm.markAllAsTouched();
     }
   }
 

@@ -2,11 +2,11 @@
   <mat-card class="login-card">
     <h2>Registrarse</h2>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="regiterForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Nombre completo</mat-label>
         <input matInput formControlName="fullName" type="text" />
-        <mat-error *ngIf="loginForm.get('fullName')?.hasError('required')">
+        <mat-error *ngIf="regiterForm.get('fullName')?.hasError('required')">
           El nombre es obligatorio
         </mat-error>
       </mat-form-field>
@@ -14,7 +14,7 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Documento</mat-label>
         <input matInput formControlName="documento" type="text" />
-        <mat-error *ngIf="loginForm.get('documento')?.hasError('required')">
+        <mat-error *ngIf="regiterForm.get('documento')?.hasError('required')">
           El documento es obligatorio
         </mat-error>
       </mat-form-field>
@@ -22,13 +22,15 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email" placeholder="usuario@correo.com" />
-        <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+        <mat-error *ngIf="regiterForm.get('email')?.hasError('required')">
           El email es obligatorio
         </mat-error>
-        <mat-error *ngIf="loginForm.get('email')?.hasError('email')"> Email no válido </mat-error>
+        <mat-error *ngIf="regiterForm.get('email')?.hasError('email')"> Email no válido </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary full-width">Registrase</button>
+      <button mat-raised-button color="primary full-width" [disabled]="regiterForm.invalid">
+        Registrase
+      </button>
       <button mat-raised-button color="primary full-width" (click)="goLoginPage()">
         Volver al Login
       </button>

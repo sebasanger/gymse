@@ -42,7 +42,7 @@ export class ValidateAcount implements OnInit, OnDestroy {
   ) {
     this.validateAcountForm = this.fb.group(
       {
-        password: ['', [Validators.required, Validators.minLength(8)]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
         password2: ['', [Validators.required]],
       },
       {

@@ -27,7 +27,11 @@
         }
       </mat-form-field>
 
-      <button mat-raised-button color="primary full-width" [disabled]="isLoading()">
+      <button
+        mat-raised-button
+        color="primary full-width"
+        [disabled]="isLoading() || validateAcountForm.invalid"
+      >
         {{ isLoading() ? 'Cargando...' : 'Enviar' }}
       </button>
       <button mat-raised-button color="primary full-width" (click)="goToLoginPage()">

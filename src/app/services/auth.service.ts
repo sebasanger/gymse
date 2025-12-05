@@ -148,14 +148,14 @@ export class AuthService {
   }
 
   resetPassword(resetPasswordPayolad: ResetPasswordPayolad) {
-    return this.httpClient.post<void>(
+    return this.httpClient.post<boolean>(
       `${base_url}/reset-password/change-password`,
       resetPasswordPayolad
     );
   }
 
   validateAcount(validateAcountPayload: ValidateAcountPayload) {
-    return this.httpClient.post<void>(`${base_url}/auth/validate-acount`, validateAcountPayload);
+    return this.httpClient.put<GetUser>(`${base_url}/auth/validate-acount`, validateAcountPayload);
   }
 
   checkUserHasRole(rol: Role): Observable<boolean> {
