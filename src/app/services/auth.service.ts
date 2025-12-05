@@ -89,11 +89,7 @@ export class AuthService {
   }
 
   resendEmailVerification(resendEmailVerification: ResendEmailVerification) {
-    resendEmailVerification.urlRedirect = client_url + '/auth/activate-acount?tokenuid=';
-    return this.httpClient.put<LoginResponse>(
-      base_url + '/auth/resend-email',
-      resendEmailVerification
-    );
+    return this.httpClient.put<void>(base_url + '/auth/resend-email', resendEmailVerification);
   }
 
   setUserDataOnStorageAndRemoveOld(data: LoginResponse) {

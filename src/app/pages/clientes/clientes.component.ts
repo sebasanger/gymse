@@ -27,6 +27,7 @@ import { ClienteService } from '../../services/cliente.service';
 import { PagoService } from '../../services/pago-service';
 import { UserService } from '../../services/user.service';
 import { DetallesMembresiaPagoDialogComponent } from './detalles-membresia-pago-dialog/detalles-membresia-pago-dialog';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',
@@ -53,8 +54,8 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
   dataSource = new MatTableDataSource<UsuarioConMembresia>();
   usuarios: UsuarioConMembresia[] = [];
   private readonly alert = inject(AlertService);
+  private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
-  private readonly pagoService = inject(PagoService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
@@ -208,6 +209,25 @@ export class ClientesComponent implements OnDestroy, AfterViewInit {
       maxWidth: '900px',
       panelClass: 'membresia-detalle-dialog',
       data: membresiaUsuario,
+    });
+  }
+
+  resendEmailValidation(id: number) {
+    this.alert.confirmRecover('Reenviar mail de activacion de al cliente?').then((result) => {
+      if (result.isConfirmed) {
+        this.authService.resendEmailVerification({ id }).subscribe({
+          next: () => {
+            this.alert.success('Mail enviado');
+            this.load();
+          },
+          error: (err) => {
+            console.error(err);
+            this.alert.errorResponse(err, 'No se pudo enviar el mail al cliente');
+          },
+        });
+      } else {
+        this.alert.warning('Cancelado', 'No se habilito.');
+      }
     });
   }
 }
