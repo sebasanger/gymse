@@ -22,6 +22,8 @@ import {
   ProgresoRutinaConProgreso,
 } from '../../../interfaces/progresoRutina/progreso-rutina..interface';
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
+import { Rutina } from '../../../interfaces/rutina/rutina.interface';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-progresos-rutinas',
@@ -39,6 +41,7 @@ import { ProgresoRutinaService } from '../../../services/progreso-rutina-service
     MatInputModule,
     MatTooltipModule,
     MatCardModule,
+    MatSelectModule,
   ],
 })
 export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
@@ -49,6 +52,8 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
   dataSource = new MatTableDataSource<ProgresoRutinaConProgreso>();
   progresos: ProgresoRutinaConProgreso[] = [];
   expandedProgreso: ProgresoRutinaConProgreso | null = null;
+
+  rutinas: Set<Rutina> = new Set<Rutina>();
 
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
@@ -74,6 +79,14 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
       .getAllOwnProgressRoutine()
       .pipe(takeUntil(this.destroy$))
       .subscribe((progresos) => {
+        progresos.forEach((progreso) => {
+          const exists = [...this.rutinas].some((r) => r.id === progreso.rutina.id);
+
+          if (!exists) {
+            this.rutinas.add(progreso.rutina);
+          }
+        });
+
         this.progresos = progresos;
         console.log(this.progresos);
 
@@ -82,6 +95,14 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
         this.customFilters();
         this.cdr.detectChanges();
       });
+  }
+
+  applyFilterByRutina(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   isExpanded(element: ProgresoRutinaConProgreso) {

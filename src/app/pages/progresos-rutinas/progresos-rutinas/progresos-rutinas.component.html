@@ -1,4 +1,14 @@
 <div class="table-top">
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por rutina</mat-label>
+    <mat-select (selectionChange)="applyFilterByRutina($event.value)">
+      <mat-option value="">Todas</mat-option>
+      <mat-option *ngFor="let rutina of rutinas" [value]="rutina.nombre">
+        {{ rutina.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <mat-form-field>
     <mat-label>Filtro</mat-label>
     <input matInput (keyup)="applyFilter($event)" #input />
