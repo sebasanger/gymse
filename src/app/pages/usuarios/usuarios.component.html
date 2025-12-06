@@ -37,6 +37,23 @@
       <td mat-cell *matCellDef="let row">{{ row.email }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="validado">
+      <th mat-header-cell *matHeaderCellDef>Validado</th>
+      <td mat-cell *matCellDef="let row">
+        @if (row.enabled) {
+        <mat-icon>check</mat-icon>
+        }@else {
+        <button
+          matTooltip="Reenviar mail de confirmacion al cliente"
+          mat-icon-button
+          (click)="resendEmailValidation(row.id)"
+        >
+          <mat-icon>outgoing_mail</mat-icon>
+        </button>
+        }
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef>Editar</th>
       <td mat-cell *matCellDef="let row">

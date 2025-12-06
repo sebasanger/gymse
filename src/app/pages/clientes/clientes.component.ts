@@ -23,11 +23,10 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { UsuarioConMembresia } from '../../interfaces/clientes/cliente.interface';
 import { AlertService } from '../../services/alert-service';
+import { AuthService } from '../../services/auth.service';
 import { ClienteService } from '../../services/cliente.service';
-import { PagoService } from '../../services/pago-service';
 import { UserService } from '../../services/user.service';
 import { DetallesMembresiaPagoDialogComponent } from './detalles-membresia-pago-dialog/detalles-membresia-pago-dialog';
-import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-clientes',
   templateUrl: './clientes.component.html',

@@ -24,6 +24,7 @@ import { Usuario } from '../../interfaces/user/usuario.interface';
 import { AlertService } from '../../services/alert-service';
 import { UserService } from '../../services/user.service';
 import { Role, ROLES, ROLES_PERSONAL } from '../../interfaces/roles/roles.enum';
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
@@ -53,12 +54,13 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
   private readonly router = inject(Router);
   private readonly destroy$ = new Subject<void>();
   private readonly usuarioService = inject(UserService);
+  private readonly authService = inject(AuthService);
   public membresias: Map<number, string> = new Map();
   public includedDeleted: boolean = true;
   public roles: Role[] = ROLES_PERSONAL;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'fullName', 'email', 'edit', 'delete'];
+  displayedColumns = ['id', 'fullName', 'email', 'validado', 'edit', 'delete'];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -171,5 +173,24 @@ export class UsuariosComponent implements OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  resendEmailValidation(id: number) {
+    this.alert.confirmRecover('Reenviar mail de activacion de al cliente?').then((result) => {
+      if (result.isConfirmed) {
+        this.authService.resendEmailVerification({ id }).subscribe({
+          next: () => {
+            this.alert.success('Mail enviado');
+            this.load();
+          },
+          error: (err) => {
+            console.error(err);
+            this.alert.errorResponse(err, 'No se pudo enviar el mail al cliente');
+          },
+        });
+      } else {
+        this.alert.warning('Cancelado', 'No se habilito.');
+      }
+    });
   }
 }
