@@ -24,6 +24,7 @@ import {
 import { ProgresoRutinaService } from '../../../services/progreso-rutina-service';
 import { Rutina } from '../../../interfaces/rutina/rutina.interface';
 import { MatSelectModule } from '@angular/material/select';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-progresos-rutinas',
@@ -55,11 +56,21 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
 
   rutinas: Set<Rutina> = new Set<Rutina>();
 
+  private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
   private readonly progresoRutinaService = inject(ProgresoRutinaService);
 
-  columnsToDisplay = ['id', 'rutina', 'entrenamiento', 'fecha', 'checkIn', 'checkOut', 'duracion'];
+  columnsToDisplay = [
+    'id',
+    'rutina',
+    'entrenamiento',
+    'fecha',
+    'checkIn',
+    'checkOut',
+    'duracion',
+    'detalles',
+  ];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
   ngAfterViewInit(): void {
@@ -138,5 +149,9 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  goDetails(rutinaId: number) {
+    this.router.navigateByUrl('/pages/progresos/rutinas/' + rutinaId);
   }
 }

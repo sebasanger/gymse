@@ -59,6 +59,16 @@
       <td mat-cell *matCellDef="let row">{{ getDuracionMinutes(row) ?? '-' }}</td>
     </ng-container>
 
+    <!-- Duracion -->
+    <ng-container matColumnDef="detalles">
+      <th mat-header-cell *matHeaderCellDef>Ver detalles</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button class="edit-button" (click)="goDetails(row.id)">
+          <mat-icon>details</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
     <!-- Expand button -->
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef></th>

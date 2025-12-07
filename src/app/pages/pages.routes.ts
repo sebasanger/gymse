@@ -22,6 +22,7 @@ import { PagoMembresiaComponent } from './pago/pago-membresia/pago-membresia';
 import { PagosComponent } from './pago/pagos.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-clientes.component';
 import { UpdatePasswordComponent } from './profile/update-password/update-password.component';
+import { GraficoProgreso } from './progresos-rutinas/grafico-progreso/grafico-progreso';
 export const PAGES_ROUTES: Routes = [
   {
     path: '',
@@ -86,6 +87,8 @@ export const PAGES_ROUTES: Routes = [
 
       //progresos rutinas
       { path: 'progresos/rutinas', component: ProgresosRutinasComponent },
+
+      { path: 'progresos/rutinas/:id', component: GraficoProgreso },
 
       //membresias
       { path: 'membresias', component: MembresiasComponent },
