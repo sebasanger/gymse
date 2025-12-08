@@ -1,8 +1,17 @@
-<div style="text-align: center">
+<div class="grafica" *ngFor="let g of graficos">
+  <h2 style="color: black">{{ g.nombre }}</h2>
+
   <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [xaxis]="chartOptions.xaxis"
-    [title]="chartOptions.title"
+    [series]="g.options.series!"
+    [chart]="g.options.chart!"
+    [xaxis]="g.options.xaxis!"
+    [yaxis]="g.options.yaxis!"
+    [stroke]="g.options.stroke!"
+    [dataLabels]="g.options.dataLabels!"
+    [legend]="g.options.legend!"
+    [tooltip]="g.options.tooltip!"
+    [title]="g.options.title!"
   ></apx-chart>
+
+  <hr />
 </div>
