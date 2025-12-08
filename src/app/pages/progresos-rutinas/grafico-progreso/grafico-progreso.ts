@@ -1,65 +1,46 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+
 import {
   ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
-  ApexStroke,
   ApexTitleSubtitle,
+  ApexXAxis,
+  ChartComponent,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  title: ApexTitleSubtitle;
+};
+
 @Component({
-  selector: 'app-grafico-progreso',
-  imports: [NgApexchartsModule],
+  selector: 'app-root',
   templateUrl: './grafico-progreso.html',
-  styleUrl: './grafico-progreso.scss',
+  imports: [NgApexchartsModule],
 })
 export class GraficoProgreso {
-  @Input() nombreEjercicio: string = '';
-  @Input() seriesRealizadas: { repeticiones: number; peso: number }[] = [];
-
-  // Opciones del grafico
-  public chartSeries: ApexAxisChartSeries = [];
-  public chartOptions: ApexChart = {
-    type: 'line',
-    height: 350,
-  };
-  public xAxis: ApexXAxis = {
-    categories: [],
-  };
-  public stroke: ApexStroke = {
-    curve: 'smooth',
-  };
-  public title: ApexTitleSubtitle = {
-    text: '',
-  };
-
-  ngOnInit() {
-    this.cargarDatos();
-  }
-
-  ngOnChanges() {
-    this.cargarDatos();
-  }
-
-  private cargarDatos() {
-    if (!this.seriesRealizadas || this.seriesRealizadas.length === 0) return;
-
-    const pesos = this.seriesRealizadas.map((s) => s.peso);
-    const categorias = this.seriesRealizadas.map((_, i) => `Serie ${i + 1}`);
-
-    this.chartSeries = [
+  @ViewChild('chart') chart!: ChartComponent;
+  public chartOptions: Partial<ChartOptions> = {
+    series: [
       {
-        name: 'Peso (kg)',
-        data: pesos,
+        name: 'My-series',
+        data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
       },
-    ];
+    ],
+    chart: {
+      height: 350,
+      type: 'bar',
+    },
+    title: {
+      text: 'Prgoresos entrenamiento',
+    },
+    xaxis: {
+      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    },
+  };
 
-    this.xAxis = {
-      categories: categorias,
-    };
-
-    this.title = {
-      text: `${this.nombreEjercicio} — Peso por serie`,
-    };
-  }
+  constructor() {}
 }
