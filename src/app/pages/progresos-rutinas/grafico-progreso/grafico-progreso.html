@@ -1,17 +1,15 @@
-<div class="grafica" *ngFor="let g of graficos">
-  <h2 style="color: black">{{ g.nombre }}</h2>
+<div class="grafica" *ngFor="let ejercicio of entrenamientos" style="margin-bottom: 50px">
+  <h2 style="text-transform: capitalize; margin-bottom: 10px">
+    {{ ejercicio.nombreEjercicio }}
+  </h2>
 
   <apx-chart
-    [series]="g.options.series!"
-    [chart]="g.options.chart!"
-    [xaxis]="g.options.xaxis!"
-    [yaxis]="g.options.yaxis!"
-    [stroke]="g.options.stroke!"
-    [dataLabels]="g.options.dataLabels!"
-    [legend]="g.options.legend!"
-    [tooltip]="g.options.tooltip!"
-    [title]="g.options.title!"
+    [series]="chartOptionsPorEjercicio[ejercicio.idEjercicio].series"
+    [chart]="chartOptionsPorEjercicio[ejercicio.idEjercicio].chart"
+    [xaxis]="chartOptionsPorEjercicio[ejercicio.idEjercicio].xaxis"
+    [yaxis]="chartOptionsPorEjercicio[ejercicio.idEjercicio].yaxis"
+    [stroke]="chartOptionsPorEjercicio[ejercicio.idEjercicio].stroke"
+    [title]="chartOptionsPorEjercicio[ejercicio.idEjercicio].title"
+    [dataLabels]="chartOptionsPorEjercicio[ejercicio.idEjercicio].dataLabels"
   ></apx-chart>
-
-  <hr />
 </div>
