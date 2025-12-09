@@ -1,8 +1,4 @@
 <div class="grafica" *ngFor="let ejercicio of entrenamientos" style="margin-bottom: 50px">
-  <h2 style="text-transform: capitalize; margin-bottom: 10px">
-    {{ ejercicio.nombreEjercicio }}
-  </h2>
-
   <apx-chart
     [series]="chartOptionsPorEjercicio[ejercicio.idEjercicio].series"
     [chart]="chartOptionsPorEjercicio[ejercicio.idEjercicio].chart"
@@ -11,5 +7,7 @@
     [stroke]="chartOptionsPorEjercicio[ejercicio.idEjercicio].stroke"
     [title]="chartOptionsPorEjercicio[ejercicio.idEjercicio].title"
     [dataLabels]="chartOptionsPorEjercicio[ejercicio.idEjercicio].dataLabels"
+    [plotOptions]="chartOptionsPorEjercicio[ejercicio.idEjercicio].plotOptions"
+    [tooltip]="chartOptionsPorEjercicio[ejercicio.idEjercicio].tooltip"
   ></apx-chart>
 </div>
