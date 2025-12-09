@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ApexOptions, ApexYAxis, NgApexchartsModule } from 'ng-apexcharts';
 
+// --- INTERFACES ---
 interface SerieRealizada {
   repeticiones: number;
   peso: number;
@@ -17,6 +18,12 @@ interface Entrenamiento {
   idEjercicio: number;
   progresos: Progreso[];
   categoriasX?: string[];
+}
+
+interface DataSeparada {
+  seriesPeso: any[];
+  seriesReps: any[];
+  categorias: string[];
 }
 
 @Component({
@@ -67,10 +74,11 @@ export class GraficoProgreso {
         {
           fecha: '2025-12-11',
           seriesRealizadas: [
-            { repeticiones: 10, peso: 140 },
-            { repeticiones: 10, peso: 120 },
+            { repeticiones: 25, peso: 250 },
+            { repeticiones: 20, peso: 260 },
             { repeticiones: 10, peso: 140 },
             { repeticiones: 10, peso: 180 },
+            { repeticiones: 5, peso: 180 },
           ],
         },
       ],
@@ -82,7 +90,7 @@ export class GraficoProgreso {
         {
           fecha: '2025-12-07',
           seriesRealizadas: [
-            { repeticiones: 8, peso: 80 },
+            { repeticiones: 25, peso: 80 },
             { repeticiones: 10, peso: 60 },
             { repeticiones: 9, peso: 80 },
           ],
@@ -98,14 +106,14 @@ export class GraficoProgreso {
       ],
     },
   ];
-
-  chartOptionsPorEjercicio: { [idEjercicio: number]: Partial<ApexOptions> } = {};
+  chartOptionsPesoPorEjercicio: { [idEjercicio: number]: Partial<ApexOptions> } = {};
+  chartOptionsRepsPorEjercicio: { [idEjercicio: number]: Partial<ApexOptions> } = {};
 
   constructor() {
     this.armarGraficos();
   }
 
-  armarSeriesParaEjercicio(ejercicio: Entrenamiento) {
+  armarSeriesParaEjercicio(ejercicio: Entrenamiento): DataSeparada {
     const dataPorFecha = new Map<string, { pesos: number[]; reps: number[] }>();
 
     ejercicio.progresos.forEach((progreso: Progreso) => {
@@ -123,12 +131,11 @@ export class GraficoProgreso {
 
     let maxSeries = 0;
     dataPorFecha.forEach((data) => {
-      if (data.pesos.length > maxSeries) {
-        maxSeries = data.pesos.length;
-      }
+      maxSeries = Math.max(maxSeries, data.pesos.length);
     });
 
-    const seriesFinales: any[] = [];
+    const seriesPesoFinales: any[] = [];
+    const seriesRepsFinales: any[] = [];
     const fechas = Array.from(dataPorFecha.keys()).sort();
 
     for (let i = 0; i < maxSeries; i++) {
@@ -138,146 +145,130 @@ export class GraficoProgreso {
       fechas.forEach((fecha) => {
         const datosFecha = dataPorFecha.get(fecha)!;
 
-        const peso = datosFecha.pesos[i] !== undefined ? datosFecha.pesos[i] : 0;
+        const peso =
+          datosFecha.pesos[i] !== undefined && datosFecha.pesos[i] !== 0
+            ? datosFecha.pesos[i]
+            : null;
         datosPesoSerie.push({ x: fecha, y: peso });
 
-        const repeticiones = datosFecha.reps[i] !== undefined ? datosFecha.reps[i] : 0;
+        const repeticiones =
+          datosFecha.reps[i] !== undefined && datosFecha.reps[i] !== 0 ? datosFecha.reps[i] : null;
         datosRepsSerie.push({ x: fecha, y: repeticiones });
       });
 
-      seriesFinales.push({
+      seriesPesoFinales.push({
         name: `Peso S${i + 1} (kg)`,
         type: 'column',
         data: datosPesoSerie,
-        yAxisIndex: 0,
       });
 
-      seriesFinales.push({
+      seriesRepsFinales.push({
         name: `Reps S${i + 1}`,
-        type: 'line',
+        type: 'column',
         data: datosRepsSerie,
-        yAxisIndex: 1,
       });
     }
 
     ejercicio.categoriasX = fechas;
 
-    return seriesFinales;
+    return {
+      seriesPeso: seriesPesoFinales,
+      seriesReps: seriesRepsFinales,
+      categorias: fechas,
+    };
   }
 
   armarGraficos() {
-    const newChartOptions: { [idEjercicio: number]: Partial<ApexOptions> } = {};
-
     this.entrenamientos.forEach((ejercicio) => {
-      const series = this.armarSeriesParaEjercicio(ejercicio);
-      const categorias = ejercicio.categoriasX || [];
+      const { seriesPeso, seriesReps, categorias } = this.armarSeriesParaEjercicio(ejercicio);
 
-      const yAxisConfig: ApexYAxis[] = series.map((s, index) => {
-        const isWeightSeries = index % 2 === 0;
-
-        const isVisible = index < 2;
-
-        let axisOptions: ApexYAxis = {
-          opposite: !isWeightSeries,
-          show: false,
-          axisTicks: { show: false },
-          axisBorder: { show: false },
-          labels: { show: false },
-          title: { text: '' },
-          min: 0,
-        };
-
-        if (isVisible) {
-          axisOptions.show = true;
-          axisOptions.axisTicks!.show = true;
-          axisOptions.axisBorder!.show = true;
-
-          if (isWeightSeries) {
-            axisOptions.title = { text: 'Peso (kg)' };
-            axisOptions.opposite = false;
-            axisOptions.labels = {
-              formatter: (val) => (val === null ? '' : Math.round(val).toString()),
-            };
-          } else {
-            axisOptions.title = { text: 'Reps' };
-            axisOptions.opposite = true;
-            axisOptions.labels = {
-              formatter: (val) => (val === null ? '' : Math.round(val).toString()),
-            };
-          }
-        }
-
-        axisOptions.seriesName = s.name;
-
-        return axisOptions;
-      });
-
-      const chartOption: Partial<ApexOptions> = {
-        series: series,
-        chart: {
-          height: 350,
-          type: 'line',
-          stacked: false,
+      const xaxisConfig: Partial<ApexOptions['xaxis']> = {
+        type: 'category',
+        categories: categorias,
+        tickPlacement: 'on',
+        labels: {
+          rotate: -45,
+          rotateAlways: true,
+          formatter: (val) =>
+            val
+              ? new Date(val).toLocaleDateString('es-ES', { month: '2-digit', day: '2-digit' })
+              : '',
+          style: { fontSize: '10px' },
         },
+      };
 
-        xaxis: {
-          type: 'category',
-          categories: categorias,
-          tickPlacement: 'on',
+      const yAxisPeso: ApexYAxis[] = [
+        {
+          opposite: false,
+          show: true,
+          min: 0,
+          axisTicks: { show: true },
+          axisBorder: { show: true, color: '#008FFB' },
+          title: { text: 'Peso (kg)', style: { color: '#008FFB' } },
           labels: {
-            rotate: -45,
-            rotateAlways: true,
-            formatter: function (val) {
-              if (val) {
-                return new Date(val).toLocaleDateString('es-ES', {
-                  month: '2-digit',
-                  day: '2-digit',
-                });
-              }
-              return '';
-            },
-            style: {
-              fontSize: '10px',
-            },
+            formatter: (val) => (val === null ? '' : Math.round(val).toString()),
+            style: { colors: '#008FFB' },
           },
+        },
+      ];
+
+      const yAxisReps: ApexYAxis[] = [
+        {
+          opposite: false,
+          show: true,
+          min: 0,
+          axisTicks: { show: true },
+          axisBorder: { show: true, color: '#00E396' },
+          title: { text: 'Reps', style: { color: '#00E396' } },
+          labels: {
+            formatter: (val) => (val === null ? '' : Math.round(val).toString()),
+            style: { colors: '#00E396' },
+          },
+        },
+      ];
+
+      this.chartOptionsPesoPorEjercicio[ejercicio.idEjercicio] = {
+        series: seriesPeso,
+        chart: { height: 350, type: 'bar', stacked: false, toolbar: { show: true } },
+        plotOptions: { bar: { horizontal: false, columnWidth: '80%' } },
+        dataLabels: { enabled: false },
+        title: {
+          text: ejercicio.nombreEjercicio + ' (Peso)',
+          align: 'left',
+          style: { fontSize: '18px', fontWeight: '600', color: '#333' },
+        },
+        tooltip: {
+          shared: false,
+          intersect: false,
+          y: { formatter: (val) => (val === null || val === 0 ? '' : val.toFixed(1) + ' kg') },
+        },
+        xaxis: xaxisConfig,
+        yaxis: yAxisPeso,
+      };
+
+      this.chartOptionsRepsPorEjercicio[ejercicio.idEjercicio] = {
+        series: seriesReps,
+        chart: { height: 350, type: 'bar', stacked: false, toolbar: { show: true } },
+        plotOptions: { bar: { horizontal: false, columnWidth: '80%' } },
+        dataLabels: {
+          enabled: false,
         },
         title: {
-          text: ejercicio.nombreEjercicio,
+          text: ejercicio.nombreEjercicio + ' (Repeticiones)',
           align: 'left',
-          style: {
-            fontSize: '18px',
-            fontWeight: '600',
-            color: '#333',
-          },
+          style: { fontSize: '18px', fontWeight: '600', color: '#333' },
         },
-
         tooltip: {
           shared: false,
           intersect: false,
           y: {
-            formatter: function (val, opts) {
-              if (val === null || val === 0) {
-                return '';
-              }
-              const seriesName = opts.w.globals.seriesNames[opts.seriesIndex];
-
-              if (seriesName.includes('Peso')) {
-                return val.toFixed(1) + ' kg';
-              }
-              if (seriesName.includes('Reps')) {
-                return Math.round(val).toString() + ' reps';
-              }
-              return val.toString();
-            },
+            formatter: (val) =>
+              val === null || val === 0 ? '' : Math.round(val).toString() + ' reps',
           },
         },
-
-        yaxis: yAxisConfig,
+        xaxis: xaxisConfig,
+        yaxis: yAxisReps,
       };
-
-      newChartOptions[ejercicio.idEjercicio] = chartOption;
     });
-
-    this.chartOptionsPorEjercicio = newChartOptions;
   }
 }

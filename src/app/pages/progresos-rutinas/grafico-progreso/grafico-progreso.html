@@ -1,13 +1,27 @@
-<div class="grafica" *ngFor="let ejercicio of entrenamientos" style="margin-bottom: 50px">
-  <apx-chart
-    [series]="chartOptionsPorEjercicio[ejercicio.idEjercicio].series"
-    [chart]="chartOptionsPorEjercicio[ejercicio.idEjercicio].chart"
-    [xaxis]="chartOptionsPorEjercicio[ejercicio.idEjercicio].xaxis"
-    [yaxis]="chartOptionsPorEjercicio[ejercicio.idEjercicio].yaxis"
-    [stroke]="chartOptionsPorEjercicio[ejercicio.idEjercicio].stroke"
-    [title]="chartOptionsPorEjercicio[ejercicio.idEjercicio].title"
-    [dataLabels]="chartOptionsPorEjercicio[ejercicio.idEjercicio].dataLabels"
-    [plotOptions]="chartOptionsPorEjercicio[ejercicio.idEjercicio].plotOptions"
-    [tooltip]="chartOptionsPorEjercicio[ejercicio.idEjercicio].tooltip"
-  ></apx-chart>
+<div class="grafica-container" *ngFor="let ejercicio of entrenamientos">
+  <div class="grafica" style="margin-bottom: 20px">
+    <apx-chart
+      [series]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.series"
+      [chart]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.chart"
+      [xaxis]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.xaxis"
+      [yaxis]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.yaxis"
+      [title]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.title"
+      [dataLabels]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.dataLabels"
+      [plotOptions]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.plotOptions"
+      [tooltip]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.tooltip"
+    ></apx-chart>
+  </div>
+
+  <div class="grafica" style="margin-bottom: 50px">
+    <apx-chart
+      [series]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.series"
+      [chart]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.chart"
+      [xaxis]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.xaxis"
+      [yaxis]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.yaxis"
+      [title]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.title"
+      [dataLabels]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.dataLabels"
+      [plotOptions]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.plotOptions"
+      [tooltip]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.tooltip"
+    ></apx-chart>
+  </div>
 </div>
