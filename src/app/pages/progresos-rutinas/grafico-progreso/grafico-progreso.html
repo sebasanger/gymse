@@ -1,27 +1,23 @@
-<div class="grafica-container" *ngFor="let ejercicio of entrenamientos">
-  <div class="grafica" style="margin-bottom: 20px">
-    <apx-chart
-      [series]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.series"
-      [chart]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.chart"
-      [xaxis]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.xaxis"
-      [yaxis]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.yaxis"
-      [title]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.title"
-      [dataLabels]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.dataLabels"
-      [plotOptions]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.plotOptions"
-      [tooltip]="chartOptionsPesoPorEjercicio[ejercicio.idEjercicio]?.tooltip"
-    ></apx-chart>
-  </div>
+<h2>{{ rutina.nombreRutina }}</h2>
 
-  <div class="grafica" style="margin-bottom: 50px">
+<div *ngFor="let ent of rutina.progresosEntrenamientos">
+  <h3>{{ ent.nombreEntrenamiento }}</h3>
+
+  <div *ngFor="let ejercicio of ent.progresosEjercicios">
+    <h4>{{ ejercicio.nombreEjercicio }}</h4>
+
     <apx-chart
-      [series]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.series"
-      [chart]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.chart"
-      [xaxis]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.xaxis"
-      [yaxis]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.yaxis"
-      [title]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.title"
-      [dataLabels]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.dataLabels"
-      [plotOptions]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.plotOptions"
-      [tooltip]="chartOptionsRepsPorEjercicio[ejercicio.idEjercicio]?.tooltip"
+      [series]="chartOptionsPeso.series"
+      [chart]="chartOptionsPeso.chart"
+      [xaxis]="chartOptionsPeso.xaxis"
+      [title]="chartOptionsPeso.title"
+    ></apx-chart>
+
+    <apx-chart
+      [series]="chartOptionsReps.series"
+      [chart]="chartOptionsReps.chart"
+      [xaxis]="chartOptionsReps.xaxis"
+      [title]="chartOptionsReps.title"
     ></apx-chart>
   </div>
 </div>
