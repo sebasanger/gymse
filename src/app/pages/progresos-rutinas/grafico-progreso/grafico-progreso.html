@@ -1,23 +1,21 @@
-<h2>{{ rutina.nombreRutina }}</h2>
+<h2 class="tituloRutina">{{ rutina.nombreRutina }}</h2>
 
-<div *ngFor="let ent of rutina.progresosEntrenamientos">
-  <h3>{{ ent.nombreEntrenamiento }}</h3>
+<div *ngFor="let entrenamiento of rutina.progresosEntrenamientos">
+  <h3 class="tituloEntrenamiento">{{ entrenamiento.nombreEntrenamiento }}</h3>
 
-  <div *ngFor="let ejercicio of ent.progresosEjercicios">
-    <h4>{{ ejercicio.nombreEjercicio }}</h4>
-
+  <div class="graficas" *ngFor="let ejercicio of entrenamiento.progresosEjercicios">
     <apx-chart
-      [series]="chartOptionsPeso.series"
-      [chart]="chartOptionsPeso.chart"
-      [xaxis]="chartOptionsPeso.xaxis"
-      [title]="chartOptionsPeso.title"
+      [series]="chartPeso[ejercicio.idEjercicio]?.series"
+      [chart]="chartPeso[ejercicio.idEjercicio]?.chart"
+      [xaxis]="chartPeso[ejercicio.idEjercicio]?.xaxis"
+      [title]="chartPeso[ejercicio.idEjercicio]?.title"
     ></apx-chart>
 
     <apx-chart
-      [series]="chartOptionsReps.series"
-      [chart]="chartOptionsReps.chart"
-      [xaxis]="chartOptionsReps.xaxis"
-      [title]="chartOptionsReps.title"
+      [series]="chartReps[ejercicio.idEjercicio]?.series"
+      [chart]="chartReps[ejercicio.idEjercicio]?.chart"
+      [xaxis]="chartReps[ejercicio.idEjercicio]?.xaxis"
+      [title]="chartReps[ejercicio.idEjercicio]?.title"
     ></apx-chart>
   </div>
 </div>
