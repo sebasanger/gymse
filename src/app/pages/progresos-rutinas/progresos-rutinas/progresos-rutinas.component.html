@@ -3,8 +3,8 @@
     <mat-label>Filtrar por rutina</mat-label>
     <mat-select (selectionChange)="applyFilterByRutina($event.value)">
       <mat-option value="">Todas</mat-option>
-      <mat-option *ngFor="let rutina of rutinas" [value]="rutina.nombre">
-        {{ rutina.nombre }}
+      <mat-option *ngFor="let rutina of rutinas" [value]="rutina?.nombre">
+        {{ rutina?.nombre ?? 'Sin rutina seleccionada' }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -26,13 +26,15 @@
     <!-- Rutina -->
     <ng-container matColumnDef="rutina">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Rutina</th>
-      <td mat-cell *matCellDef="let row">{{ row?.rutina?.nombre }}</td>
+      <td mat-cell *matCellDef="let row">{{ row?.rutina?.nombre ?? 'Sin rutina seleccionada' }}</td>
     </ng-container>
 
     <!-- Entrenamiento -->
     <ng-container matColumnDef="entrenamiento">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Entrenamiento</th>
-      <td mat-cell *matCellDef="let row">{{ row?.entrenamientoSeleccionado?.nombre }}</td>
+      <td mat-cell *matCellDef="let row">
+        {{ row?.entrenamientoSeleccionado?.nombre ?? 'Sin entrenamiento seleccionado' }}
+      </td>
     </ng-container>
 
     <!-- Fecha -->
@@ -61,10 +63,10 @@
 
     <!-- Duracion -->
     <ng-container matColumnDef="detalles">
-      <th mat-header-cell *matHeaderCellDef>Ver detalles</th>
+      <th mat-header-cell *matHeaderCellDef>Ver progresos rutina</th>
       <td mat-cell *matCellDef="let row">
-        <button mat-icon-button class="edit-button" (click)="goDetails(row.id)">
-          <mat-icon>details</mat-icon>
+        <button mat-button class="edit-button" (click)="goDetails(row?.rutina?.id)">
+          Ver progresos
         </button>
       </td>
     </ng-container>
@@ -117,6 +119,7 @@
       mat-row
       *matRowDef="let row; columns: columnsToDisplayWithExpand"
       class="example-element-row"
+      [class.not-rutina]="!row?.entrenamientoSeleccionado"
       [class.example-expanded-row]="isExpanded(row)"
       (click)="toggle(row)"
     ></tr>

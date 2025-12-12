@@ -91,7 +91,7 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((progresos) => {
         progresos.forEach((progreso) => {
-          const exists = [...this.rutinas].some((r) => r.id === progreso.rutina.id);
+          const exists = [...this.rutinas].some((r) => r?.id === progreso.rutina.id);
 
           if (!exists) {
             this.rutinas.add(progreso.rutina);
@@ -99,7 +99,6 @@ export class ProgresosRutinasComponent implements OnDestroy, AfterViewInit {
         });
 
         this.progresos = progresos;
-        console.log(this.progresos);
 
         this.dataSource.data = progresos;
         this.table.dataSource = this.dataSource;

@@ -59,7 +59,7 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
   selectedEntrenamiento: any | null = null;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion'];
+  columnsToDisplay = ['id', 'nombre', 'descripcion', 'detalles'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
   /** Checks whether an element is expanded. */
@@ -101,6 +101,10 @@ export class SeleccionRutinasComponent implements OnDestroy, AfterViewInit {
 
       return nombre.includes(normalizedFilter) || id.includes(normalizedFilter);
     };
+  }
+
+  goDetails(rutinaId: number) {
+    this.router.navigateByUrl('/pages/progresos/rutinas/' + rutinaId);
   }
 
   applyFilter(event: Event) {

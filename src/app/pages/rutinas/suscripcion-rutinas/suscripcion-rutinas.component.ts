@@ -59,7 +59,7 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
   expandedRutina: RutinaConFlag | null | undefined;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  columnsToDisplay = ['id', 'nombre', 'descripcion', 'tipo', 'edit', 'action'];
+  columnsToDisplay = ['id', 'nombre', 'descripcion', 'tipo', 'detalles', 'edit', 'action'];
   columnsToDisplayWithExpand = [...this.columnsToDisplay, 'expand'];
 
   /** Checks whether an element is expanded. */
@@ -142,6 +142,10 @@ export class SuscripcionRutinasComponent implements OnDestroy, AfterViewInit {
         },
       });
     });
+  }
+
+  goDetails(rutinaId: number) {
+    this.router.navigateByUrl('/pages/progresos/rutinas/' + rutinaId);
   }
 
   desuscribir(rutinaId: number) {
