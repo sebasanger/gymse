@@ -8,6 +8,7 @@ import {
   ProgresoRutinaConProgreso,
 } from '../interfaces/progresoRutina/progreso-rutina..interface';
 import { BaseService } from './base-service';
+import { ProgresoRutinaDto } from '../interfaces/progresos/ProgresosDto';
 const base_url = environment.base_url;
 
 @Injectable({
@@ -78,5 +79,9 @@ export class ProgresoRutinaService extends BaseService<ProgresoRutina> {
     this.http.get<number>(`${base_url}/${this.endpoint}/activas/count`).subscribe((res) => {
       this.$activeCustomers.next(res);
     });
+  }
+
+  getProgresosByRutinaId(rutinaId: number) {
+    return this.http.get<ProgresoRutinaDto>(`${base_url}/${this.endpoint}/rutina/${rutinaId}`);
   }
 }
