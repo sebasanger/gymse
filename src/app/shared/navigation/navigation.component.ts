@@ -7,8 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterModule } from '@angular/router';
-import { interval, Observable } from 'rxjs';
-import { map, repeat, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, shareReplay } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { ProgresoRutinaService } from '../../services/progreso-rutina-service';
 import { UserInfo } from '../user-info/user-info';
@@ -103,6 +103,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Pagar Membresia',
       visible: false,
     },
+    {
+      id: 'inscripcion_clase',
+      icon: 'assignment_turned_in',
+      redirection: '/pages/clase',
+      tittle: 'Inscripcion de clase',
+      visible: false,
+    },
 
     // Admin
     {
@@ -174,6 +181,8 @@ export class NavigationComponent implements OnInit {
   activateClientMenu() {
     this.setVisible(['gestion_membresias'], true);
     this.setVisible(['pago_membresia'], true);
+    this.setVisible(['inscripcion_clase'], true);
+
     this.progresoRutinaService
       .getCurrentRoutine()
       .asObservable()

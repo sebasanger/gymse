@@ -23,6 +23,7 @@ import { PagosComponent } from './pago/pagos.component';
 import { UpdateProfileComponent } from './profile/update-profile/update-clientes.component';
 import { UpdatePasswordComponent } from './profile/update-password/update-password.component';
 import { GraficoProgreso } from './progresos-rutinas/grafico-progreso/grafico-progreso';
+import { ClasesComponent } from './clases/clases.component';
 export const PAGES_ROUTES: Routes = [
   {
     path: '',
@@ -114,6 +115,17 @@ export const PAGES_ROUTES: Routes = [
       {
         path: 'pagos',
         component: PagosComponent,
+      },
+
+      //clases
+      { path: 'clase', component: ClasesComponent },
+      {
+        path: 'clase/create',
+        component: CreateUpdateEjerciciosComponent,
+      },
+      {
+        path: 'clase/update/:id',
+        component: CreateUpdateEjerciciosComponent,
       },
 
       //check in

@@ -1,0 +1,67 @@
+.valid-member {
+  background-color: rgba(76, 175, 79, 0.205) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: normal;
+
+  &:hover {
+    background-color: rgba(0, 255, 8, 0.356) !important;
+    cursor: pointer !important;
+  }
+}
+
+.invalid-member {
+  background-color: rgba(255, 153, 0, 0.226) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-style: normal;
+
+  &:hover {
+    background-color: rgba(255, 152, 0, 0.1) !important;
+    cursor: pointer !important;
+  }
+}
+
+.disabled-row {
+  background-color: rgba(251, 255, 0, 0.281) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-style: normal;
+
+  &:hover {
+    background-color: rgba(251, 255, 0, 0.39) !important;
+    cursor: pointer !important;
+  }
+}
+
+.status-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.legend-item {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid #999;
+}
+
+.legend-item-deleted {
+  background-color: rgba(255, 153, 0, 0.445);
+}
+
+.legend-item-invalid-member {
+  background-color: rgba(255, 153, 0, 0.452);
+}
+
+.legend-item-disabled {
+  background-color: rgba(251, 255, 0, 0.425);
+}
+
+.legend-item-valid-member {
+  background-color: rgba(76, 175, 79, 0.466);
+}
+
+.legend-toggle {
+  margin-right: 15px;
+}
