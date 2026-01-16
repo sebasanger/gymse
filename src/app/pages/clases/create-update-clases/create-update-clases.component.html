@@ -3,39 +3,64 @@
     <mat-card-header>
       <mat-card-title>Clase</mat-card-title>
     </mat-card-header>
+
     <mat-card-content>
+      <!-- DATOS BASICOS -->
       <div class="row">
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Nombre" formControlName="nombre" />
-            @if (membresiaForm.controls['nombre'].hasError('required')) {
-            <mat-error>Nombre es <strong>requerido</strong></mat-error>
-            }
-          </mat-form-field>
-        </div>
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Nombre" formControlName="nombre" />
+          <mat-error *ngIf="membresiaForm.get('nombre')?.hasError('required')">
+            Nombre requerido
+          </mat-error>
+        </mat-form-field>
 
-        <div class="col">
-          <mat-form-field class="full-width">
-            <mat-label>Capacidad</mat-label>
-            <input matInput formControlName="capacidad" />
-            @if (membresiaForm.controls['capacidad'].hasError('required')) {
-            <mat-error>Capacidad es <strong>requerido</strong></mat-error>
-            }
-          </mat-form-field>
-        </div>
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Descripcion" formControlName="descripcion" />
+        </mat-form-field>
 
-        <div class="col">
-          <mat-form-field class="full-width">
-            <input matInput placeholder="Descripcion" type="text" formControlName="descripcion" />
-            @if (membresiaForm.controls['descripcion'].hasError('required')) {
-            <mat-error>Descripcion es <strong>requerida</strong></mat-error>
-            }
-          </mat-form-field>
-        </div>
+        <mat-form-field class="full-width">
+          <input matInput type="number" placeholder="Capacidad" formControlName="capacidad" />
+        </mat-form-field>
       </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- AGREGAR FECHA -->
+      <h3>Agregar fecha</h3>
+
+      <div [formGroup]="nuevaFechaForm" class="row">
+        <mat-form-field class="full-width">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fecha" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="full-width">
+          <mat-label>Hora</mat-label>
+          <input matInput type="time" formControlName="hora" />
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="button" (click)="addFecha()">
+          Agregar
+        </button>
+      </div>
+
+      <!-- LISTADO DE FECHAS -->
+      <h3 *ngIf="fechas.length">Fechas cargadas</h3>
+
+      <mat-chip-listbox *ngIf="fechas.length">
+        <mat-chip *ngFor="let fg of fechas.controls; let i = index">
+          {{ fg.value.fecha | date : 'dd/MM/yyyy' }} - {{ fg.value.hora }}
+          <button matChipRemove (click)="removeFecha(i)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </mat-chip-listbox>
     </mat-card-content>
+
     <mat-card-actions>
-      <button matButton="elevated" color="primary" type="submit" [disabled]="membresiaForm.invalid">
+      <button mat-raised-button color="primary" type="submit" [disabled]="membresiaForm.invalid">
         Guardar
       </button>
     </mat-card-actions>

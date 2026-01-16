@@ -6,7 +6,7 @@ export interface Clase {
   descripcion: string;
   capacidad: number;
   usuario: UsuarioMinDto;
-  fechasClases: string;
+  fechasClases: string[];
 }
 
 export interface FechaClase {
@@ -23,7 +23,7 @@ export interface CreateClaseDto {
   nombre: string;
   descripcion: string;
   capacidad: number;
-  fechas: Date[];
+  fechas: string[];
 }
 
 export interface UpdateClaseDto {
@@ -31,5 +31,5 @@ export interface UpdateClaseDto {
   nombre: string;
   descripcion: string;
   capacidad: number;
-  fechas: Date[];
+  fechas: string[];
 }
