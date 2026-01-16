@@ -61,7 +61,7 @@ export class ClasesComponent implements OnDestroy, AfterViewInit {
 
   private readonly dialog = inject(MatDialog);
 
-  displayedColumns = ['id', 'nombre', 'descripcion', 'capacidad', 'inscripcion', 'edit', 'delete'];
+  displayedColumns = ['id', 'nombre', 'descripcion', 'capacidad', 'fechas', 'edit', 'delete'];
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -104,11 +104,11 @@ export class ClasesComponent implements OnDestroy, AfterViewInit {
   }
 
   create() {
-    this.router.navigateByUrl('pages/clases/create');
+    this.router.navigateByUrl('pages/clase/create');
   }
 
   edit(claseId: number) {
-    this.router.navigateByUrl('pages/clases/update/' + claseId);
+    this.router.navigateByUrl('pages/clase/update/' + claseId);
   }
 
   delete(id: number) {

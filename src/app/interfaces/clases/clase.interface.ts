@@ -18,3 +18,18 @@ export interface Fecha {
   id: number;
   fecha: Date;
 }
+
+export interface CreateClaseDto {
+  nombre: string;
+  descripcion: string;
+  capacidad: number;
+  fechas: Date[];
+}
+
+export interface UpdateClaseDto {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  capacidad: number;
+  fechas: Date[];
+}

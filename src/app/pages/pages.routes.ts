@@ -24,6 +24,7 @@ import { UpdateProfileComponent } from './profile/update-profile/update-clientes
 import { UpdatePasswordComponent } from './profile/update-password/update-password.component';
 import { GraficoProgreso } from './progresos-rutinas/grafico-progreso/grafico-progreso';
 import { ClasesComponent } from './clases/clases.component';
+import { CreateUpdateClasesComponent } from './clases/create-update-clases/create-update-clases.component';
 export const PAGES_ROUTES: Routes = [
   {
     path: '',
@@ -121,11 +122,11 @@ export const PAGES_ROUTES: Routes = [
       { path: 'clase', component: ClasesComponent },
       {
         path: 'clase/create',
-        component: CreateUpdateEjerciciosComponent,
+        component: CreateUpdateClasesComponent,
       },
       {
         path: 'clase/update/:id',
-        component: CreateUpdateEjerciciosComponent,
+        component: CreateUpdateClasesComponent,
       },
 
       //check in
