@@ -5,22 +5,26 @@
     </mat-card-header>
 
     <mat-card-content>
-      <!-- DATOS BASICOS -->
       <div class="row">
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Nombre" formControlName="nombre" />
-          <mat-error *ngIf="membresiaForm.get('nombre')?.hasError('required')">
-            Nombre requerido
-          </mat-error>
-        </mat-form-field>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Nombre" formControlName="nombre" />
+            <mat-error *ngIf="membresiaForm.get('nombre')?.hasError('required')">
+              Nombre requerido
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="full-width">
-          <input matInput placeholder="Descripcion" formControlName="descripcion" />
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <input matInput type="number" placeholder="Capacidad" formControlName="capacidad" />
-        </mat-form-field>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Descripcion" formControlName="descripcion" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput type="number" placeholder="Capacidad" formControlName="capacidad" />
+          </mat-form-field>
+        </div>
       </div>
 
       <mat-divider></mat-divider>
@@ -29,18 +33,20 @@
       <h3>Agregar fecha</h3>
 
       <div [formGroup]="nuevaFechaForm" class="row">
-        <mat-form-field class="full-width">
-          <mat-label>Fecha</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fecha" />
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field class="full-width">
-          <mat-label>Hora</mat-label>
-          <input matInput type="time" formControlName="hora" />
-        </mat-form-field>
-
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fecha" />
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Hora</mat-label>
+            <input matInput type="time" formControlName="hora" />
+          </mat-form-field>
+        </div>
         <button mat-raised-button color="primary" type="button" (click)="addFecha()">
           Agregar
         </button>

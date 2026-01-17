@@ -103,13 +103,6 @@ export class NavigationComponent implements OnInit {
       tittle: 'Pagar Membresia',
       visible: false,
     },
-    {
-      id: 'inscripcion_clase',
-      icon: 'assignment_turned_in',
-      redirection: '/pages/clase',
-      tittle: 'Inscripcion de clase',
-      visible: false,
-    },
 
     // Admin
     {
@@ -154,6 +147,13 @@ export class NavigationComponent implements OnInit {
       tittle: 'Pagos',
       visible: false,
     },
+    {
+      id: 'gestion_clases',
+      icon: 'assignment_turned_in',
+      redirection: '/pages/clase',
+      tittle: 'Gestion de clases',
+      visible: false,
+    },
   ];
 
   constructor() {}
@@ -181,7 +181,6 @@ export class NavigationComponent implements OnInit {
   activateClientMenu() {
     this.setVisible(['gestion_membresias'], true);
     this.setVisible(['pago_membresia'], true);
-    this.setVisible(['inscripcion_clase'], true);
 
     this.progresoRutinaService
       .getCurrentRoutine()
@@ -213,7 +212,10 @@ export class NavigationComponent implements OnInit {
   }
 
   activateAdminMenu() {
-    this.setVisible(['usuarios', 'ejercicios', 'rutinas', 'membresias', 'clientes', 'pagos'], true);
+    this.setVisible(
+      ['usuarios', 'ejercicios', 'rutinas', 'membresias', 'clientes', 'pagos', 'gestion_clases'],
+      true
+    );
   }
 
   setVisible(ids: string[], value: boolean) {
